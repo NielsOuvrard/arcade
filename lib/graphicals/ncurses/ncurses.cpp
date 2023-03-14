@@ -33,6 +33,28 @@ void Ncurses::draw()
     refresh();
 }
 
+void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
+{
+    if (entities.size() == 0) {
+        return;
+    }
+    if (entities.find("close") != entities.end()) {
+        return;
+    }
+}
+
+std::string Ncurses::getEvent()
+{
+    char c = getch();
+    std::string val = std::string(&c);
+    return val;
+}
+
+const std::string & Ncurses::getName() const
+{
+    return _name;
+}
+
 extern "C" IDisplayModule *create(void)
 {
     return new  Ncurses();

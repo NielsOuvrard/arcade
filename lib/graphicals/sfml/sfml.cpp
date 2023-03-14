@@ -70,6 +70,13 @@ std::string Sfml::getEvent()
     while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return "close";
+        if (event.type == sf::Event::TextEntered) {
+            if (event.text.unicode < 128) {
+                char  c = static_cast<char>(event.text.unicode);
+                std::string val = std::string(&c);
+                return val;
+            }    
+        }
             // _window.close();
     }
     return "";
@@ -80,7 +87,7 @@ const std::string & Sfml::getName() const
     return _name;
 }
 
-extern "C" IDisplayModule *entryPoint(void)
+extern "C" IDisplayModule *create(void)
 {
     return new Sfml();
 }

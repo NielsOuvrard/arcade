@@ -17,7 +17,11 @@ class Ncurses : public IDisplayModule {
         void init();
         void stop();
         void draw();
+        void update(std::map<std::string, IGameModule::Entity> entities);
+        std::string getEvent();
+        const std::string &getName() const;
 
     protected:
+        std::string _name = "SFML";
     private:
 };

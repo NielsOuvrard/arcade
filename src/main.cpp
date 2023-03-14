@@ -21,11 +21,12 @@ int main(void)
     DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (libPath);
     IDisplayModule *module = val->getInstance();
     module->init();
-    module->draw();
-    std::chrono::milliseconds timespan(1000); // or whatever
-    std::this_thread::sleep_for(timespan);            
+    while (1) {
+        module->draw();
+        if (module->getEvent() == "e")
+            break;
+    }
     module->stop();
-    libPath = "lib/arcade_ncurses.so";
     delete val;
     return 0;
 }
