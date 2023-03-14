@@ -9,15 +9,16 @@
 ##
 ##
 
-LIB_SRC = lib.cpp
+SRC = src/core/*.cpp \
+	  src/game/*.cpp \
+	  src/display/*.cpp \
+	  src/main.cpp
 
-SRC = file.cpp
+SRC_LIB_GAMES = lib/game/*.cpp
+
+SRC_LIB_GRAPHICALS = lib/graphicals/*.cpp
 
 NAME = arcade
-
-LIB = libm.so
-
-SFML = lib_arcade_sfml.so
 
 #  -ldl -fno-gnu-unique
 all:
@@ -34,7 +35,7 @@ fclean: clean
 re: fclean all
 
 core:
-	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -fno-gnu-unique -g3
+	g++ -c $(NAME) $(SRC)
 
 games:
 	g++ -c lib/game/*.cpp
