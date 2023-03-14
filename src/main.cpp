@@ -7,6 +7,7 @@
 
 
 #include "display/IDisplay.hpp"
+#include "core/DLLoader.hpp"
 #include <dlfcn.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,16 +17,15 @@
 
 int main(void)
 {
-    void **foo =  (void **)dlopen("lib/arcade_ncurses.so",  RTLD_LAZY);
-    IDisplayModule * (*fooFunc)(void);
-    fooFunc = (IDisplayModule *(*) ()) dlsym(foo, "entryPoint");
-    IDisplayModule *module;
-    module = fooFunc();
+    std::string libPath = "lib/arcade_sfml.so";
+    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (libPath);
+    IDisplayModule *module = val->getInstance();
     module->init();
     module->draw();
-    std::chrono::milliseconds timespan(111605); // or whatever
-
-    std::this_thread::sleep_for(timespan);
-        module->stop();
+    std::chrono::milliseconds timespan(1000); // or whatever
+    std::this_thread::sleep_for(timespan);            
+    module->stop();
+    libPath = "lib/arcade_ncurses.so";
+    delete val;
     return 0;
 }

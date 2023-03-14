@@ -1,2 +1,4 @@
 *.dSYM
 .vscode
+*.so
+arcade

@@ -42,19 +42,19 @@ core:
 	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -g3 $(INCLUDE_PATH)
 
 sfml:
-	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 $(SFML_FLAGS) $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_sfml.so -fno-gnu-unique  -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 $(SFML_FLAGS) $(INCLUDE_PATH)
 
 ncurses:
-	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++11 -g3 -lncurses $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_ncurses.so -fno-gnu-unique -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++11 -g3 -lncurses $(INCLUDE_PATH)
 
 sdl2:
-	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 $(SDL2_FLAGS) $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_sdl2.so -fno-gnu-unique -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 $(SDL2_FLAGS) $(INCLUDE_PATH)
 
 snake:
-	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_snake.so -fno-gnu-unique -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
 
 nibbler:
-	g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_nibbler.so -fno-gnu-unique -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
 
 games: snake \
 	nibbler
