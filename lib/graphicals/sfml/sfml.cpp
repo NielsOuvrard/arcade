@@ -34,17 +34,13 @@ void Sfml::stop()
 
 void Sfml::draw()
 {
+    // in case of error
     if (!_window->isOpen()) {
         return;
     }
-    // mettdre dans update
-    // sf::Event event;
-    // while (_window.pollEvent(event)) {
-    //     if (event.type == sf::Event::Closed)
-    //         _window.close();
-    // }
     _window->clear();
 
+    // draw...
     sf::RectangleShape rectangle(sf::Vector2f(120.f, 50.f));
     rectangle.setFillColor(sf::Color::White);
     rectangle.setPosition(sf::Vector2f(50, 70));
@@ -60,6 +56,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
         return;
     }
     if (entities.find("close") != entities.end()) {
+        std::cout << "close" << std::endl;
         _window->close();
     }
 }
