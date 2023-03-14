@@ -51,7 +51,15 @@ void Sfml::draw()
     _window.display();
 }
 
-extern "C" IDisplayModule *entryPoint(void)
+extern "C" IDisplayModule *create(void)
 {
     return new Sfml();
+}
+
+extern "C" void destroy(IDisplayModule* obj) {
+    delete obj;
+}
+
+extern "C" std::string getType() {
+    return "Graphic";
 }

@@ -33,7 +33,16 @@ void Ncurses::draw()
     refresh();
 }
 
-extern "C" IDisplayModule *entryPoint(void)
+extern "C" IDisplayModule *create(void)
 {
     return new  Ncurses();
+}
+
+extern "C" std::string getType(void)
+{
+    return "Graphic";
+}
+
+extern "C" void destroy(IDisplayModule* obj) {
+    delete obj;
 }
