@@ -15,21 +15,39 @@ SRC_LIB_GAMES = lib/games
 
 SRC_LIB_GRAPHICALS = lib/graphicals
 
+SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+SDL2_FLAGS :=
+
+# OS detection
+ifeq ($(shell uname -s),Linux)
+	# Linux
+	# SFML_FLAGS +=
+	SDL2_FLAGS += -lSDL2
+endif
+ifeq ($(shell uname -s),Darwin)
+	# Mac OS X
+	SFML_FLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
+	# SDL2_FLAGS += -lSDL2
+endif
+
 NAME = arcade
 
 .DEFAULT_GOAL := all
 
+# -fno-gnu-unique
+
 core:
-	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -fno-gnu-unique -g3
+	echo $(OSFLAG)
+	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -g3
 
 sfml:
-	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 $(SFML_FLAGS)
 
 ncurses:
 	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++11 -g3 -lncurses
 
 sdl2:
-	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 -lSDL2
+	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 $(SDL2_FLAGS)
 
 snake:
 	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++11 -g3
