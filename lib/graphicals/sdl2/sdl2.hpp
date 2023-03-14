@@ -11,7 +11,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 
-#include "../../../src/display/IDisplay.hpp"
+#include "IDisplay.hpp"
 
 class Sdl2 : public IDisplayModule {
     public:
@@ -20,10 +20,14 @@ class Sdl2 : public IDisplayModule {
         void init();
         void stop();
         void draw();
+        void update(std::map<std::string, IGameModule::Entity> entities);
+        std::string getEvent();
+        const std::string &getName() const;
 
     protected:
     private:
         SDL_Window *_window;
         SDL_Renderer *_renderer;
         SDL_Event _event;
+        std::string _name = "SDL2";
 };
