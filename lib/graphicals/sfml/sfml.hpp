@@ -18,7 +18,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
-#include "../../../src/display/IDisplay.hpp"
+#include "IDisplay.hpp"
 
 class Sfml : public IDisplayModule {
     public:
@@ -26,12 +26,14 @@ class Sfml : public IDisplayModule {
         ~Sfml();
         void init();
         void stop();
+        void update(std::map<std::string, IGameModule::Entity> entities);
         void draw();
+        std::string getEvent();
+        const std::string &getName() const;
 
     protected:
-        // sf::RenderWindow _window;
-        // sf::RenderWindow window (sf::VideoMode(500,200) , "ma fenetre");
         sf::RenderWindow _window;
         sf::Event _event;
+        std::string _name = "SFML";
     private:
 };

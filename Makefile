@@ -34,26 +34,27 @@ NAME = arcade
 
 .DEFAULT_GOAL := all
 
+INCLUDE_PATH = -I./src/display -I./src/game -I./src/core
 # -fno-gnu-unique
 
 core:
 	echo $(OSFLAG)
-	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -g3
+	g++ -o $(NAME) $(SRC) -std=c++11 -ldl -g3 $(INCLUDE_PATH)
 
 sfml:
-	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 $(SFML_FLAGS)
+	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++11 -g3 $(SFML_FLAGS) $(INCLUDE_PATH)
 
 ncurses:
-	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++11 -g3 -lncurses
+	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++11 -g3 -lncurses $(INCLUDE_PATH)
 
 sdl2:
-	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 $(SDL2_FLAGS)
+	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++11 -g3 $(SDL2_FLAGS) $(INCLUDE_PATH)
 
 snake:
-	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++11 -g3
+	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
 
 nibbler:
-	g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp -std=c++11 -g3
+	g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp -std=c++11 -g3 $(INCLUDE_PATH)
 
 games: snake \
 	nibbler
@@ -71,6 +72,7 @@ clean:
 fclean: clean
 	rm -f $(NAME) \
 	rm -f lib/*.so
+	# find . -type d -name "*.dSYM" -exec rm -Rf {} \;
 
 re: fclean all
 

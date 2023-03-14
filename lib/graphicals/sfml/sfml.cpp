@@ -36,11 +36,11 @@ void Sfml::draw()
         return;
     }
     // mettdre dans update
-    sf::Event event;
-    while (_window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            _window.close();
-    }
+    // sf::Event event;
+    // while (_window.pollEvent(event)) {
+    //     if (event.type == sf::Event::Closed)
+    //         _window.close();
+    // }
     _window.clear();
 
     sf::RectangleShape rectangle(sf::Vector2f(120.f, 50.f));
@@ -49,6 +49,33 @@ void Sfml::draw()
     _window.draw(rectangle);
 
     _window.display();
+}
+
+
+void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
+{
+    if (entities.size() == 0) {
+        return;
+    }
+    if (entities.find("close") != entities.end()) {
+        _window.close();
+    }
+}
+
+std::string Sfml::getEvent()
+{
+    sf::Event event;
+    while (_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            return "close";
+            // _window.close();
+    }
+    return "";
+}
+
+const std::string & Sfml::getName() const
+{
+    return _name;
 }
 
 extern "C" IDisplayModule *entryPoint(void)
