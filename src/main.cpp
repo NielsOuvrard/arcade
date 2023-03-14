@@ -17,22 +17,15 @@
 
 int main(void)
 {
-    std::string libPath = "lib/arcade_sdl2.so";
+    std::string libPath = "lib/arcade_sfml.so";
     DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (libPath);
     IDisplayModule *module = val->getInstance();
     module->init();
     module->draw();
     std::chrono::milliseconds timespan(1000); // or whatever
-    std::this_thread::sleep_for(timespan);
+    std::this_thread::sleep_for(timespan);            
     module->stop();
     libPath = "lib/arcade_ncurses.so";
-    delete val;
-    val = new DLLoader<IDisplayModule> (libPath);
-    //module = val->getInstance();
-    //module->init();
-    //module->draw();
-    //std::this_thread::sleep_for(timespan);            
-    //module->stop();
     delete val;
     return 0;
 }

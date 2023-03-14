@@ -22,33 +22,35 @@ Sfml::~Sfml()
 
 void Sfml::init()
 {
-    _window.create(sf::VideoMode(1280, 720), "Monitor");
+    _window = new sf::RenderWindow;
+    _window->create(sf::VideoMode(1280, 720), "Monitor");
 }
 
 void Sfml::stop()
 {
-    _window.close();
+    _window->close();
+    delete _window;
 }
 
 void Sfml::draw()
 {
-    if (!_window.isOpen()) {
+    if (!_window->isOpen()) {
         return;
     }
     // mettdre dans update
     sf::Event event;
-    while (_window.pollEvent(event)) {
+    while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
-            _window.close();
+            _window->close();
     }
-    _window.clear();
+    _window->clear();
 
     sf::RectangleShape rectangle(sf::Vector2f(120.f, 50.f));
     rectangle.setFillColor(sf::Color::White);
     rectangle.setPosition(sf::Vector2f(50, 70));
-    _window.draw(rectangle);
+    _window->draw(rectangle);
 
-    _window.display();
+    _window->display();
 }
 
 extern "C" IDisplayModule *create(void)

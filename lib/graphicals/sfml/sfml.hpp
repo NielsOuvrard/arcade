@@ -31,7 +31,7 @@ class Sfml : public IDisplayModule {
     protected:
         // sf::RenderWindow _window;
         // sf::RenderWindow window (sf::VideoMode(500,200) , "ma fenetre");
-        sf::RenderWindow _window;
+        sf::RenderWindow* _window = nullptr;
         sf::Event _event;
     private:
 };
