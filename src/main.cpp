@@ -28,5 +28,15 @@ int main(void)
     }
     module->stop();
     delete val;
+    libPath = "lib/arcade_ncurses.so";
+    val = new DLLoader<IDisplayModule> (libPath);
+    module = val->getInstance();
+    module->init();
+    while (1) {
+        module->draw();
+        if (module->getEvent() == "e")
+            break;
+    }
+    module->stop();
     return 0;
 }
