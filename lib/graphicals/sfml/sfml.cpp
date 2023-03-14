@@ -70,7 +70,7 @@ std::string Sfml::getEvent()
         if (event.type == sf::Event::TextEntered) {
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
-                std::string val = std::string(&c);
+                std::string val = {c};
                 return val;
             }    
         }

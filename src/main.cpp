@@ -17,7 +17,7 @@
 
 int main(void)
 {
-    std::string libPath = "lib/arcade_sdl2.so";
+    std::string libPath = "lib/arcade_sfml.so";
     DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (libPath);
     IDisplayModule *module = val->getInstance();
     module->init();
