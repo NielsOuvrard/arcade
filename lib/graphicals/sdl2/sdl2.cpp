@@ -36,3 +36,17 @@ void Sdl2::draw()
     SDL_RenderPresent(_renderer);
     SDL_Delay(1000/60);
 }
+
+extern "C" IDisplayModule *create(void)
+{
+    return new  Sdl2();
+}
+
+extern "C" std::string getType(void)
+{
+    return "Graphic";
+}
+
+extern "C" void destroy(IDisplayModule* obj) {
+    delete obj;
+}
