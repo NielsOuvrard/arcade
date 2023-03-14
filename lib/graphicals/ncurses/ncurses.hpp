@@ -8,8 +8,9 @@
 #pragma once
 
 #include <ncurses.h>
+#include "../../../src/display/IDisplay.hpp"
 
-class Ncurses {
+class Ncurses : public IDisplayModule {
     public:
         Ncurses();
         ~Ncurses();

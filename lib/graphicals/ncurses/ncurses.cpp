@@ -32,3 +32,8 @@ void Ncurses::draw()
     mvprintw(0, 0, "Hello World !!!");
     refresh();
 }
+
+extern "C" IDisplayModule *entryPoint(void)
+{
+    return new  Ncurses();
+}
