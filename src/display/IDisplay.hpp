@@ -1,5 +1,5 @@
 /*
-** IDisplayModule
+**
 **  ________  ________  ________  ________  ________  _______
 ** |\   __  \|\   __  \|\   ____\|\   __  \|\   ___ \|\  ___ \
 ** \ \  \|\  \ \  \|\  \ \  \___|\ \  \|\  \ \  \_|\ \ \   __/|
@@ -14,7 +14,7 @@
     #define DISPLAY_MODULE_I
 
 #include <string>
-#include "../game/IGameModule.hpp"
+#include "IGameModule.hpp"
 
 class IDisplayModule {
     public:

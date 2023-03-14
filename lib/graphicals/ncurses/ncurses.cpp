@@ -57,7 +57,7 @@ const std::string & Ncurses::getName() const
 
 extern "C" IDisplayModule *create(void)
 {
-    return new  Ncurses();
+    return new Ncurses();
 }
 
 extern "C" std::string getType(void)
