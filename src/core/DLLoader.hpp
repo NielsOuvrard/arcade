@@ -41,7 +41,7 @@ class DLLoader {
             instance = func();
         };
         ~DLLoader(){
-            void (*func)(IDisplayModule  *);
+            void (*func)(T  *);
             func = (void (*) (T *)) dlsym(lib, "destroy");
             char *error = dlerror();
             func(instance);
@@ -52,8 +52,8 @@ class DLLoader {
             return instance;
         };
         std::string getInstanceType() const {
-            T *(*func)(void);
-            func = (T * (*) ()) dlsym(lib, "getType");
+            std::string (*func)(void);
+            func = (std::string  (*) ()) dlsym(lib, "getType");
             char *error = dlerror();
             if (error != NULL) {
                 throw Error(error);

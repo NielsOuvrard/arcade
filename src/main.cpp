@@ -14,29 +14,22 @@
 #include <stdlib.h>
 #include <chrono>
 #include <thread>
-
+#include "Core.hpp"
 int main(void)
 {
-    std::string libPath = "lib/arcade_sfml.so";
-    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (libPath);
-    IDisplayModule *module = val->getInstance();
-    module->init();
-    while (1) {
-        module->draw();
-        if (module->getEvent() == "e")
-            break;
+    Core newCore = Core();
+    std::vector<std::string> list = newCore.getGfxLibs();
+    for (auto val : list) {
+        DLLoader<IDisplayModule> *loader = new DLLoader<IDisplayModule> (val);
+        IDisplayModule *module = loader->getInstance();
+        module->init();
+        while (1) {
+            module->draw();
+            if (module->getEvent() == "e")
+                break;
+        }
+        module->stop();
+        delete loader;
     }
-    module->stop();
-    delete val;
-    libPath = "lib/arcade_ncurses.so";
-    val = new DLLoader<IDisplayModule> (libPath);
-    module = val->getInstance();
-    module->init();
-    while (1) {
-        module->draw();
-        if (module->getEvent() == "e")
-            break;
-    }
-    module->stop();
     return 0;
 }
