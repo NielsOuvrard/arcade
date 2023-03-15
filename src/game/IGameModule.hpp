@@ -33,7 +33,8 @@ class IGameModule {
             std::string background_color;
             float x;
             float y;
-            bool isSprite;
+            bool underline;
+            bool bold;
         };
 
         virtual ~IGameModule () = default ;

@@ -12,18 +12,24 @@
 #include <sstream>
 #include <vector>
 #include <filesystem>
+#include <map>
 #include "DLLoader.hpp"
+#include "IDisplay.hpp"
+#include "IGameModule.hpp"
+#include "Menu.hpp"
 class Core {
     public:
-        Core();
+        Core(const std::string displayLibPath);
         ~Core();
         std::vector<std::string> getGamesLibs () const { return gameLibs;}
         std::vector<std::string> getGfxLibs () const { return gfxLibs;}
-
+        void displayMenu();
     protected:
     private:
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
+        DLLoader<IDisplayModule> *displayLib;
+        DLLoader<IGameModule> *gameLib;
 };
 
 #endif /* !CORE_HPP_ */

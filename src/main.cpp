@@ -15,21 +15,10 @@
 #include <chrono>
 #include <thread>
 #include "Core.hpp"
-int main(void)
+int main(int ac, char **av)
 {
-    Core newCore = Core();
-    std::vector<std::string> list = newCore.getGfxLibs();
-    for (auto val : list) {
-        DLLoader<IDisplayModule> *loader = new DLLoader<IDisplayModule> (val);
-        IDisplayModule *module = loader->getInstance();
-        module->init();
-        while (1) {
-            module->draw();
-            if (module->getEvent() == "e")
-                break;
-        }
-        module->stop();
-        delete loader;
-    }
-    return 0;
+    if (ac != 2)
+        exit(84);
+    Core newCore = Core(av[1]);
+    newCore.displayMenu();
 }

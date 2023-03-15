@@ -38,13 +38,7 @@ void Sfml::draw()
     if (!_window->isOpen()) {
         return;
     }
-    _window->clear();
-
     // draw...
-    sf::RectangleShape rectangle(sf::Vector2f(120.f, 50.f));
-    rectangle.setFillColor(sf::Color::White);
-    rectangle.setPosition(sf::Vector2f(50, 70));
-    _window->draw(rectangle);
 
     _window->display();
 }
@@ -55,9 +49,20 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     if (entities.size() == 0) {
         return;
     }
-    if (entities.find("close") != entities.end()) {
-        std::cout << "close" << std::endl;
-        _window->close();
+    _window->clear();
+    for (auto const &val : entities) {
+        IGameModule::Entity entity =  val.second;
+        sf::Font font;
+        font.loadFromFile("font.ttf");
+        sf::Text text;
+        if (entity.bold && entity.underline)
+            text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+        text.setFont(font);
+        text.setString(entity.text);
+        text.setFillColor(sf::Color::White);
+        text.setPosition(sf::Vector2f(entity.x, entity.y));
+        text.setCharacterSize(100);
+        _window->draw(text);
     }
 }
 
@@ -68,11 +73,14 @@ std::string Sfml::getEvent()
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
+            std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
                 std::string val = {c};
                 return val;
             }    
+        } else if (event.type == sf::Event::KeyPressed) {
+            std::cout << event.key.code << std::endl;
         }
             // _window.close();
     }

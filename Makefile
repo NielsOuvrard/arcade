@@ -10,7 +10,8 @@
 ##
 
 SRC =	src/main.cpp \
-		src/core/Core.cpp
+		src/core/Core.cpp \
+		src/core/Menu.cpp
 
 SRC_LIB_GAMES = lib/games
 
