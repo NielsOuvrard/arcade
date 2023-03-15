@@ -29,12 +29,14 @@ class IGameModule {
         struct Entity {
             std::string file;
             std::string text;
-            std::string color;
             std::string background_color;
             float x;
             float y;
             bool underline;
             bool bold;
+            int red;
+            int green;
+            int blue;
         };
 
         virtual ~IGameModule () = default ;

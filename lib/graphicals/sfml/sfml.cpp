@@ -59,7 +59,8 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
             text.setStyle(sf::Text::Bold | sf::Text::Underlined);
         text.setFont(font);
         text.setString(entity.text);
-        text.setFillColor(sf::Color::White);
+        sf::Color color(entity.red, entity.green, entity.blue);
+        text.setFillColor(color);
         text.setPosition(sf::Vector2f(entity.x, entity.y));
         text.setCharacterSize(100);
         _window->draw(text);
@@ -75,6 +76,8 @@ std::string Sfml::getEvent()
         if (event.type == sf::Event::TextEntered) {
             if (event.text.unicode == 13)
                 return "Enter";
+            if (event.text.unicode == 27)
+                return "ESC";
             std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
