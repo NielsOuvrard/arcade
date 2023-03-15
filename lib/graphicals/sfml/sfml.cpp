@@ -24,6 +24,7 @@ void Sfml::init()
 {
     _window = new sf::RenderWindow;
     _window->create(sf::VideoMode(1280, 720), "Monitor");
+    font.loadFromFile("font.ttf");
 }
 
 void Sfml::stop()
@@ -52,8 +53,6 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     _window->clear();
     for (auto const &val : entities) {
         IGameModule::Entity entity =  val.second;
-        sf::Font font;
-        font.loadFromFile("font.ttf");
         sf::Text text;
         if (entity.bold && entity.underline)
             text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -62,7 +61,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
         sf::Color color(entity.red, entity.green, entity.blue);
         text.setFillColor(color);
         text.setPosition(sf::Vector2f(entity.x, entity.y));
-        text.setCharacterSize(100);
+        text.setCharacterSize(60);
         _window->draw(text);
     }
 }
@@ -78,7 +77,10 @@ std::string Sfml::getEvent()
                 return "Enter";
             if (event.text.unicode == 27)
                 return "ESC";
-            std::cout << event.text.unicode << std::endl;
+            if (event.text.unicode == 8) {
+                return "Backspace";
+            }
+            // std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
                 std::string val = {c};

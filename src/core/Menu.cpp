@@ -82,6 +82,19 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         entities.insert({val, gfxLib});
         y += 100;
     }
+    Entity nameTitle = {
+        "",
+        name,
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    entities.insert({"nameTitle", nameTitle});
 }
 
 Menu::~Menu()
@@ -97,10 +110,19 @@ bool Menu::isGameOver()
 
 void Menu::update(std::string key)
 {
-    if (key.empty() == false) {
-        if (key == "close") {
-            status = FINISHED;
-        }
+    if (key.empty())
+        return;
+    if (key == "close") {
+        status = FINISHED;
+    }
+    if (key == "Backspace" && name.length() > 18) {
+        name.resize(name.length() - 1);
+        entities["nameTitle"].text = name;
+    }
+    if (key.length() == 1) {
+        name = name.append(key);
+        entities["nameTitle"].text = name;    
+        return;
     }
     if (gameLibs.size() != 0) {
         if (key == "Enter" && !isGameSelected) {

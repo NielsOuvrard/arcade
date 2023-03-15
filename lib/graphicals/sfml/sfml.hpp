@@ -37,5 +37,6 @@ class Sfml : public IDisplayModule {
         sf::RenderWindow* _window = nullptr;
         sf::Event _event;
         std::string _name = "SFML";
+        sf::Font font;
     private:
 };

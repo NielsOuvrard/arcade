@@ -20,6 +20,7 @@ class Menu  : public IGameModule {
         std::map<std::string, Entity> getInfos() { return entities;};
         GAME_STATUS getGameStatus() { return status;};
     protected:
+        std::string name = "Enter your name : ";
         std::map<std::string, Entity> entities;
         GAME_STATUS status;
         int selectedGameIndex = 0;
