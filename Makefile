@@ -18,21 +18,24 @@ SRC_LIB_GAMES = lib/games
 SRC_LIB_GRAPHICALS = lib/graphicals
 
 SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+SDL2_FLAGS = -lSDL2
 
-SDL2_FLAGS :=
+INCLUDE_PATH = -I./src/display -I./src/game -I./src/core -std=c++20 -g3
+HOMEBREW = /opt/homebrew/Cellar/
 
-INCLUDE_PATH = -I./src/display -I./src/game -I./src/core
 # OS detection
 ifeq ($(shell uname -s),Linux)
 	# Linux
-	# SFML_FLAGS +=
-	SDL2_FLAGS += -lSDL2 -lSDL2_image -lSDL2_ttf
 	INCLUDE_PATH += -fno-gnu-unique
 endif
 ifeq ($(shell uname -s),Darwin)
 	# Mac OS X
-	SFML_FLAGS += -I/opt/homebrew/Cellar/sfml/2.5.1_2/include -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib
-	# SDL2_FLAGS += -lSDL2
+	SFML_FLAGS += -I$(HOMEBREW)sfml/2.5.1_2/include -L$(HOMEBREW)sfml/2.5.1_2/lib
+	SDL2_FLAGS += -I$(HOMEBREW)sdl2/2.26.4/include/SDL2
+	SDL2_FLAGS += -I$(HOMEBREW)sdl2/2.26.4/include -L$(HOMEBREW)sdl2/2.26.4/lib
+	SDL2_FLAGS += -I$(HOMEBREW)sdl2_image/2.6.3/include -L$(HOMEBREW)sdl2_image/2.6.3/lib
+	# SDL2_FLAGS += -I$(HOMEBREW)sdl2_ttf/2.20.2 -L$(HOMEBREW)sdl2_ttf/2.20.2
+	SDL2_FLAGS += -I$(HOMEBREW)sdl2_ttf/2.20.2/include -L$(HOMEBREW)sdl2_ttf/2.20.2/lib -lSDL2_ttf
 endif
 
 NAME = arcade
@@ -41,22 +44,22 @@ NAME = arcade
 
 core:
 	echo $(OSFLAG)
-	g++ -o $(NAME) $(SRC) -std=c++20 -ldl -g3 $(INCLUDE_PATH)
+	g++ -o $(NAME) $(SRC) -ldl $(INCLUDE_PATH)
 
 sfml:
-	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp -std=c++20 -g3 $(SFML_FLAGS) $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_sfml.so -fPIC $(SRC_LIB_GRAPHICALS)/sfml/*.cpp $(SFML_FLAGS) $(INCLUDE_PATH)
 
 ncurses:
-	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -std=c++20 -g3 -lncurses $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_ncurses.so -fPIC $(SRC_LIB_GRAPHICALS)/ncurses/*.cpp -lncurses $(INCLUDE_PATH)
 
 sdl2:
-	g++ -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp -std=c++20 -g3 $(SDL2_FLAGS) $(INCLUDE_PATH)
+	g++ -v -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp $(SDL2_FLAGS) $(INCLUDE_PATH)
 
 snake:
-	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp -std=c++20 -g3 $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp $(INCLUDE_PATH)
 
 nibbler:
-	g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp -std=c++20 -g3 $(INCLUDE_PATH)
+	g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp $(INCLUDE_PATH)
 
 games: snake \
 	nibbler
@@ -64,8 +67,8 @@ games: snake \
 graphicals:	sfml ncurses sdl2
 
 all: core \
+	games \
 	graphicals
-#games \
 
 clean:
 	rm -f *~ \
@@ -74,7 +77,9 @@ clean:
 fclean: clean
 	rm -f $(NAME) \
 	rm -f lib/*.so
-	# find . -type d -name "*.dSYM" -exec rm -Rf {} \;
+
+mac_clean:
+	find . -type d -name "*.dSYM" -exec rm -Rf {} \;
 
 re: fclean all
 
