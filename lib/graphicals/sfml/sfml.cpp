@@ -73,6 +73,8 @@ std::string Sfml::getEvent()
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
+            if (event.text.unicode == 13)
+                return "Enter";
             std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
@@ -80,7 +82,16 @@ std::string Sfml::getEvent()
                 return val;
             }    
         } else if (event.type == sf::Event::KeyPressed) {
-            std::cout << event.key.code << std::endl;
+            switch (event.key.code) {
+                case 71 :
+                    return "LeftArrow";
+                case 72:
+                    return "RightArrow";
+                case 73:
+                    return "UpArrow";
+                case 74:
+                    return "DownArrow";
+            }
         }
             // _window.close();
     }

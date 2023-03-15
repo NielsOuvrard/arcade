@@ -91,8 +91,5 @@ void Menu::update(std::string key)
         if (key == "close") {
             status = FINISHED;
         }
-        Entity newEntity = entities["newEntity"];
-        newEntity.text = "Key pressed is " + key;
-        entities["newEntity"] = newEntity;
     }
 }

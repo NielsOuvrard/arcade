@@ -22,6 +22,10 @@ class Menu  : public IGameModule {
     protected:
         std::map<std::string, Entity> entities;
         GAME_STATUS status;
+        int selectedGameIndex = 0;
+        int selectedDisplayIndex = 0;
+        bool isGameSelected = false;
+        bool isDisplaySelected = false;
     private:
 };
 
