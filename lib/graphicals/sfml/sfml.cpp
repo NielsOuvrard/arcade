@@ -80,7 +80,7 @@ std::string Sfml::getEvent()
                 char  c = static_cast<char>(event.text.unicode);
                 std::string val = {c};
                 return val;
-            }    
+            }
         } else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
                 case 71 :

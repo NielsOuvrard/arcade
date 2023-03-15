@@ -7,8 +7,10 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs)
+Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal)
 {
+    gameLibs = gameLibsVal;
+    gfxLibs = gfxLibsVal;
     float x = 0, y = 0;
     Entity gameEntity = {
         "",
@@ -92,4 +94,24 @@ void Menu::update(std::string key)
             status = FINISHED;
         }
     }
+    // if (key == "DownArrow" && !isGameSelected && (selectedGameIndex + 1) != gameLibs.size()) {
+    //     std::string currentSelectedGame = gameLibs[selectedGameIndex];
+    //     std::string newSelectedGame = gameLibs[selectedGameIndex + 1];
+    //     entities[currentSelectedGame].underline = false;
+    //     entities[currentSelectedGame].bold = false;
+    //     entities[newSelectedGame].underline = true;
+    //     entities[newSelectedGame].bold = true;
+    //     selectedGameIndex += 1;
+    //     return;
+    // }
+    // if (key == "UpArrow" && !isGameSelected && (selectedGameIndex - 1) != gameLibs.size()) {
+    //     std::string currentSelectedGame = gameLibs[selectedGameIndex];
+    //     std::string newSelectedGame = gameLibs[selectedGameIndex - 1];
+    //     entities[currentSelectedGame].underline = false;
+    //     entities[currentSelectedGame].bold = false;
+    //     entities[newSelectedGame].underline = true;
+    //     entities[newSelectedGame].bold = true;
+    //     selectedGameIndex -= 1;
+    //     return;
+    // }
 }

@@ -40,10 +40,7 @@ void Core::displayMenu()
     IDisplayModule *module = displayLib->getInstance();
     Menu myMenu = Menu(gameLibs, gfxLibs);
     module->init();
-    while (1) {
-        if (myMenu.getGameStatus() == IGameModule::FINISHED) {
-            break;
-        }
+    while (myMenu.getGameStatus() != IGameModule::FINISHED) {
         module->update(myMenu.getInfos());
         module->draw();
         myMenu.update(module->getEvent());

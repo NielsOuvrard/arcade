@@ -26,6 +26,8 @@ class Menu  : public IGameModule {
         int selectedDisplayIndex = 0;
         bool isGameSelected = false;
         bool isDisplaySelected = false;
+        std::vector<std::string> gameLibs;
+        std::vector<std::string> gfxLibs;
     private:
 };
 
