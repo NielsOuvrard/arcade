@@ -23,7 +23,6 @@ SDL2_FLAGS = -lSDL2
 INCLUDE_PATH = -I./src/display -I./src/game -I./src/core -std=c++20 -g3
 HOMEBREW = /opt/homebrew/Cellar/
 
-# OS detection
 ifeq ($(shell uname -s),Linux)
 	# Linux
 	INCLUDE_PATH += -fno-gnu-unique
@@ -34,7 +33,6 @@ ifeq ($(shell uname -s),Darwin)
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2/2.26.4/include/SDL2
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2/2.26.4/include -L$(HOMEBREW)sdl2/2.26.4/lib
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2_image/2.6.3/include -L$(HOMEBREW)sdl2_image/2.6.3/lib
-	# SDL2_FLAGS += -I$(HOMEBREW)sdl2_ttf/2.20.2 -L$(HOMEBREW)sdl2_ttf/2.20.2
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2_ttf/2.20.2/include -L$(HOMEBREW)sdl2_ttf/2.20.2/lib -lSDL2_ttf
 endif
 
