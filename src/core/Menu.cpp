@@ -119,7 +119,7 @@ void Menu::update(std::string key)
         name.resize(name.length() - 1);
         entities["nameTitle"].text = name;
     }
-    if (key.length() == 1) {
+    if (key.length() == 1 && name.size() != 32) {
         name = name.append(key);
         entities["nameTitle"].text = name;    
         return;
