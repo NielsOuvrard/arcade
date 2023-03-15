@@ -18,6 +18,7 @@ SRC_LIB_GAMES = lib/games
 SRC_LIB_GRAPHICALS = lib/graphicals
 
 SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+
 SDL2_FLAGS :=
 
 INCLUDE_PATH = -I./src/display -I./src/game -I./src/core
@@ -25,7 +26,7 @@ INCLUDE_PATH = -I./src/display -I./src/game -I./src/core
 ifeq ($(shell uname -s),Linux)
 	# Linux
 	# SFML_FLAGS +=
-	SDL2_FLAGS += -lSDL2
+	SDL2_FLAGS += -lSDL2 -lSDL2_image -lSDL2_ttf
 	INCLUDE_PATH += -fno-gnu-unique
 endif
 ifeq ($(shell uname -s),Darwin)
@@ -63,8 +64,8 @@ games: snake \
 graphicals:	sfml ncurses sdl2
 
 all: core \
-	games \
 	graphicals
+#games \
 
 clean:
 	rm -f *~ \

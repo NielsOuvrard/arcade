@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "IDisplay.hpp"
 
@@ -30,4 +31,9 @@ class Sdl2 : public IDisplayModule {
         SDL_Renderer *_renderer;
         SDL_Event _event;
         std::string _name = "SDL2";
+        //text
+        TTF_Font *_font;
+        SDL_Texture *_text_texture = nullptr;
+        SDL_Surface *_text_surface;
+        SDL_Rect _text_rect;
 };
