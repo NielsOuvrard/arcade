@@ -13,6 +13,7 @@
 #ifndef IGAME_MODULE
     #define IGAME_MODULE
 
+#include <vector>
 #include <iostream>
 #include <string>
 #include <map>
