@@ -49,6 +49,8 @@ void Core::displayMenu()
     selectedDisplayLib = myMenu.getSelectedDisplayLib();
     module->stop();
     delete module;
+    if (myMenu.getSelectedStatus())
+        mainLoop();
 }
 
 void Core::mainLoop()

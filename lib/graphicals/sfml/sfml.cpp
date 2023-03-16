@@ -23,7 +23,7 @@ Sfml::~Sfml()
 void Sfml::init()
 {
     _window = new sf::RenderWindow;
-    _window->create(sf::VideoMode(1280, 720), "Monitor");
+    _window->create(sf::VideoMode(1920, 1080), "Arcade - SFML");
     font.loadFromFile("font.ttf");
 }
 
@@ -53,16 +53,25 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     _window->clear();
     for (auto const &val : entities) {
         IGameModule::Entity entity =  val.second;
-        sf::Text text;
-        if (entity.bold && entity.underline)
-            text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-        text.setFont(font);
-        text.setString(entity.text);
-        sf::Color color(entity.color_fg.red, entity.color_fg.green, entity.color_fg.blue);
-        text.setFillColor(color);
-        text.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
-        text.setCharacterSize(60);
-        _window->draw(text);
+        if (!entity.text.empty()) {
+            sf::Text text;
+            if (entity.bold && entity.underline)
+                text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+            text.setFont(font);
+            text.setString(entity.text);
+            sf::Color color(entity.color_fg.red, entity.color_fg.green, entity.color_fg.blue);
+            text.setFillColor(color);
+            text.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
+            text.setCharacterSize(60);
+            _window->draw(text);
+        } else {
+            sf::Sprite sprite;
+            sf::Texture texture;
+            texture.loadFromFile(entity.file);
+            sprite.setTexture(texture);
+            sprite.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
+            _window->draw(sprite);
+        }
     }
 }
 

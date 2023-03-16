@@ -19,6 +19,7 @@ class Menu  : public IGameModule {
         void update(std::string key);
         std::map<std::string, Entity> getInfos() { return entities;};
         GAME_STATUS getGameStatus() { return status;};
+        bool getSelectedStatus() {return hasSelected;};
         std::string getSelectedGameLib() const { return gameLibs[selectedGameIndex];};
         std::string getSelectedDisplayLib() const {return gfxLibs[selectedDisplayIndex];};
     protected:
@@ -29,6 +30,7 @@ class Menu  : public IGameModule {
         int selectedDisplayIndex = 0;
         bool isGameSelected = false;
         bool isDisplaySelected = false;
+        bool hasSelected = false;
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
     private:

@@ -138,6 +138,7 @@ void Menu::update(std::string key)
             entities[currentSelectedDisplay].color_bg.green = 0;
             entities[currentSelectedDisplay].color_bg.blue = 0;
             isDisplaySelected = true;
+            hasSelected = true;
             return;
         }
         if (key == "ESC" && isDisplaySelected) {
@@ -149,6 +150,7 @@ void Menu::update(std::string key)
             entities[currentSelectedDisplay].color_bg.green = 0;
             entities[currentSelectedDisplay].color_bg.blue = 0;
             isDisplaySelected = false;
+            hasSelected = false;
             return;
         }
         if (key == "DownArrow" && !isDisplaySelected && (selectedDisplayIndex + 1) < gfxLibs.size()) {
