@@ -18,6 +18,12 @@
 #include <string>
 #include <map>
 
+typedef struct color_s {
+    int red;
+    int green;
+    int blue;
+} color_t;
+
 class IGameModule {
     public:
         enum GAME_STATUS {
@@ -35,9 +41,8 @@ class IGameModule {
             float y;
             bool underline;
             bool bold;
-            int red;
-            int green;
-            int blue;
+            color_t color_fg;
+            color_t color_bg;
         };
 
         virtual ~IGameModule () = default ;

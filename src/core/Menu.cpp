@@ -131,17 +131,23 @@ void Menu::update(std::string key)
     if (gfxLibs.size() != 0 && isGameSelected) {
         if (key == "Enter" && !isDisplaySelected) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            entities[currentSelectedDisplay].red = 255;
-            entities[currentSelectedDisplay].green = 0;
-            entities[currentSelectedDisplay].blue = 0;
+            entities[currentSelectedDisplay].color_fg.red = 255;
+            entities[currentSelectedDisplay].color_fg.green = 0;
+            entities[currentSelectedDisplay].color_fg.blue = 0;
+            entities[currentSelectedDisplay].color_bg.red = 0;
+            entities[currentSelectedDisplay].color_bg.green = 0;
+            entities[currentSelectedDisplay].color_bg.blue = 0;
             isDisplaySelected = true;
             return;
         }
         if (key == "ESC" && isDisplaySelected) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            entities[currentSelectedDisplay].red = 255;
-            entities[currentSelectedDisplay].green = 255;
-            entities[currentSelectedDisplay].blue = 255;
+            entities[currentSelectedDisplay].color_fg.red = 255;
+            entities[currentSelectedDisplay].color_fg.green = 255;
+            entities[currentSelectedDisplay].color_fg.blue = 255;
+            entities[currentSelectedDisplay].color_bg.red = 0;
+            entities[currentSelectedDisplay].color_bg.green = 0;
+            entities[currentSelectedDisplay].color_bg.blue = 0;
             isDisplaySelected = false;
             return;
         }
@@ -169,17 +175,23 @@ void Menu::update(std::string key)
     if (gameLibs.size() != 0) {
         if (key == "Enter" && !isGameSelected) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
-            entities[currentSelectedGame].red = 255;
-            entities[currentSelectedGame].green = 0;
-            entities[currentSelectedGame].blue = 0;
+            entities[currentSelectedGame].color_fg.red = 255;
+            entities[currentSelectedGame].color_fg.green = 0;
+            entities[currentSelectedGame].color_fg.blue = 0;
+            entities[currentSelectedGame].color_bg.red = 0;
+            entities[currentSelectedGame].color_bg.green = 0;
+            entities[currentSelectedGame].color_bg.blue = 0;
             isGameSelected = true;
             return;
         }
         if (key == "ESC" && isGameSelected) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
-            entities[currentSelectedGame].red = 255;
-            entities[currentSelectedGame].green = 255;
-            entities[currentSelectedGame].blue = 255;
+            entities[currentSelectedGame].color_fg.red = 255;
+            entities[currentSelectedGame].color_fg.green = 255;
+            entities[currentSelectedGame].color_fg.blue = 255;
+            entities[currentSelectedGame].color_bg.red = 0;
+            entities[currentSelectedGame].color_bg.green = 0;
+            entities[currentSelectedGame].color_bg.blue = 0;
             isGameSelected = false;
             return;
         }

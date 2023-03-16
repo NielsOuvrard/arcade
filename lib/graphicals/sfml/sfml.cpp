@@ -58,7 +58,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
             text.setStyle(sf::Text::Bold | sf::Text::Underlined);
         text.setFont(font);
         text.setString(entity.text);
-        sf::Color color(entity.red, entity.green, entity.blue);
+        sf::Color color(entity.color_fg.red, entity.color_fg.green, entity.color_fg.blue);
         text.setFillColor(color);
         text.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
         text.setCharacterSize(60);
