@@ -77,6 +77,8 @@ std::string Ncurses::getEvent()
     if (c == KEY_DOWN)
         return "DownArrow";
 
+    if (c == 27)
+        return "close";
     if (c == KEY_ENTER || c == 10)
         return "Enter";
     if (c == KEY_BACKSPACE)
