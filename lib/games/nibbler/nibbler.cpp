@@ -9,7 +9,7 @@
 
 Nibbler::Nibbler()
 {
-
+    
 }
 
 Nibbler::~Nibbler()

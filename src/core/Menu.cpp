@@ -24,7 +24,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         255,
         255
     };
-    y += 100;
+    y += 1;
     entities.insert({"Game Libs", gameEntity});
     for (std::string val : gameLibs) {
         bool bold = false, underline = false;
@@ -45,7 +45,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             255
         };
         entities.insert({val, gameLib});
-        y += 100;
+        y += 1;
     }
     Entity gfxEntity = {
         "",
@@ -59,7 +59,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         255,
         255
     };
-    y += 100;
+    y += 1;
     entities.insert({"GFX Libs", gfxEntity});
     for (std::string val : gfxLibs) {
         bool bold = false, underline = false;
@@ -80,7 +80,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             255
         };
         entities.insert({val, gfxLib});
-        y += 100;
+        y += 1;
     }
     Entity nameTitle = {
         "",
