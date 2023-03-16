@@ -18,7 +18,16 @@ Ncurses::~Ncurses()
 void Ncurses::init()
 {
     initscr();
+    // start_color();
     noecho();
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, TRUE);
+    curs_set(0);
+    keyok(27, TRUE); // ESC
+    keyok(32, TRUE); // SPACE
+    keyok(10, TRUE); // ENTER
+    keyok(127, TRUE); // BACKSPACE
+    nodelay(stdscr, TRUE);
     cbreak();
 }
 
@@ -29,7 +38,6 @@ void Ncurses::stop()
 
 void Ncurses::draw()
 {
-    // mvprintw(0, 0, "Hello World !!!");
     refresh();
 }
 
@@ -43,12 +51,11 @@ void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
             init_pair(1, COLOR_RED, COLOR_BLACK);
             attron(COLOR_PAIR(1));
 
-            int y = ((int)e.y);
             if (e.bold && e.underline) {
                  attron(A_BOLD);
                  attron(A_UNDERLINE);
             }
-            mvprintw(y, (int)e.x, "%s -> %d %d %d", e.text.c_str(), e.red, e.green, e.blue);
+            mvprintw((int)e.y, (int)e.x, "%s", e.text.c_str(), e.red, e.green, e.blue);
             attroff(COLOR_PAIR(1));
             attroff(A_UNDERLINE);
             attroff(A_BOLD);
@@ -59,22 +66,11 @@ void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
 std::string Ncurses::getEvent()
 {
     int c;
+    FILE *file = fopen("log.txt", "w");
+    fprintf(file, "event = %d aka %c\n", c, c);
+    fclose(file);
     if (!(c = getch()))
         return "";
-    if (c == KEY_BACKSPACE)
-        return "close";
-
-    // not work mac
-    // if (c == 65)
-    //     return "UpArrow";
-    // if (c == 66)
-    //     return "DownArrow";
-    // if (c == 67)
-    //     return "RightArrow";
-    // if (c == 68)
-    //     return "LeftArrow";
-    // exit(c);
-
     if (c == KEY_LEFT)
         return "LeftArrow";
     if (c == KEY_RIGHT)
@@ -84,7 +80,7 @@ std::string Ncurses::getEvent()
     if (c == KEY_DOWN)
         return "DownArrow";
 
-    if (c == KEY_ENTER)
+    if (c == KEY_ENTER || c == 10)
         return "Enter";
     if (c == KEY_BACKSPACE)
         return "Backspace";
