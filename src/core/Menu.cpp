@@ -124,6 +124,48 @@ void Menu::update(std::string key)
         entities["nameTitle"].text = name;
         return;
     }
+    if (key == "Enter" && isGameSelected && isDisplaySelected && name.length() > 19) {
+        status = FINISHED;
+        return;
+    }
+    if (gfxLibs.size() != 0 && isGameSelected) {
+        if (key == "Enter" && !isDisplaySelected) {
+            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+            entities[currentSelectedDisplay].red = 255;
+            entities[currentSelectedDisplay].green = 0;
+            entities[currentSelectedDisplay].blue = 0;
+            isDisplaySelected = true;
+            return;
+        }
+        if (key == "ESC" && isDisplaySelected) {
+            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+            entities[currentSelectedDisplay].red = 255;
+            entities[currentSelectedDisplay].green = 255;
+            entities[currentSelectedDisplay].blue = 255;
+            isDisplaySelected = false;
+            return;
+        }
+        if (key == "DownArrow" && !isDisplaySelected && (selectedDisplayIndex + 1) < gfxLibs.size()) {
+            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+            std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex + 1];
+            entities[currentSelectedDisplay].underline = false;
+            entities[currentSelectedDisplay].bold = false;
+            entities[newSelectedDisplay].underline = true;
+            entities[newSelectedDisplay].bold = true;
+            selectedDisplayIndex += 1;
+            return;
+        }
+        if (key == "UpArrow" && !isDisplaySelected && selectedDisplayIndex != 0) {
+            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+            std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex - 1];
+            entities[currentSelectedDisplay].underline = false;
+            entities[currentSelectedDisplay].bold = false;
+            entities[newSelectedDisplay].underline = true;
+            entities[newSelectedDisplay].bold = true;
+            selectedDisplayIndex -= 1;
+            return;
+        }
+    }
     if (gameLibs.size() != 0) {
         if (key == "Enter" && !isGameSelected) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
@@ -159,44 +201,6 @@ void Menu::update(std::string key)
             entities[newSelectedGame].underline = true;
             entities[newSelectedGame].bold = true;
             selectedGameIndex -= 1;
-            return;
-        }
-    }
-    if (gfxLibs.size() != 0) {
-        if (key == "Enter" && !isDisplaySelected) {
-            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            entities[currentSelectedDisplay].red = 255;
-            entities[currentSelectedDisplay].green = 0;
-            entities[currentSelectedDisplay].blue = 0;
-            isDisplaySelected = true;
-            return;
-        }
-        if (key == "ESC" && isDisplaySelected) {
-            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            entities[currentSelectedDisplay].red = 255;
-            entities[currentSelectedDisplay].green = 255;
-            entities[currentSelectedDisplay].blue = 255;
-            isDisplaySelected = false;
-            return;
-        }
-        if (key == "DownArrow" && !isDisplaySelected && (selectedDisplayIndex + 1) < gfxLibs.size()) {
-            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex + 1];
-            entities[currentSelectedDisplay].underline = false;
-            entities[currentSelectedDisplay].bold = false;
-            entities[newSelectedDisplay].underline = true;
-            entities[newSelectedDisplay].bold = true;
-            selectedDisplayIndex += 1;
-            return;
-        }
-        if (key == "UpArrow" && !isDisplaySelected && selectedDisplayIndex != 0) {
-            std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex - 1];
-            entities[currentSelectedDisplay].underline = false;
-            entities[currentSelectedDisplay].bold = false;
-            entities[newSelectedDisplay].underline = true;
-            entities[newSelectedDisplay].bold = true;
-            selectedDisplayIndex -= 1;
             return;
         }
     }

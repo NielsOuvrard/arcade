@@ -22,4 +22,5 @@ int main(int ac, char **av)
         exit(84);
     Core newCore = Core(av[1]);
     newCore.displayMenu();
+    newCore.mainLoop();
 }

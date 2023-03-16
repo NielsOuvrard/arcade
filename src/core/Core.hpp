@@ -24,12 +24,15 @@ class Core {
         std::vector<std::string> getGamesLibs () const { return gameLibs;}
         std::vector<std::string> getGfxLibs () const { return gfxLibs;}
         void displayMenu();
+        void mainLoop();
     protected:
     private:
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
         DLLoader<IDisplayModule> *displayLib;
         DLLoader<IGameModule> *gameLib;
+        std::string selectedGameLib;
+        std::string selectedDisplayLib;
 };
 
 #endif /* !CORE_HPP_ */

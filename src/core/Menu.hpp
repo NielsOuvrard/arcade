@@ -19,6 +19,8 @@ class Menu  : public IGameModule {
         void update(std::string key);
         std::map<std::string, Entity> getInfos() { return entities;};
         GAME_STATUS getGameStatus() { return status;};
+        std::string getSelectedGameLib() const { return gameLibs[selectedGameIndex];};
+        std::string getSelectedDisplayLib() const {return gfxLibs[selectedDisplayIndex];};
     protected:
         std::string name = "Enter your name : ";
         std::map<std::string, Entity> entities;

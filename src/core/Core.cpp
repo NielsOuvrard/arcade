@@ -44,9 +44,26 @@ void Core::displayMenu()
         module->update(myMenu.getInfos());
         module->draw();
         myMenu.update(module->getEvent());
-        // if (module->getEvent() == "e")
-        //     break;
     }
+    selectedGameLib = myMenu.getSelectedGameLib();
+    selectedDisplayLib = myMenu.getSelectedDisplayLib();
     module->stop();
     delete module;
+}
+
+void Core::mainLoop()
+{
+    DLLoader<IDisplayModule> *displayLib = new DLLoader<IDisplayModule> (selectedDisplayLib);
+    DLLoader<IGameModule> *gameLib = new DLLoader<IGameModule> (selectedGameLib);
+    IGameModule *game = gameLib->getInstance();
+    IDisplayModule *display = displayLib->getInstance();
+    display->init();
+    while (game->getGameStatus() != IGameModule::FINISHED) {
+        display->update(game->getInfos());
+        display->draw();
+        game->update(display->getEvent());
+    }
+    display->stop();
+    delete displayLib;
+    delete gameLib;
 }
