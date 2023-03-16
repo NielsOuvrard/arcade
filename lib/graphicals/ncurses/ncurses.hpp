@@ -23,5 +23,6 @@ class Ncurses : public IDisplayModule {
 
     protected:
         std::string _name = "SFML";
+        int event;
     private:
 };
