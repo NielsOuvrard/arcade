@@ -47,7 +47,7 @@ void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
     for (auto const &entity : entities) {
         if (entity.second.text.length()) {
             IGameModule::Entity e = entity.second;
-            init_color(COLOR_RED, (255 / e.red) * 1000, (255 / e.green) * 1000, (255 / e.blue) * 1000);
+            init_color(COLOR_RED, (e.red / 255) * 1000, (e.green / 255) * 1000, (e.blue / 255) * 1000);
             init_pair(1, COLOR_RED, COLOR_BLACK);
             attron(COLOR_PAIR(1));
 
