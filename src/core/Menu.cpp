@@ -121,7 +121,7 @@ void Menu::update(std::string key)
     }
     if (key.length() == 1 && name.size() != 32) {
         name = name.append(key);
-        entities["nameTitle"].text = name;    
+        entities["nameTitle"].text = name;
         return;
     }
     if (gameLibs.size() != 0) {

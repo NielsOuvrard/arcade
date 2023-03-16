@@ -68,7 +68,7 @@ std::string Sdl2::getEvent()
         if (_event.type == SDL_KEYDOWN) {
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    return "ESC";
+                    return "close";
                 case SDLK_RETURN:
                     return "Enter";
                 case SDLK_LEFT:
