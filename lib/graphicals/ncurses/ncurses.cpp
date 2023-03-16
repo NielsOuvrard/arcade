@@ -18,7 +18,7 @@ Ncurses::~Ncurses()
 void Ncurses::init()
 {
     initscr();
-    // start_color();
+    start_color();
     noecho();
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
@@ -47,7 +47,7 @@ void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
     for (auto const &entity : entities) {
         if (entity.second.text.length()) {
             IGameModule::Entity e = entity.second;
-            init_color(COLOR_RED, 1000 / e.red, 1000 / e.green, 1000 / e.blue);
+            init_color(COLOR_RED, (255 / e.red) * 1000, (255 / e.green) * 1000, (255 / e.blue) * 1000);
             init_pair(1, COLOR_RED, COLOR_BLACK);
             attron(COLOR_PAIR(1));
 
@@ -66,9 +66,6 @@ void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
 std::string Ncurses::getEvent()
 {
     int c;
-    FILE *file = fopen("log.txt", "w");
-    fprintf(file, "event = %d aka %c\n", c, c);
-    fclose(file);
     if (!(c = getch()))
         return "";
     if (c == KEY_LEFT)
