@@ -24,6 +24,13 @@ typedef struct color_s {
     int blue;
 } color_t;
 
+typedef struct sprite_s {
+    std::string path;
+    float scaleX;
+    float scaleY;
+
+} sprite_t;
+
 class IGameModule {
     public:
         enum GAME_STATUS {
@@ -43,6 +50,7 @@ class IGameModule {
             bool bold;
             color_t color_fg;
             color_t color_bg;
+            sprite_t sprite;
         };
 
         virtual ~IGameModule () = default ;
