@@ -36,4 +36,8 @@ class Sdl2 : public IDisplayModule {
         SDL_Texture *_text_texture = nullptr;
         SDL_Surface *_text_surface;
         SDL_Rect _text_rect;
+        //image
+        SDL_Texture *_image_texture = nullptr;
+        SDL_Surface *_image_surface;
+        SDL_Rect _image_rect;
 };

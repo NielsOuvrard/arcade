@@ -11,6 +11,14 @@
 
 class Snake : public IGameModule {
     public:
+
+        enum DIRECTION {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        };
+
         Snake();
         ~Snake();
         void startGame() {
@@ -18,7 +26,6 @@ class Snake : public IGameModule {
         };
         bool isGameOver();
         void update(std::string key);
-        std::string getEvent();
         const std::string &getName() const;
         GAME_STATUS getGameStatus();
         std::map<std::string, Entity> getInfos();
@@ -28,5 +35,9 @@ class Snake : public IGameModule {
         std::map<std::string, IGameModule::Entity> _entities;
         IGameModule::GAME_STATUS _gameStatus = IGameModule::MENU;
         std::string _event = "";
-        std::vector<std::vector<int>> _grid;
+        // std::vector<std::vector<int>> _grid;
+        std::vector<std::map<std::string, IGameModule::Entity>> _gameObject;
+        int _score = 0;
+        int _speed = 1;
+        int _direction = DIRECTION::RIGHT;
 };
