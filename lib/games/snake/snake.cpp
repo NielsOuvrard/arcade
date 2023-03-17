@@ -9,11 +9,37 @@
 
 Snake::Snake()
 {
-    float x = 600, y = 3;
+    generateGrid(100);
+    float y = 0, x = 0;
+    int row = 0;
+    for (std::string value : _grid) {
+        for (int i = 0; value[i]; i++) {
+            if (value[i] == '-') {
+                Entity newEntity = {
+                    "lib/games/snake/files/snake/walls.png",
+                    "#",
+                    "",
+                    x,
+                    y,
+                    false,
+                    false,
+                    {255, 0, 0},
+                    {0, 0, 0},
+                };
+                std::cout << newEntity.y << std::endl;
+                _entities.insert({std::to_string(i) + "walls" + std::to_string(row), newEntity});
+            }
+            x += 1;
+        }
+        x = 0;
+        y += 1;
+        row++;
+    }
+    x = 600, y = 3;
     Entity gameEntity  = {
         "lib/games/snake/files/snake/head-right.png",
+        "H",
         "",
-        "E9967A",
         x,
         y,
         false,
@@ -26,8 +52,8 @@ Snake::Snake()
     x = 536; y = 3;
     gameEntity  = {
         "lib/games/snake/files/snake/tail-right.png",
+        "T",
         "",
-        "E9967A",
         x,
         y,
         false,
@@ -37,7 +63,6 @@ Snake::Snake()
         0
     };
     _entities.insert({"snake-tail", gameEntity});
-    _gameObject.push_back(_entities);
 }
 
 Snake::~Snake()
@@ -48,51 +73,39 @@ void Snake::update(std::string key)
 {
     if (key.empty()) {
         if (_direction == DIRECTION::RIGHT) {
-            for (auto &gameObject : _gameObject) {
-                for (auto &entity : gameObject) {
-                    entity.second.x += 2 * _speed;
-                }
-            }
+            _entities["snake-head"].x += 0.03;
+            _entities["snake-tail"].x += 0.03;
         }
         else if (_direction == DIRECTION::LEFT) {
-            for (auto &gameObject : _gameObject) {
-                for (auto &entity : gameObject) {
-                    entity.second.x -= 2 * _speed;
-                }
-            }
+            _entities["snake-head"].x -= 0.03;
+            _entities["snake-tail"].x -= 0.03;
         }
         else if (_direction == DIRECTION::UP) {
-            for (auto &gameObject : _gameObject) {
-                for (auto &entity : gameObject) {
-                    entity.second.y -= 0.02 * _speed;
-                }
-            }
+            _entities["snake-head"].y -= 0.03;
+            _entities["snake-tail"].y -= 0.03;
         }
         else if (_direction == DIRECTION::DOWN) {
-            for (auto &gameObject : _gameObject) {
-                for (auto &entity : gameObject) {
-                    entity.second.y += 0.02 * _speed;
-                }
-            }
+            _entities["snake-head"].y += 0.03;
+            _entities["snake-tail"].y += 0.03;
         }
     }
     if (key == "close") {
         _gameStatus = FINISHED;
     }
     if (key == "UpArrow") {
-        _entities["snake-head"].y -= 0.03;
+        // _entities["snake-head"].y -= 0.03;
         _direction = DIRECTION::UP;
     }
     if (key == "DownArrow") {
-        _entities["snake-head"].y += 0.03;
+        // _entities["snake-head"].y += 0.03;
         _direction = DIRECTION::DOWN;
     }
     if (key == "LeftArrow") {
-        _entities["snake-head"].x -= 5;
+        // _entities["sknake-head"].x -= 5;
         _direction = DIRECTION::LEFT;
     }
     if (key == "RightArrow") {
-        _entities["snake-head"].x += 5;
+        // _entities["snake-head"].x += 5;
         _direction = DIRECTION::RIGHT;
     }
 }
@@ -115,6 +128,22 @@ IGameModule::GAME_STATUS Snake::getGameStatus()
 bool Snake::isGameOver()
 {
     return false;
+}
+
+void Snake::generateGrid(int lenght)
+{
+    std::string val;
+    val = std::string(lenght, '-');
+    _grid.insert(_grid.end(), val);
+    for (int i = 10; i != 0; i--) {
+        val = std::string("-") + std::string(lenght - 2, ' ') + std::string("-");
+        _grid.insert(_grid.end(), val);
+    }
+    val = std::string(lenght, '-');
+    _grid.insert(_grid.end(), val);
+    for (std::string val : _grid) {
+        std::cout << val << std::endl;
+    }
 }
 
 extern "C" IGameModule *create(void)

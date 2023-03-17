@@ -29,15 +29,13 @@ class Snake : public IGameModule {
         const std::string &getName() const;
         GAME_STATUS getGameStatus();
         std::map<std::string, Entity> getInfos();
+        void generateGrid(int lenght);
     protected:
     private:
         std::string _name = "Snake";
         std::map<std::string, IGameModule::Entity> _entities;
         IGameModule::GAME_STATUS _gameStatus = IGameModule::MENU;
-        std::string _event = "";
-        // std::vector<std::vector<int>> _grid;
-        std::vector<std::map<std::string, IGameModule::Entity>> _gameObject;
-        int _score = 0;
+        std::vector<std::string> _grid;
         int _speed = 1;
         int _direction = DIRECTION::RIGHT;
 };
