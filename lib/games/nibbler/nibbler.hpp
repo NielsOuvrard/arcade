@@ -11,20 +11,34 @@
 
 class Nibbler : public IGameModule {
     public:
+        enum DIRECTION {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        };
+        struct box {
+            int new_x;
+            int new_y;
+            int x;
+            int y;
+        } typedef t_box;
         Nibbler();
         ~Nibbler();
-        void startGame();
+        void startGame() ;
         bool isGameOver();
         void update(std::string key);
         std::map<std::string, Entity> getInfos() { return entities;};
         GAME_STATUS getGameStatus() {return status;};
         void generateGrid(int lenght);
-        std::vector<std::string> getGrid() const {return grid;};
+        std::vector<std::vector<int>> getGrid() const {return grid;};
+        DIRECTION getDirection() {return _direction;};
     protected:
         GAME_STATUS status;
         std::map<std::string, Entity> entities;
-        std::vector<std::string> grid;
-
+        std::vector<std::vector<int>> grid;
+        std::vector<std::vector<t_box>> boxes;
+        DIRECTION _direction = DIRECTION::RIGHT;
 };
 
 #endif /* !NIBBLER_HPP_ */
