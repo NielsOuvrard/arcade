@@ -18,10 +18,12 @@ class Nibbler : public IGameModule {
         void update(std::string key);
         std::map<std::string, Entity> getInfos() { return entities;};
         GAME_STATUS getGameStatus() {return status;};
-
+        void generateGrid(int lenght);
+        std::vector<std::string> getGrid() const {return grid;};
     protected:
         GAME_STATUS status;
         std::map<std::string, Entity> entities;
+        std::vector<std::string> grid;
 
 };
 

@@ -106,7 +106,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         true,
         {255, 0, 0},
         {0, 0, 0},
-        {"snake-graphics.png", 1, 1}
+        {"snake-graphics.png"}
     };
     entities.insert({"snakeSprite", sprite});
 

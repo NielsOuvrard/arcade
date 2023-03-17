@@ -26,9 +26,6 @@ typedef struct color_s {
 
 typedef struct sprite_s {
     std::string path;
-    float scaleX;
-    float scaleY;
-
 } sprite_t;
 
 class IGameModule {

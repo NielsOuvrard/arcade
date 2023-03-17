@@ -53,7 +53,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     _window->clear();
     for (auto const &val : entities) {
         IGameModule::Entity entity =  val.second;
-        if (!entity.text.empty()) {
+        if (entity.file.empty()) {
             sf::Text text;
             if (entity.bold && entity.underline)
                 text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -67,10 +67,9 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             sf::Sprite sprite;
             sf::Texture texture;
-            texture.loadFromFile(entity.sprite.path);
+            texture.loadFromFile(entity.file);
             sprite.setTexture(texture);
-            sprite.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
-            sprite.setScale(sf::Vector2f(entity.sprite.scaleX, entity.sprite.scaleY));
+            sprite.setPosition(sf::Vector2f((entity.x * 100) * 0.16, (entity.y * 100) * 0.16));
             _window->draw(sprite);
         }
     }
