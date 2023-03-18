@@ -13,7 +13,7 @@ Nibbler::Nibbler()
     float y = 0, x = 0;
     int row = 0;
     for (std::vector<int> value : grid) {
-        for (int i = 0; value[i]; i++) {
+        for (int i = 0; i != 100; i++) {
             if (value[i] == -2) {
                 Entity newEntity = {
                     "lib/games/snake/files/snake/walls.png",
