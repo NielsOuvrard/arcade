@@ -12,6 +12,7 @@ Core::Core(const std::string displayLibPath)
 {
     try {
         displayLib = new DLLoader<IDisplayModule>(displayLibPath);
+        menuCurrentGraphicDisplay = displayLibPath;
         std::string path = "lib/";
         for (const auto &entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".so") {
@@ -39,12 +40,20 @@ Core::~Core()
 void Core::displayMenu()
 {
     IDisplayModule *module = displayLib->getInstance();
-    Menu myMenu = Menu(gameLibs, gfxLibs);
+    Menu myMenu = Menu(gameLibs, gfxLibs, menuCurrentGraphicDisplay);
     module->init();
     while (myMenu.getGameStatus() != IGameModule::FINISHED) {
         module->update(myMenu.getInfos());
         module->draw();
         myMenu.update(module->getEvent());
+        if (myMenu.getMenuCurrentGraphicDisplay() != menuCurrentGraphicDisplay) {
+            menuCurrentGraphicDisplay = myMenu.getMenuCurrentGraphicDisplay();
+            module->stop();
+            delete module;
+            displayLib = new DLLoader<IDisplayModule>(menuCurrentGraphicDisplay);
+            module = displayLib->getInstance();
+            module->init();
+        }
     }
     selectedGameLib = myMenu.getSelectedGameLib();
     selectedDisplayLib = myMenu.getSelectedDisplayLib();

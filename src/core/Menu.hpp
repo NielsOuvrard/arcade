@@ -10,7 +10,7 @@
 #include "Core.hpp"
 class Menu  : public IGameModule {
     public:
-        Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs);
+        Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs, std::string currentGraphicLib);
         ~Menu();
         bool isGameOver();
         void startGame() {
@@ -22,6 +22,7 @@ class Menu  : public IGameModule {
         bool getSelectedStatus() {return hasSelected;};
         std::string getSelectedGameLib() const { return gameLibs[selectedGameIndex];};
         std::string getSelectedDisplayLib() const {return gfxLibs[selectedDisplayIndex];};
+        std::string getMenuCurrentGraphicDisplay() const {return menuCurrentGraphicDisplay;};
     protected:
         std::string name = "Enter your name : ";
         std::map<std::string, Entity> entities;
@@ -33,6 +34,7 @@ class Menu  : public IGameModule {
         bool hasSelected = false;
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
+        std::string menuCurrentGraphicDisplay;
     private:
 };
 

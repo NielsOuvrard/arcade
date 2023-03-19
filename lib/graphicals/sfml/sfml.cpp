@@ -24,6 +24,7 @@ void Sfml::init()
 {
     _window = new sf::RenderWindow;
     _window->create(sf::VideoMode(1920, 1080), "Arcade - SFML");
+    _window->setKeyRepeatEnabled(false);
     font.loadFromFile("font.ttf");
 }
 
@@ -78,7 +79,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
 std::string Sfml::getEvent()
 {
     sf::Event event;
-    if (_window->pollEvent(event) != false) {
+    while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
@@ -98,25 +99,15 @@ std::string Sfml::getEvent()
         } else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
                 case 71 :
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                        while (_window->pollEvent(event));
-                        return "LeftArrow";
-                    }
+                    return "LeftArrow";
                 case 72:
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                        while (_window->pollEvent(event));
-                        return "RightArrow";
-                    }
+                    return "RightArrow";
                 case 73:
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                        while (_window->pollEvent(event));
-                        return "UpArrow";
-                    }
+                    return "UpArrow";
                 case 74:
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                        while (_window->pollEvent(event));
-                        return "DownArrow";
-                    }
+                    return "DownArrow";
+                case 85:
+                    return "F1";
             }
         }
             // _window.close();

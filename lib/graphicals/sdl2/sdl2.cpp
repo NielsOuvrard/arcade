@@ -51,7 +51,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
             _image_surface = IMG_Load(e.file.c_str());
             _image_texture = SDL_CreateTextureFromSurface(_renderer, _image_surface);
             float x = (entity.second.x * 100) * 0.16;
-            float y = (entity.second.y * 100) * 0.16; 
+            float y = (entity.second.y * 100) * 0.16;
             _image_rect = {(int)x, (int)y, _image_surface->w, _image_surface->h};
             SDL_FreeSurface(_image_surface);
             SDL_RenderCopy(_renderer, _image_texture, NULL, &_image_rect);
@@ -98,6 +98,10 @@ std::string Sdl2::getEvent()
                     return "DownArrow";
                 case SDLK_BACKSPACE:
                     return "Backspace";
+                case SDLK_F1:
+                    return "F1";
+                case SDLK_F2:
+                    return "F2";
                 default:
                     return "";
             }
