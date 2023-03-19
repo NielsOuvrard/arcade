@@ -33,6 +33,7 @@ class Core {
         DLLoader<IGameModule> *gameLib;
         std::string selectedGameLib;
         std::string selectedDisplayLib;
+        std::string menuCurrentGraphicDisplay;
 };
 
 #endif /* !CORE_HPP_ */

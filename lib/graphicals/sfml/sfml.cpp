@@ -79,6 +79,7 @@ std::string Sfml::getEvent()
 {
     sf::Event event;
     while (_window->pollEvent(event)) {
+        std::cout << event.text.unicode << std::endl;
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
@@ -89,7 +90,6 @@ std::string Sfml::getEvent()
             if (event.text.unicode == 8) {
                 return "Backspace";
             }
-            // std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
                 std::string val = {c};
@@ -105,6 +105,8 @@ std::string Sfml::getEvent()
                     return "UpArrow";
                 case 74:
                     return "DownArrow";
+                case 85:
+                    return "F1";
             }
         }
             // _window.close();
