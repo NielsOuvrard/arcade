@@ -78,7 +78,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
 std::string Sfml::getEvent()
 {
     sf::Event event;
-    while (_window->pollEvent(event)) {
+    if (_window->pollEvent(event) != false) {
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
@@ -98,13 +98,25 @@ std::string Sfml::getEvent()
         } else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
                 case 71 :
-                    return "LeftArrow";
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                        while (_window->pollEvent(event));
+                        return "LeftArrow";
+                    }
                 case 72:
-                    return "RightArrow";
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                        while (_window->pollEvent(event));
+                        return "RightArrow";
+                    }
                 case 73:
-                    return "UpArrow";
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                        while (_window->pollEvent(event));
+                        return "UpArrow";
+                    }
                 case 74:
-                    return "DownArrow";
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                        while (_window->pollEvent(event));
+                        return "DownArrow";
+                    }
             }
         }
             // _window.close();
