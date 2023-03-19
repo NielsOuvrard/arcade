@@ -82,7 +82,8 @@ std::string Sdl2::getEvent()
         if (_event.type == SDL_QUIT) {
             return "close";
         }
-        if (_event.type == SDL_KEYDOWN) {
+        if (_event.type == SDL_KEYDOWN && _event.key.repeat == 0) {
+            std::cout << "ici" << std::endl;
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:
                     return "close";
@@ -106,7 +107,7 @@ std::string Sdl2::getEvent()
                     return "";
             }
         }
-        if (_event.type == SDL_TEXTINPUT) {
+        if (_event.type == SDL_TEXTINPUT && _event.key.repeat == 0) {
             std::string val = _event.text.text;
             return val;
         }
