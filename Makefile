@@ -76,7 +76,6 @@ fclean: clean
 	@ rm -f lib/*.so
 
 mac_clean:
-	@ rm lib/arcade_nibbler.so lib/arcade_snake.so
 	@ find . -type d -name "*.dSYM" -exec rm -Rf {} \;
 
 re: fclean all

@@ -20,6 +20,7 @@ int main(int ac, char **av)
 {
     if (ac != 2)
         exit(84);
+    srand(time(NULL));
     Core newCore = Core(av[1]);
     newCore.displayMenu();
 }

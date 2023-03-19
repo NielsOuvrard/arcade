@@ -6,6 +6,7 @@
 */
 
 #include "Core.hpp"
+#include <unistd.h>
 
 Core::Core(const std::string displayLibPath)
 {
@@ -65,6 +66,8 @@ void Core::mainLoop()
         display->update(game->getInfos());
         display->draw();
         game->update(display->getEvent());
+        // wait for 1/60 seconds
+        usleep(16666);
     }
     display->stop();
     delete displayLib;

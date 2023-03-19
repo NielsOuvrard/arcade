@@ -34,6 +34,9 @@ class Nibbler : public IGameModule {
         std::vector<std::vector<int>> getGrid() const {return grid;};
         DIRECTION getDirection() {return _direction;};
     protected:
+        void move(void);
+        void dataToEntity(void);
+        void generateApple(void);
         GAME_STATUS status;
         std::map<std::string, Entity> entities;
         std::vector<std::vector<int>> grid;
