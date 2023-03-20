@@ -70,12 +70,21 @@ void Core::mainLoop()
     IDisplayModule *display = displayLib->getInstance();
     display->init();
     game->startGame();
+    currentRuntimeGraphicDisplay = selectedDisplayLib;
+    game->setCurrentRuntimeGraphicDisplay(selectedDisplayLib);
     while (game->getGameStatus() != IGameModule::FINISHED) {
         display->update(game->getInfos());
         display->draw();
         game->update(display->getEvent());
-        // wait for 1/60 seconds
-        usleep(16666);
+        if (game->getCurrentRuntimeGraphicDisplay() != currentRuntimeGraphicDisplay) {
+            currentRuntimeGraphicDisplay = game->getCurrentRuntimeGraphicDisplay();
+            display->stop();
+            delete display;
+            displayLib = new DLLoader<IDisplayModule>(currentRuntimeGraphicDisplay);
+            display = displayLib->getInstance();
+            display->init();
+        }
+        usleep(100000);
     }
     display->stop();
     delete displayLib;
