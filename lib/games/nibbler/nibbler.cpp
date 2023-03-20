@@ -118,7 +118,6 @@ void Nibbler::dataToEntity(void)
     float y = 0, x = 0;
     int row = 0;
     clearEntities();
-    std::cout << "data to entity" << std::endl;
     for (std::vector<int> value : getGrid()) {
         for (int i = 0; i != 100; i++) {
             if (value[i] == -2) {
