@@ -186,6 +186,11 @@ void Nibbler::moveHead(int x, int y, bool eat)
 
 void Nibbler::move(void)
 {
+    if (getTimeElapsed() < std::chrono::milliseconds(200)) {
+        return;
+    } else {
+        setChronoValue(std::chrono::high_resolution_clock::now());
+    }
     if (getDirection() == UP && _head_y > 0 && getGrid()[_head_y - 1][_head_x] > -2) {
         if (getGrid()[_head_y - 1][_head_x] == -1) {
             moveHead(0, -1, true);
