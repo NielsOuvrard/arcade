@@ -56,11 +56,6 @@ void AGameModule::clearEntities()
     _entities.clear();
 }
 
-void AGameModule::updateEntity(std::string name, Entity entity)
-{
-    _entities[name] = entity;
-}
-
 std::map<std::string, AGameModule::Entity> AGameModule::getInfos() const
 {
     return _entities;
@@ -104,7 +99,7 @@ void AGameModule::setDirection(AGameModule::DIRECTION direction)
     _direction = direction;
 }
 
-// std::vector<std::string> AGameModule::getTextures(void)
-// {
-
-// }
+AGameModule::Entity &AGameModule::getEntity(std::string name) const
+{
+    return _entities.at(name);
+}

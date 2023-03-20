@@ -107,7 +107,6 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         true,
         {255, 0, 0},
         {0, 0, 0},
-        {"snake-graphics.png"}
     };
     setNewEntity("snakeSprite", sprite);
 
@@ -126,50 +125,45 @@ void Menu::update(std::string key)
     }
     if (key == "Backspace" && name.length() > 18) {
         name.resize(name.length() - 1);
-
-        _entities["nameTitle"].text = name;
-
+        getEntity("nameTitle").text = name;
+        return;
     }
     if (key.length() == 1 && name.size() != 32) {
         name = name.append(key);
-        _entities["nameTitle"].text = name;
+        getEntity("nameTitle").text = name;
         return;
     }
     if (key == "Enter" && isGameSelected && isDisplaySelected && name.length() > 19) {
-        _status = FINISHED;
+        setGameStatus(FINISHED);
         return;
     }
     if (key == "F1") {
-        if (_currentRuntimeGraphicDisplay == "lib/arcade_sfml.so") {
-            _currentRuntimeGraphicDisplay = "lib/arcade_sdl2.so";
-        } else if (_currentRuntimeGraphicDisplay == "lib/arcade_sdl2.so") {
-            _currentRuntimeGraphicDisplay = "lib/arcade_ncurses.so";
+        if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
+            setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
+        } else if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sdl2.so") {
+            setCurrentRuntimeGraphicDisplay("lib/arcade_ncurses.so");
         } else {
-            _currentRuntimeGraphicDisplay = "lib/arcade_sfml.so";
+            setCurrentRuntimeGraphicDisplay("lib/arcade_sfml.so");
         }
         return;
     }
     if (gfxLibs.size() != 0 && isGameSelected) {
         if (key == "Enter" && !isDisplaySelected) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            _entities[currentSelectedDisplay].color_fg.red = 255;
-            _entities[currentSelectedDisplay].color_fg.green = 0;
-            _entities[currentSelectedDisplay].color_fg.blue = 0;
-            _entities[currentSelectedDisplay].color_bg.red = 0;
-            _entities[currentSelectedDisplay].color_bg.green = 0;
-            _entities[currentSelectedDisplay].color_bg.blue = 0;
+            color_t color_fg = {255, 0, 0};
+            color_t color_bg = {0, 0, 0};
+            getEntity(currentSelectedDisplay).color_fg = color_fg;
+            getEntity(currentSelectedDisplay).color_bg = color_bg;
             isDisplaySelected = true;
             hasSelected = true;
             return;
         }
         if (key == "ESC" && isDisplaySelected) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
-            _entities[currentSelectedDisplay].color_fg.red = 255;
-            _entities[currentSelectedDisplay].color_fg.green = 255;
-            _entities[currentSelectedDisplay].color_fg.blue = 255;
-            _entities[currentSelectedDisplay].color_bg.red = 0;
-            _entities[currentSelectedDisplay].color_bg.green = 0;
-            _entities[currentSelectedDisplay].color_bg.blue = 0;
+            color_t color_fg = {255, 255, 255};
+            color_t color_bg = {0, 0, 0};
+            getEntity(currentSelectedDisplay).color_fg = color_fg;
+            getEntity(currentSelectedDisplay).color_bg = color_bg;
             isDisplaySelected = false;
             hasSelected = false;
             return;
@@ -177,20 +171,20 @@ void Menu::update(std::string key)
         if (key == "DownArrow" && !isDisplaySelected && (selectedDisplayIndex + 1) < gfxLibs.size()) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
             std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex + 1];
-            _entities[currentSelectedDisplay].underline = false;
-            _entities[currentSelectedDisplay].bold = false;
-            _entities[newSelectedDisplay].underline = true;
-            _entities[newSelectedDisplay].bold = true;
+            getEntity(currentSelectedDisplay).underline = false;
+            getEntity(currentSelectedDisplay).bold = false;
+            getEntity(newSelectedDisplay).underline = true;
+            getEntity(newSelectedDisplay).bold = true;
             selectedDisplayIndex += 1;
             return;
         }
         if (key == "UpArrow" && !isDisplaySelected && selectedDisplayIndex != 0) {
             std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
             std::string newSelectedDisplay = gfxLibs[selectedDisplayIndex - 1];
-            _entities[currentSelectedDisplay].underline = false;
-            _entities[currentSelectedDisplay].bold = false;
-            _entities[newSelectedDisplay].underline = true;
-            _entities[newSelectedDisplay].bold = true;
+            getEntity(currentSelectedDisplay).underline = false;
+            getEntity(currentSelectedDisplay).bold = false;
+            getEntity(newSelectedDisplay).underline = true;
+            getEntity(newSelectedDisplay).bold = true;
             selectedDisplayIndex -= 1;
             return;
         }
@@ -198,43 +192,39 @@ void Menu::update(std::string key)
     if (gameLibs.size() != 0) {
         if (key == "Enter" && !isGameSelected) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
-            _entities[currentSelectedGame].color_fg.red = 255;
-            _entities[currentSelectedGame].color_fg.green = 0;
-            _entities[currentSelectedGame].color_fg.blue = 0;
-            _entities[currentSelectedGame].color_bg.red = 0;
-            _entities[currentSelectedGame].color_bg.green = 0;
-            _entities[currentSelectedGame].color_bg.blue = 0;
+            color_t color_fg = {255, 0, 0};
+            color_t color_bg = {0, 0, 0};
+            getEntity(currentSelectedGame).color_fg = color_fg;
+            getEntity(currentSelectedGame).color_bg = color_bg;
             isGameSelected = true;
             return;
         }
         if (key == "ESC" && isGameSelected) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
-            _entities[currentSelectedGame].color_fg.red = 255;
-            _entities[currentSelectedGame].color_fg.green = 255;
-            _entities[currentSelectedGame].color_fg.blue = 255;
-            _entities[currentSelectedGame].color_bg.red = 0;
-            _entities[currentSelectedGame].color_bg.green = 0;
-            _entities[currentSelectedGame].color_bg.blue = 0;
+            color_t color_fg = {255, 255, 255};
+            color_t color_bg = {0, 0, 0};
+            getEntity(currentSelectedGame).color_fg = color_fg;
+            getEntity(currentSelectedGame).color_bg = color_bg;
             isGameSelected = false;
             return;
         }
         if (key == "DownArrow" && !isGameSelected && (selectedGameIndex + 1) < gameLibs.size()) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
             std::string newSelectedGame = gameLibs[selectedGameIndex + 1];
-            _entities[currentSelectedGame].underline = false;
-            _entities[currentSelectedGame].bold = false;
-            _entities[newSelectedGame].underline = true;
-            _entities[newSelectedGame].bold = true;
+            getEntity(currentSelectedGame).underline = false;
+            getEntity(currentSelectedGame).bold = false;
+            getEntity(newSelectedGame).underline = true;
+            getEntity(newSelectedGame).bold = true;
             selectedGameIndex += 1;
             return;
         }
         if (key == "UpArrow" && !isGameSelected && selectedGameIndex != 0) {
             std::string currentSelectedGame = gameLibs[selectedGameIndex];
             std::string newSelectedGame = gameLibs[selectedGameIndex - 1];
-            _entities[currentSelectedGame].underline = false;
-            _entities[currentSelectedGame].bold = false;
-            _entities[newSelectedGame].underline = true;
-            _entities[newSelectedGame].bold = true;
+            getEntity(currentSelectedGame).underline = false;
+            getEntity(currentSelectedGame).bold = false;
+            getEntity(newSelectedGame).underline = true;
+            getEntity(newSelectedGame).bold = true;
             selectedGameIndex -= 1;
             return;
         }

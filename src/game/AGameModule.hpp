@@ -11,12 +11,6 @@
 
 class AGameModule : public IGameModule {
     public:
-        enum DIRECTION {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT
-        };
         AGameModule();
         ~AGameModule();
         void startGame();
@@ -30,13 +24,13 @@ class AGameModule : public IGameModule {
         std::vector<std::vector<int>> getGrid() const;
         void setGridValue(int y, int x, int value);
         void setNewEntity(std::string name, Entity entity);
-        void updateEntity(std::string name, Entity entity);
         void clearEntities();
         DIRECTION getDirection() const;
         void setDirection(DIRECTION direction);
+        Entity &getEntity(std::string name) const override;
 
     protected:
-        std::map<std::string, Entity> _entities;
+        mutable std::map<std::string, Entity> _entities;
         GAME_STATUS _status;
         std::string _currentRuntimeGraphicDisplay;
         DIRECTION _direction = DIRECTION::RIGHT;
