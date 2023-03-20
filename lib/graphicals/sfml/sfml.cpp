@@ -96,7 +96,7 @@ std::string Sfml::getEvent()
             }
         } else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
-                case 71 :
+                case 71:
                     return "LeftArrow";
                 case 72:
                     return "RightArrow";
@@ -116,6 +116,7 @@ void Sfml::saveTextures(const std::vector<std::string> &path_texture)
 {
     for (auto const &val : path_texture) {
         sf::Texture texture;
+        std::cout << "load texture: " << val << std::endl;
         texture.loadFromFile(val);
         _textures.push_back(texture);
     }

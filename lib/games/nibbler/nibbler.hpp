@@ -25,13 +25,12 @@ class Nibbler : public AGameModule {
     protected:
         void move(void);
         void dataToEntity(void);
-        void generateApple(void);
         void moveHead(int x, int y, bool generateApple);
         int chooseSprite (float x, float y, int value);
         void snakePart(std::vector<int> value, float x, float y, int row, int i);
-        std::vector<std::string> getTextures(void);
+        void getInfoSnake (std::vector<std::string> map);
 
-        // std::vector<std::vector<t_box>> boxes;
+        std::vector<std::string> getTextures(void);
         int _head_x = 0;
         int _head_y = 0;
         int _size_snake = 0;

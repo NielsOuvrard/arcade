@@ -9,6 +9,7 @@
 
 AGameModule::AGameModule()
 {
+    // _status = IN_GAME;
 }
 
 AGameModule::~AGameModule()
@@ -77,6 +78,24 @@ void AGameModule::generateGrid(int lenght)
     _grid[3][2] = 2;
     _grid[3][3] = 3;
     _grid[3][4] = 4; // ? shure ? only for snake
+}
+
+void AGameModule::generateGrid(std::vector<std::string> grid)
+{
+    for (auto &line : grid) {
+        std::vector<int> val;
+        for (auto &c : line) {
+            if (c == ' ')
+                val.push_back(0);
+            else if (c == 'A')
+                val.push_back(-1); // food
+            else if (c == '#')
+                val.push_back(-2); // wall
+            else if (c >= '0' && c <= '9')
+                val.push_back(c - '0'); // snake
+        }
+        _grid.push_back(val);
+    }
 }
 
 std::vector<std::vector<int>> AGameModule::getGrid() const
