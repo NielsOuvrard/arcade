@@ -6,7 +6,7 @@
 */
 
 
-#include "display/IDisplay.hpp"
+#include "IDisplayModule.hpp"
 #include "core/DLLoader.hpp"
 #include <dlfcn.h>
 #include <stdio.h>

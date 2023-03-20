@@ -14,7 +14,7 @@
 #include <filesystem>
 #include <map>
 #include "DLLoader.hpp"
-#include "IDisplay.hpp"
+#include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "Menu.hpp"
 class Core {
