@@ -12,6 +12,9 @@ Nibbler::Nibbler()
     generateGrid(100);
     dataToEntity();
     generateApple();
+    _head_x = 4;
+    _head_y = 3;
+    _size_snake = 4;
 }
 
 Nibbler::~Nibbler()
@@ -32,11 +35,90 @@ void Nibbler::generateApple(void)
     }
 }
 
+int Nibbler::chooseSprite (float x, float y, int value)
+{
+    if (getGrid()[y][x + 1] > 0 && getGrid()[y][x - 1] > 0) // horizontal
+        return 10;
+    if (getGrid()[y + 1][x] > 0 && getGrid()[y - 1][x] > 0) // vertical
+        return 1;
+    if (value == _size_snake) { // head
+        if (getDirection() == DIRECTION::DOWN) {
+            return 6;
+        } else if (getDirection() == DIRECTION::LEFT) {
+            return 7;
+        } else if (getDirection() == DIRECTION::RIGHT) {
+            return 8;
+        } else if (getDirection() == DIRECTION::UP) {
+            return 9;
+        }
+    } else if (value == 1) { // tail
+        if (getGrid()[y + 1][x] == 2) { // move down
+            return 11;
+        } else if (getGrid()[y][x - 1] == 2) { // move left
+            return 12;
+        } else if (getGrid()[y][x + 1] == 2) { // move right
+            return 13;
+        } else if (getGrid()[y - 1][x] == 2) { // move up
+            return 14;
+        } else {
+            return 10; // ?
+        }
+    } else {
+        if (getGrid()[y + 1][x] > 0 && getGrid()[y][x - 1] > 0) // down left
+            return 2;
+        if (getGrid()[y + 1][x] > 0 && getGrid()[y][x + 1] > 0) // down right
+            return 3;
+        if (getGrid()[y - 1][x] > 0 && getGrid()[y][x - 1] > 0) // up left
+            return 4;
+        if (getGrid()[y - 1][x] > 0 && getGrid()[y][x + 1] > 0) // up right
+            return 5;
+        return 10; // ?
+    }
+}
+
+void Nibbler::snakePart(std::vector<int> value, float x, float y, int row, int i)
+{
+    std::vector<std::pair<std::string, std::string>> snake = {
+        {{"lib/games/snake/files/snake/apple.png", "A"},
+        {"lib/games/snake/files/snake/body-vertical.png", "|"},
+        {"lib/games/snake/files/snake/curv-down-left.png", "\\"},
+        {"lib/games/snake/files/snake/curv-down-right.png", "/"},
+        {"lib/games/snake/files/snake/curv-up-left.png", "/"},
+        {"lib/games/snake/files/snake/curv-up-right.png", "\\"},
+        {"lib/games/snake/files/snake/head-down.png", "M"},
+        {"lib/games/snake/files/snake/head-left.png", "3"},
+        {"lib/games/snake/files/snake/head-right.png", "E"},
+        {"lib/games/snake/files/snake/head-up.png", "W"},
+        {"lib/games/snake/files/snake/horizontal-body.png", "="},
+        {"lib/games/snake/files/snake/tail-down.png", "^"},
+        {"lib/games/snake/files/snake/tail-left.png", ">"},
+        {"lib/games/snake/files/snake/tail-right.png", "<"},
+        {"lib/games/snake/files/snake/tail-up.png", "v"},
+        {"lib/games/snake/files/snake/walls.png", "#"},
+        {"", " "}}
+    };
+
+    int index = chooseSprite(x, y, value[i]);
+    Entity newEntity = {
+        snake[index].first,
+        snake[index].second,
+        "",
+        x,
+        y,
+        false,
+        false,
+        {0, 255, 0},
+        {0, 0, 0},
+    };
+    setNewEntity(std::to_string(i) + "snake" + std::to_string(row), newEntity);
+}
+
 void Nibbler::dataToEntity(void)
 {
     float y = 0, x = 0;
     int row = 0;
     clearEntities();
+    std::cout << "data to entity" << std::endl;
     for (std::vector<int> value : getGrid()) {
         for (int i = 0; i != 100; i++) {
             if (value[i] == -2) {
@@ -48,7 +130,7 @@ void Nibbler::dataToEntity(void)
                     y,
                     false,
                     false,
-                    {255, 0, 0},
+                    {255, 255, 255},
                     {0, 0, 0},
                 };
                 setNewEntity(std::to_string(i) + "walls" + std::to_string(row), newEntity);
@@ -62,7 +144,7 @@ void Nibbler::dataToEntity(void)
                     y,
                     false,
                     false,
-                    {255, 0, 0},
+                    {0, 0, 0},
                     {0, 0, 0},
                 };
                 setNewEntity(std::to_string(i) + "spaces" + std::to_string(row), newEntity);
@@ -82,18 +164,7 @@ void Nibbler::dataToEntity(void)
                 setNewEntity(std::to_string(i) + "apples" + std::to_string(row), newEntity);
             }
             if (value[i] > 0) {
-                Entity newEntity = {
-                    "lib/games/snake/files/snake/body-vertical.png",
-                    "S",
-                    "",
-                    x,
-                    y,
-                    false,
-                    false,
-                    {255, 0, 0},
-                    {0, 0, 0},
-                };
-                setNewEntity(std::to_string(i) + "snake" + std::to_string(row), newEntity);
+                snakePart(value, x, y, row, i);
             }
             x += 1;
         }
@@ -103,52 +174,48 @@ void Nibbler::dataToEntity(void)
     }
 }
 
+void Nibbler::moveHead(int x, int y, bool generateApple)
+{
+    // getGrid()[_head_y += y][_head_x += x] = _size_snake + 1;
+    setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
+    _size_snake += generateApple;
+}
+
 void Nibbler::move(void)
 {
-    int x_head, y_head, head_value = 0;
-    for (int i = 0; i != getGrid().size(); i++) {
-        for (int j = 0; j != getGrid()[i].size(); j++) {
-            if (getGrid()[i][j] > head_value) {
-                head_value = getGrid()[i][j];
-                x_head = j;
-                y_head = i;
-            }
-        }
-    }
-    if (head_value == 0)
-        return;
-    if (getDirection() == UP && y_head > 0 && getGrid()[y_head - 1][x_head] > -2) {
-        if (getGrid()[y_head - 1][x_head] == -1) {
-            setGridValue(y_head - 1, x_head, head_value + 1);
+    if (getDirection() == UP && _head_y > 0 && getGrid()[_head_y - 1][_head_x] > -2) {
+        if (getGrid()[_head_y - 1][_head_x] == -1) {
+            moveHead(0, -1, true);
             generateApple();
             return;
         }
-        setGridValue(y_head - 1, x_head, head_value + 1);
-    } else if (getDirection() == DOWN && getGrid().size() > y_head && getGrid()[y_head + 1][x_head] > -2) {
-        if (getGrid()[y_head + 1][x_head] == -1) {
-            setGridValue(y_head + 1, x_head, head_value + 1);
+        moveHead(0, -1, false);
+    } else if (getDirection() == DOWN && getGrid().size() > _head_y && getGrid()[_head_y + 1][_head_x] > -2) {
+        if (getGrid()[_head_y + 1][_head_x] == -1) {
+            moveHead(0, 1, true);
             generateApple();
             return;
         }
-        setGridValue(y_head + 1, x_head, head_value + 1);
-    } else if (getDirection() == LEFT && x_head > 0 && getGrid()[y_head][x_head - 1] > -2) {
-        if (getGrid()[y_head][x_head - 1] == -1) {
-            setGridValue(y_head, x_head - 1, head_value + 1);
+        moveHead(0, 1, false);
+    } else if (getDirection() == LEFT && _head_x > 0 && getGrid()[_head_y][_head_x - 1] > -2) {
+        if (getGrid()[_head_y][_head_x - 1] == -1) {
+            moveHead(-1, 0, true);
             generateApple();
             return;
         }
-        setGridValue(y_head, x_head - 1, head_value + 1);
-    } else if (getDirection() == RIGHT && getGrid()[y_head].size() > x_head && getGrid()[y_head][x_head + 1] > -2) {
-        if (getGrid()[y_head][x_head + 1] == -1) {
-            setGridValue(y_head, x_head + 1, head_value + 1);
+        moveHead(-1, 0, false);
+    } else if (getDirection() == RIGHT && getGrid()[_head_y].size() > _head_x && getGrid()[_head_y][_head_x + 1] > -2) {
+        if (getGrid()[_head_y][_head_x + 1] == -1) {
+            moveHead(1, 0, true);
             generateApple();
             return;
         }
-        setGridValue(y_head, x_head + 1, head_value + 1);
+        moveHead(1, 0, false);
     } else {
         setGameStatus(FINISHED);
         return;
     }
+
     for (int i = 0; i != getGrid().size(); i++) {
         for (int j = 0; j != getGrid()[i].size(); j++) {
             if (getGrid()[i][j] > 0) {

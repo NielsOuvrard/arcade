@@ -81,19 +81,7 @@ void AGameModule::generateGrid(int lenght)
     _grid[3][1] = 1;
     _grid[3][2] = 2;
     _grid[3][3] = 3;
-    _grid[3][4] = 4;
-    // generateApple();
-    // grid[2][4] = -1;
-    // std::cout << "voici la map" << std::endl;
-    // for (std::vector<int> value : grid) {
-    //     for (int i = 0; value[i]; i++) {
-    //         if (value[i] == 0)
-    //             std::cout << " ";
-    //         if (value[i] == -2)
-    //             std::cout << "-";
-    //     }
-    //     std::cout << std::endl;
-    // }
+    _grid[3][4] = 4; // ? shure ? only for snake
 }
 
 std::vector<std::vector<int>> AGameModule::getGrid() const

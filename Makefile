@@ -78,6 +78,7 @@ fclean: clean
 
 mac_clean:
 	@ find . -type d -name "*.dSYM" -exec rm -Rf {} \;
+	@ find . -name "*.DS_Store" -exec rm -Rf {} \;
 
 re: fclean all
 

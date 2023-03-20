@@ -26,7 +26,14 @@ class Nibbler : public AGameModule {
         void move(void);
         void dataToEntity(void);
         void generateApple(void);
-        std::vector<std::vector<t_box>> boxes;
+        void moveHead(int x, int y, bool generateApple);
+        int chooseSprite (float x, float y, int value);
+        void snakePart(std::vector<int> value, float x, float y, int row, int i);
+
+        // std::vector<std::vector<t_box>> boxes;
+        int _head_x = 0;
+        int _head_y = 0;
+        int _size_snake = 0;
 };
 
 #endif /* !NIBBLER_HPP_ */
