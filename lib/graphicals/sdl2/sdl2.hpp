@@ -12,7 +12,7 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "IDisplay.hpp"
+#include "IDisplayModule.hpp"
 
 class Sdl2 : public IDisplayModule {
     public:

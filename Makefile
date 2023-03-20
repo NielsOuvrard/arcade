@@ -11,7 +11,8 @@
 
 SRC =	src/main.cpp \
 		src/core/Core.cpp \
-		src/core/Menu.cpp
+		src/core/Menu.cpp \
+		src/game/AGameModule.cpp
 
 SRC_LIB_GAMES = lib/games
 
@@ -53,10 +54,10 @@ sdl2:
 	@ g++ -v -shared -o lib/arcade_sdl2.so -fPIC $(SRC_LIB_GRAPHICALS)/sdl2/*.cpp $(SDL2_FLAGS) $(INCLUDE_PATH)
 
 snake:
-	@ g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp $(INCLUDE_PATH)
+	@ g++ -shared -o lib/arcade_snake.so -fPIC $(SRC_LIB_GAMES)/snake/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
 nibbler:
-	@ g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp $(INCLUDE_PATH)
+	@ g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
 games: snake \
 	nibbler

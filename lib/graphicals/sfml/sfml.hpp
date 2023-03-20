@@ -17,7 +17,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
-
 #include "IDisplayModule.hpp"
 
 class Sfml : public IDisplayModule {

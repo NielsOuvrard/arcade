@@ -12,71 +12,71 @@ Snake::Snake()
     generateGrid(100);
     float y = 0, x = 0;
     int row = 0;
-    for (std::string value : _grid) {
-        for (int i = 0; value[i]; i++) {
-            if (value[i] == '-') {
-                Entity newEntity = {
-                    "lib/games/snake/files/snake/walls.png",
-                    "#",
-                    "",
-                    x,
-                    y,
-                    false,
-                    false,
-                    {255, 0, 0},
-                    {0, 0, 0},
-                };
-                std::cout << newEntity.y << std::endl;
-                _entities.insert({std::to_string(i) + "walls" + std::to_string(row), newEntity});
-            }
-            if (value[i] == 'H') {
-                Entity newEntity = {
-                    "lib/games/snake/files/snake/head-right.png",
-                    "H",
-                    "",
-                    x,
-                    y,
-                    false,
-                    false,
-                    {255, 0, 0},
-                    {0, 0, 0},
-                };
-                _entities.insert({"head", newEntity});
-            }
-            if (value[i] == 'T') {
-                Entity newEntity = {
-                    "lib/games/snake/files/snake/tail-right.png",
-                    "T",
-                    "",
-                    x,
-                    y,
-                    false,
-                    false,
-                    {255, 0, 0},
-                    {0, 0, 0},
-                };
-                _entities.insert({"tail", newEntity});
-            }
-            if (value[i] == 'S') {
-                Entity newEntity = {
-                    "lib/games/snake/files/snake/horizontal-body.png",
-                    "S",
-                    "",
-                    x,
-                    y,
-                    false,
-                    false,
-                    {255, 0, 0},
-                    {0, 0, 0},
-                };
-                _entities.insert({"horizontal-body", newEntity});
-            }
-            x += 1;
-        }
-        x = 0;
-        y += 1;
-        row++;
-    }
+    // for (std::string value : _grid) {
+    //     for (int i = 0; value[i]; i++) {
+    //         if (value[i] == '-') {
+    //             Entity newEntity = {
+    //                 "lib/games/snake/files/snake/walls.png",
+    //                 "#",
+    //                 "",
+    //                 x,
+    //                 y,
+    //                 false,
+    //                 false,
+    //                 {255, 0, 0},
+    //                 {0, 0, 0},
+    //             };
+    //             std::cout << newEntity.y << std::endl;
+    //             _entities.insert({std::to_string(i) + "walls" + std::to_string(row), newEntity});
+    //         }
+    //         if (value[i] == 'H') {
+    //             Entity newEntity = {
+    //                 "lib/games/snake/files/snake/head-right.png",
+    //                 "H",
+    //                 "",
+    //                 x,
+    //                 y,
+    //                 false,
+    //                 false,
+    //                 {255, 0, 0},
+    //                 {0, 0, 0},
+    //             };
+    //             _entities.insert({"head", newEntity});
+    //         }
+    //         if (value[i] == 'T') {
+    //             Entity newEntity = {
+    //                 "lib/games/snake/files/snake/tail-right.png",
+    //                 "T",
+    //                 "",
+    //                 x,
+    //                 y,
+    //                 false,
+    //                 false,
+    //                 {255, 0, 0},
+    //                 {0, 0, 0},
+    //             };
+    //             _entities.insert({"tail", newEntity});
+    //         }
+    //         if (value[i] == 'S') {
+    //             Entity newEntity = {
+    //                 "lib/games/snake/files/snake/horizontal-body.png",
+    //                 "S",
+    //                 "",
+    //                 x,
+    //                 y,
+    //                 false,
+    //                 false,
+    //                 {255, 0, 0},
+    //                 {0, 0, 0},
+    //             };
+    //             _entities.insert({"horizontal-body", newEntity});
+    //         }
+    //         x += 1;
+    //     }
+    //     x = 0;
+    //     y += 1;
+    //     row++;
+    // }
     x = 600, y = 3;
 }
 
@@ -118,7 +118,7 @@ void Snake::update(std::string key)
         }
     }
     if (key == "close") {
-        _gameStatus = FINISHED;
+        // _gameStatus = FINISHED;
     }
     if (key == "UpArrow") {
         // _entities["snake-head"].y -= 0.03;
@@ -136,47 +136,13 @@ void Snake::update(std::string key)
         // _entities["snake-head"].x += 5;
         _direction = DIRECTION::RIGHT;
     }
-    print_grid(_grid);
+    // print_grid(_grid);
     sleep(1);
-}
-
-std::map<std::string, IGameModule::Entity> Snake::getInfos()
-{
-    return _entities;
 }
 
 const std::string &Snake::getName() const
 {
     return _name;
-}
-
-IGameModule::GAME_STATUS Snake::getGameStatus()
-{
-    return _gameStatus;
-}
-
-bool Snake::isGameOver()
-{
-    return false;
-}
-
-void Snake::generateGrid(int lenght)
-{
-    std::string val;
-    val = std::string(lenght, '-');
-    _grid.insert(_grid.end(), val);
-    for (int i = 10; i != 0; i--) {
-        val = std::string("-") + std::string(lenght - 2, ' ') + std::string("-");
-        _grid.insert(_grid.end(), val);
-    }
-    val = std::string(lenght, '-');
-    _grid.insert(_grid.end(), val);
-    for (std::string val : _grid) {
-        std::cout << val << std::endl;
-    }
-    _grid[5][50] = 'H';
-    _grid[5][49] = 'S';
-    _grid[5][48] = 'T';
 }
 
 extern "C" IGameModule *create(void)

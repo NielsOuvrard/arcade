@@ -6,13 +6,12 @@
 */
 
 #include "Core.hpp"
-#include <unistd.h>
 
 Core::Core(const std::string displayLibPath)
 {
     try {
         displayLib = new DLLoader<IDisplayModule>(displayLibPath);
-        menuCurrentGraphicDisplay = displayLibPath;
+        currentRuntimeGraphicDisplay = displayLibPath;
         std::string path = "lib/";
         for (const auto &entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".so") {
@@ -40,17 +39,17 @@ Core::~Core()
 void Core::displayMenu()
 {
     IDisplayModule *module = displayLib->getInstance();
-    Menu myMenu = Menu(gameLibs, gfxLibs, menuCurrentGraphicDisplay);
+    Menu myMenu = Menu(gameLibs, gfxLibs, currentRuntimeGraphicDisplay);
     module->init();
     while (myMenu.getGameStatus() != IGameModule::FINISHED) {
         module->update(myMenu.getInfos());
         module->draw();
         myMenu.update(module->getEvent());
-        if (myMenu.getMenuCurrentGraphicDisplay() != menuCurrentGraphicDisplay) {
-            menuCurrentGraphicDisplay = myMenu.getMenuCurrentGraphicDisplay();
+        if (myMenu.getCurrentRuntimeGraphicDisplay() != currentRuntimeGraphicDisplay) {
+            currentRuntimeGraphicDisplay = myMenu.getCurrentRuntimeGraphicDisplay();
             module->stop();
             delete module;
-            displayLib = new DLLoader<IDisplayModule>(menuCurrentGraphicDisplay);
+            displayLib = new DLLoader<IDisplayModule>(currentRuntimeGraphicDisplay);
             module = displayLib->getInstance();
             module->init();
         }

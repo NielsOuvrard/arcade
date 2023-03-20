@@ -54,8 +54,8 @@ class IGameModule {
         virtual void startGame() = 0;
         virtual bool isGameOver() = 0;
         virtual void update(std::string key) = 0;
-        virtual std::map<std::string, Entity> getInfos() = 0;
-        virtual GAME_STATUS getGameStatus() = 0;
+        virtual std::map<std::string, Entity> getInfos() const = 0;
+        virtual GAME_STATUS getGameStatus() const = 0;
 
     protected:
     private:

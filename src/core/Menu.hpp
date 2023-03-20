@@ -8,25 +8,18 @@
 #ifndef MENU_HPP_
 #define MENU_HPP_
 #include "Core.hpp"
-class Menu  : public IGameModule {
+#include "AGameModule.hpp"
+class Menu : public AGameModule {
     public:
         Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs, std::string currentGraphicLib);
         ~Menu();
-        bool isGameOver();
-        void startGame() {
-            status = IN_GAME;
-        };
         void update(std::string key);
-        std::map<std::string, Entity> getInfos() { return entities;};
-        GAME_STATUS getGameStatus() { return status;};
         bool getSelectedStatus() {return hasSelected;};
         std::string getSelectedGameLib() const { return gameLibs[selectedGameIndex];};
         std::string getSelectedDisplayLib() const {return gfxLibs[selectedDisplayIndex];};
-        std::string getMenuCurrentGraphicDisplay() const {return menuCurrentGraphicDisplay;};
+
     protected:
         std::string name = "Enter your name : ";
-        std::map<std::string, Entity> entities;
-        GAME_STATUS status;
         int selectedGameIndex = 0;
         int selectedDisplayIndex = 0;
         bool isGameSelected = false;
@@ -34,7 +27,6 @@ class Menu  : public IGameModule {
         bool hasSelected = false;
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
-        std::string menuCurrentGraphicDisplay;
     private:
 };
 

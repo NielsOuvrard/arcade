@@ -12,10 +12,11 @@
 #include <sstream>
 #include <vector>
 #include <filesystem>
+#include <unistd.h>
 #include <map>
 #include "DLLoader.hpp"
 #include "IDisplayModule.hpp"
-#include "IGameModule.hpp"
+#include "AGameModule.hpp"
 #include "Menu.hpp"
 class Core {
     public:
@@ -33,7 +34,7 @@ class Core {
         DLLoader<IGameModule> *gameLib;
         std::string selectedGameLib;
         std::string selectedDisplayLib;
-        std::string menuCurrentGraphicDisplay;
+        std::string currentRuntimeGraphicDisplay;
 };
 
 #endif /* !CORE_HPP_ */
