@@ -22,6 +22,7 @@ class Sdl2 : public IDisplayModule {
         void stop();
         void draw();
         void update(std::map<std::string, IGameModule::Entity> entities);
+        void saveTextures(const std::vector<std::string> &path_texture);
         std::string getEvent();
         const std::string &getName() const;
 

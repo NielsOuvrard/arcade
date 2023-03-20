@@ -20,6 +20,7 @@ class Ncurses : public IDisplayModule {
         void update(std::map<std::string, IGameModule::Entity> entities);
         std::string getEvent();
         const std::string &getName() const;
+        void saveTextures(const std::vector<std::string> &texture);
 
     protected:
         std::string _name = "SFML";

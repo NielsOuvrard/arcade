@@ -69,6 +69,7 @@ void Core::mainLoop()
     IGameModule *game = gameLib->getInstance();
     IDisplayModule *display = displayLib->getInstance();
     display->init();
+    display->saveTextures(game->getTextures());
     game->startGame();
     while (game->getGameStatus() != IGameModule::FINISHED) {
         display->update(game->getInfos());

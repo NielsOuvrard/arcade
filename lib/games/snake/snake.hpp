@@ -15,6 +15,7 @@ class Snake : public AGameModule {
         ~Snake();
         void update(std::string key);
         const std::string &getName() const;
+        std::vector<std::string> getTextures(void){return std::vector<std::string>();};
     protected:
     private:
         std::string _name = "Snake";

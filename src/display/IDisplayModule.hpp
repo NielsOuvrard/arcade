@@ -23,6 +23,7 @@ class IDisplayModule {
         virtual void stop() = 0;
         virtual void update(std::map<std::string, IGameModule::Entity> entities) = 0;
         virtual void draw() = 0;
+        virtual void saveTextures(const std::vector<std::string> &texture) = 0;
         virtual std::string getEvent() = 0;
         virtual const std::string &getName() const = 0;
 };

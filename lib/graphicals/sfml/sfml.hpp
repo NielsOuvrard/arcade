@@ -27,6 +27,7 @@ class Sfml : public IDisplayModule {
         void stop();
         void update(std::map<std::string, IGameModule::Entity> entities);
         void draw();
+        void saveTextures(const std::vector<std::string> &texture);
         std::string getEvent();
         const std::string &getName() const;
 
@@ -37,5 +38,6 @@ class Sfml : public IDisplayModule {
         sf::Event _event;
         std::string _name = "SFML";
         sf::Font font;
+        std::vector<sf::Texture> _textures;
     private:
 };

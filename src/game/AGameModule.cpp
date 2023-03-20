@@ -103,3 +103,8 @@ void AGameModule::setDirection(AGameModule::DIRECTION direction)
 {
     _direction = direction;
 }
+
+// std::vector<std::string> AGameModule::getTextures(void)
+// {
+
+// }

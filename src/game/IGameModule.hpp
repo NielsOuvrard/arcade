@@ -38,7 +38,7 @@ class IGameModule {
         };
 
         struct Entity {
-            std::string file;
+            int id_file;
             std::string text;
             std::string background_color;
             float x;
@@ -54,6 +54,7 @@ class IGameModule {
         virtual void startGame() = 0;
         virtual bool isGameOver() = 0;
         virtual void update(std::string key) = 0;
+        virtual std::vector<std::string> getTextures() = 0;
         virtual std::map<std::string, Entity> getInfos() const = 0;
         virtual GAME_STATUS getGameStatus() const = 0;
 

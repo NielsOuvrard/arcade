@@ -14,7 +14,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
     gfxLibs = gfxLibsVal;
     float x = 0, y = 0;
     Entity gameEntity = {
-        "",
+        -1,
         "Game Libs",
         "E9967A",
         x,
@@ -33,8 +33,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             bold = true;
             underline = true;
         }
-        Entity  gameLib = {
-            "",
+        Entity gameLib = {
+            -1,
             val,
             "E9967A",
             x,
@@ -48,8 +48,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         setNewEntity(val, gameLib);
         y += 1;
     }
-    Entity gfxEntity = {
-        "",
+    Entity gfxEntity = { // old color type (only one color), why it's working ?
+        -1,
         "GFX Libs",
         "E9967A",
         x,
@@ -69,7 +69,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             underline = true;
         }
         Entity gfxLib = {
-            "",
+            -1,
             val,
             "E9967A",
             x,
@@ -84,7 +84,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         y += 1;
     }
     Entity nameTitle = {
-        "",
+        -1,
         name,
         "E9967A",
         x,
@@ -98,7 +98,7 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
     setNewEntity("nameTitle", nameTitle);
     x += 1;
     Entity sprite = {
-        "",
+        -1,
         "",
         "E9967A",
         x,

@@ -103,6 +103,11 @@ const std::string & Ncurses::getName() const
     return _name;
 }
 
+void Ncurses::saveTextures(const std::vector<std::string> &path_texture)
+{
+    (void)path_texture;
+}
+
 extern "C" IDisplayModule *create(void)
 {
     return new Ncurses();

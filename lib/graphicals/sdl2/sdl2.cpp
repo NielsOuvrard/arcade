@@ -45,35 +45,36 @@ void Sdl2::draw()
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
-    for (auto const &entity : entities) {
-        IGameModule::Entity e = entity.second;
-        if (e.file.length()) {
-            _image_surface = IMG_Load(e.file.c_str());
-            _image_texture = SDL_CreateTextureFromSurface(_renderer, _image_surface);
-            float x = (entity.second.x * 100) * 0.16;
-            float y = (entity.second.y * 100) * 0.16;
-            _image_rect = {(int)x, (int)y, _image_surface->w, _image_surface->h};
-            SDL_FreeSurface(_image_surface);
-            SDL_RenderCopy(_renderer, _image_texture, NULL, &_image_rect);
-            continue;
-        }
-        if (entity.second.text.length()) {
-            if (e.bold && e.underline) {
-                TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
-            }
-            _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
-                (Uint8)e.color_fg.red,
-                (Uint8)e.color_fg.green,
-                (Uint8)e.color_fg.blue, 255
-            });
-            _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
-            _text_rect = {(int)((entity.second.x * 100) * 0.16), (int)(entity.second.y * 100), _text_surface->w, _text_surface->h};
-            SDL_FreeSurface(_text_surface);
-            SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
-            TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
-            continue;
-        }
-    }
+    (void) entities;
+    // for (auto const &entity : entities) {
+    //     IGameModule::Entity e = entity.second;
+    //     if (e.file_id > 0) {
+    //         _image_surface = IMG_Load(e.file.c_str());
+    //         _image_texture = SDL_CreateTextureFromSurface(_renderer, _image_surface);
+    //         float x = (entity.second.x * 100) * 0.16;
+    //         float y = (entity.second.y * 100) * 0.16;
+    //         _image_rect = {(int)x, (int)y, _image_surface->w, _image_surface->h};
+    //         SDL_FreeSurface(_image_surface);
+    //         SDL_RenderCopy(_renderer, _image_texture, NULL, &_image_rect);
+    //         continue;
+    //     }
+    //     if (entity.second.text.length()) {
+    //         if (e.bold && e.underline) {
+    //             TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
+    //         }
+    //         _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
+    //             (Uint8)e.color_fg.red,
+    //             (Uint8)e.color_fg.green,
+    //             (Uint8)e.color_fg.blue, 255
+    //         });
+    //         _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
+    //         _text_rect = {(int)((entity.second.x * 100) * 0.16), (int)(entity.second.y * 100), _text_surface->w, _text_surface->h};
+    //         SDL_FreeSurface(_text_surface);
+    //         SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
+    //         TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
+    //         continue;
+    //     }
+    // }
 }
 
 std::string Sdl2::getEvent()
@@ -83,7 +84,6 @@ std::string Sdl2::getEvent()
             return "close";
         }
         if (_event.type == SDL_KEYDOWN && _event.key.repeat == 0) {
-            std::cout << "ici" << std::endl;
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:
                     return "close";
@@ -132,4 +132,9 @@ extern "C" std::string getType(void)
 
 extern "C" void destroy(IDisplayModule* obj) {
     delete obj;
+}
+
+void Sdl2::saveTextures(const std::vector<std::string> &path_texture)
+{
+    (void)path_texture;
 }

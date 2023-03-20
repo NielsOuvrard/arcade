@@ -45,7 +45,6 @@ void Sfml::draw()
     _window->display();
 }
 
-
 void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
 {
     if (entities.size() == 0) {
@@ -53,8 +52,8 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     }
     _window->clear();
     for (auto const &val : entities) {
-        IGameModule::Entity entity =  val.second;
-        if (entity.file.empty()) {
+        IGameModule::Entity entity = val.second;
+        if (entity.id_file == -1) {
             sf::Text text;
             if (entity.bold && entity.underline)
                 text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -67,9 +66,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
             _window->draw(text);
         } else {
             sf::Sprite sprite;
-            sf::Texture texture;
-            texture.loadFromFile(entity.file);
-            sprite.setTexture(texture);
+            sprite.setTexture(_textures[entity.id_file]);
             sprite.setPosition(sf::Vector2f((entity.x * 100) * 0.16, (entity.y * 100) * 0.16));
             _window->draw(sprite);
         }
@@ -83,6 +80,8 @@ std::string Sfml::getEvent()
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {
+            if (event.text.unicode == '\n')
+                return "Enter";
             if (event.text.unicode == 13)
                 return "Enter";
             if (event.text.unicode == 27)
@@ -90,7 +89,6 @@ std::string Sfml::getEvent()
             if (event.text.unicode == 8) {
                 return "Backspace";
             }
-            // std::cout << event.text.unicode << std::endl;
             if (event.text.unicode < 128) {
                 char  c = static_cast<char>(event.text.unicode);
                 std::string val = {c};
@@ -110,9 +108,17 @@ std::string Sfml::getEvent()
                     return "F1";
             }
         }
-            // _window.close();
     }
     return "";
+}
+
+void Sfml::saveTextures(const std::vector<std::string> &path_texture)
+{
+    for (auto const &val : path_texture) {
+        sf::Texture texture;
+        texture.loadFromFile(val);
+        _textures.push_back(texture);
+    }
 }
 
 const std::string & Sfml::getName() const

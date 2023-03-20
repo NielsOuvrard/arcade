@@ -29,6 +29,7 @@ class Nibbler : public AGameModule {
         void moveHead(int x, int y, bool generateApple);
         int chooseSprite (float x, float y, int value);
         void snakePart(std::vector<int> value, float x, float y, int row, int i);
+        std::vector<std::string> getTextures(void);
 
         // std::vector<std::vector<t_box>> boxes;
         int _head_x = 0;

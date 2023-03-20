@@ -17,6 +17,7 @@ class Menu : public AGameModule {
         bool getSelectedStatus() {return hasSelected;};
         std::string getSelectedGameLib() const { return gameLibs[selectedGameIndex];};
         std::string getSelectedDisplayLib() const {return gfxLibs[selectedDisplayIndex];};
+        std::vector<std::string> getTextures(void){return std::vector<std::string>();};
 
     protected:
         std::string name = "Enter your name : ";

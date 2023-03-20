@@ -23,12 +23,9 @@ Nibbler::~Nibbler()
 
 void Nibbler::generateApple(void)
 {
-    std::cout << "generate apple" << std::endl;
     int x = rand() % 100;
     int y = rand() % 10;
-    std::cout << "x: " << x << " y: " << y << std::endl;
     if (getGrid()[y][x] == 0) {
-        std::cout << "apple generated in " << x << " " << y << std::endl;
         setGridValue(y, x, -1);
     } else {
         generateApple();
@@ -78,30 +75,14 @@ int Nibbler::chooseSprite (float x, float y, int value)
 
 void Nibbler::snakePart(std::vector<int> value, float x, float y, int row, int i)
 {
-    std::vector<std::pair<std::string, std::string>> snake = {
-        {{"lib/games/snake/files/snake/apple.png", "A"},
-        {"lib/games/snake/files/snake/body-vertical.png", "|"},
-        {"lib/games/snake/files/snake/curv-down-left.png", "\\"},
-        {"lib/games/snake/files/snake/curv-down-right.png", "/"},
-        {"lib/games/snake/files/snake/curv-up-left.png", "/"},
-        {"lib/games/snake/files/snake/curv-up-right.png", "\\"},
-        {"lib/games/snake/files/snake/head-down.png", "M"},
-        {"lib/games/snake/files/snake/head-left.png", "3"},
-        {"lib/games/snake/files/snake/head-right.png", "E"},
-        {"lib/games/snake/files/snake/head-up.png", "W"},
-        {"lib/games/snake/files/snake/horizontal-body.png", "="},
-        {"lib/games/snake/files/snake/tail-down.png", "^"},
-        {"lib/games/snake/files/snake/tail-left.png", ">"},
-        {"lib/games/snake/files/snake/tail-right.png", "<"},
-        {"lib/games/snake/files/snake/tail-up.png", "v"},
-        {"lib/games/snake/files/snake/walls.png", "#"},
-        {"", " "}}
+    std::vector<std::string> snake = {
+        "A", "|", "\\", "/", "/", "\\", "M", "3", "E", "W", "=", "^", ">", "<", "v", "#", " "
     };
 
     int index = chooseSprite(x, y, value[i]);
     Entity newEntity = {
-        snake[index].first,
-        snake[index].second,
+        index,
+        snake[index],
         "",
         x,
         y,
@@ -120,9 +101,9 @@ void Nibbler::dataToEntity(void)
     clearEntities();
     for (std::vector<int> value : getGrid()) {
         for (int i = 0; i != 100; i++) {
-            if (value[i] == -2) {
+            if (value[i] == -2) { // walls
                 Entity newEntity = {
-                    "lib/games/snake/files/snake/walls.png",
+                    15,
                     "#",
                     "",
                     x,
@@ -134,9 +115,9 @@ void Nibbler::dataToEntity(void)
                 };
                 setNewEntity(std::to_string(i) + "walls" + std::to_string(row), newEntity);
             }
-            if (value[i] == 0) {
+            if (value[i] == 0) { // spaces
                 Entity newEntity = {
-                    "",
+                    16,
                     " ",
                     "",
                     x,
@@ -148,9 +129,9 @@ void Nibbler::dataToEntity(void)
                 };
                 setNewEntity(std::to_string(i) + "spaces" + std::to_string(row), newEntity);
             }
-            if (value[i] == -1) {
+            if (value[i] == -1) { // apple
                 Entity newEntity = {
-                    "lib/games/snake/files/snake/apple.png",
+                    0,
                     "A",
                     "",
                     x,
@@ -243,8 +224,7 @@ void Nibbler::update(std::string key)
     }
 }
 
-extern "C" IGameModule *create(void)
-{
+extern "C" IGameModule *create(void) {
     return new Nibbler();
 }
 
@@ -254,4 +234,27 @@ extern "C" void destroy(IGameModule* obj) {
 
 extern "C" std::string getType() {
     return "Game";
+}
+
+std::vector<std::string> Nibbler::getTextures() {
+    std::vector<std::string> snake = {
+        "lib/games/snake/files/snake/apple.png",
+        "lib/games/snake/files/snake/body-vertical.png",
+        "lib/games/snake/files/snake/curv-down-left.png",
+        "lib/games/snake/files/snake/curv-down-right.png",
+        "lib/games/snake/files/snake/curv-up-left.png",
+        "lib/games/snake/files/snake/curv-up-right.png",
+        "lib/games/snake/files/snake/head-down.png",
+        "lib/games/snake/files/snake/head-left.png",
+        "lib/games/snake/files/snake/head-right.png",
+        "lib/games/snake/files/snake/head-up.png",
+        "lib/games/snake/files/snake/horizontal-body.png",
+        "lib/games/snake/files/snake/tail-down.png",
+        "lib/games/snake/files/snake/tail-left.png",
+        "lib/games/snake/files/snake/tail-right.png",
+        "lib/games/snake/files/snake/tail-up.png",
+        "lib/games/snake/files/snake/walls.png",
+        ""
+    };
+    return snake;
 }
