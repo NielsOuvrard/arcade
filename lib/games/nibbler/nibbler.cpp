@@ -175,7 +175,6 @@ void Nibbler::dataToEntity(void)
 
 void Nibbler::moveHead(int x, int y, bool generateApple)
 {
-    // getGrid()[_head_y += y][_head_x += x] = _size_snake + 1;
     setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
     _size_snake += generateApple;
 }

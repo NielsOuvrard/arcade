@@ -24,10 +24,6 @@ typedef struct color_s {
     int blue;
 } color_t;
 
-typedef struct sprite_s {
-    std::string path;
-} sprite_t;
-
 class IGameModule {
     public:
         enum GAME_STATUS {
@@ -35,6 +31,13 @@ class IGameModule {
             PAUSED,
             IN_GAME,
             FINISHED
+        };
+
+        enum DIRECTION {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
         };
 
         struct Entity {
@@ -47,16 +50,25 @@ class IGameModule {
             bool bold;
             color_t color_fg;
             color_t color_bg;
-            sprite_t sprite;
         };
 
         virtual ~IGameModule () = default ;
+        virtual void update(std::string key) = 0;
         virtual void startGame() = 0;
         virtual bool isGameOver() = 0;
-        virtual void update(std::string key) = 0;
-        virtual std::map<std::string, Entity> getInfos() const = 0;
+        virtual std::string getCurrentRuntimeGraphicDisplay() const = 0;
+        virtual void setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay) = 0;
         virtual GAME_STATUS getGameStatus() const = 0;
-
+        virtual void setGameStatus(GAME_STATUS status) = 0;
+        virtual std::map<std::string, Entity> getInfos() const = 0;
+        virtual void generateGrid(int lenght) = 0;
+        virtual std::vector<std::vector<int>> getGrid() const = 0;
+        virtual void setGridValue(int y, int x, int value) = 0;
+        virtual void setNewEntity(std::string name, Entity entity) = 0;
+        virtual void clearEntities() = 0;
+        virtual DIRECTION getDirection() const = 0;
+        virtual void setDirection(DIRECTION direction) = 0;
+        virtual Entity &getEntity(std::string name) const = 0;
     protected:
     private:
 };
