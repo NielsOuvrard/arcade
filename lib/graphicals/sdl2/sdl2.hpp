@@ -1,8 +1,10 @@
 /*
-** EPITECH PROJECT, 2023
-** B-OOP-400-MAR-4-1-arcade-adam.elaoumari
-** File description:
-** sdl2
+**       _/_/_/  _/_/_/    _/          _/_/
+**    _/        _/    _/  _/        _/    _/
+**     _/_/    _/    _/  _/            _/
+**        _/  _/    _/  _/          _/
+** _/_/_/    _/_/_/    _/_/_/_/  _/_/_/_/
+**
 */
 
 #pragma once
