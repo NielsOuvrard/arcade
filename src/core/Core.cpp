@@ -87,6 +87,7 @@ void Core::mainLoop()
             display->init();
         }
     }
+    printf("here\n");
     display->stop();
     delete displayLib;
     delete gameLib;
