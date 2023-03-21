@@ -73,6 +73,7 @@ void Core::mainLoop()
     game->startGame();
     currentRuntimeGraphicDisplay = selectedDisplayLib;
     game->setCurrentRuntimeGraphicDisplay(selectedDisplayLib);
+    printf("here2\n");
     while (game->getGameStatus() != IGameModule::FINISHED) {
         display->update(game->getInfos());
         display->draw();
