@@ -73,7 +73,6 @@ void Core::mainLoop()
     game->startGame();
     currentRuntimeGraphicDisplay = selectedDisplayLib;
     game->setCurrentRuntimeGraphicDisplay(selectedDisplayLib);
-    printf("here2\n");
     while (game->getGameStatus() != IGameModule::FINISHED) {
         display->update(game->getInfos());
         display->draw();
@@ -87,7 +86,6 @@ void Core::mainLoop()
             display->init();
         }
     }
-    printf("here\n");
     display->stop();
     delete displayLib;
     delete gameLib;
