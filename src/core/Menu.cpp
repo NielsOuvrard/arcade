@@ -97,18 +97,6 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
     };
     setNewEntity("nameTitle", nameTitle);
     x += 1;
-    Entity sprite = {
-        -1,
-        "",
-        "E9967A",
-        x,
-        y,
-        true,
-        true,
-        {255, 0, 0},
-        {0, 0, 0},
-    };
-    setNewEntity("snakeSprite", sprite);
 
 }
 

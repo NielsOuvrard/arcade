@@ -47,36 +47,30 @@ void Sdl2::draw()
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
-    (void) entities;
-    // for (auto const &entity : entities) {
-    //     IGameModule::Entity e = entity.second;
-    //     if (e.file_id > 0) {
-    //         _image_surface = IMG_Load(e.file.c_str());
-    //         _image_texture = SDL_CreateTextureFromSurface(_renderer, _image_surface);
-    //         float x = (entity.second.x * 100) * 0.16;
-    //         float y = (entity.second.y * 100) * 0.16;
-    //         _image_rect = {(int)x, (int)y, _image_surface->w, _image_surface->h};
-    //         SDL_FreeSurface(_image_surface);
-    //         SDL_RenderCopy(_renderer, _image_texture, NULL, &_image_rect);
-    //         continue;
-    //     }
-    //     if (entity.second.text.length()) {
-    //         if (e.bold && e.underline) {
-    //             TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
-    //         }
-    //         _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
-    //             (Uint8)e.color_fg.red,
-    //             (Uint8)e.color_fg.green,
-    //             (Uint8)e.color_fg.blue, 255
-    //         });
-    //         _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
-    //         _text_rect = {(int)((entity.second.x * 100) * 0.16), (int)(entity.second.y * 100), _text_surface->w, _text_surface->h};
-    //         SDL_FreeSurface(_text_surface);
-    //         SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
-    //         TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
-    //         continue;
-    //     }
-    // }
+    for (auto const &entity : entities) {
+        IGameModule::Entity e = entity.second;
+        if (e.id_file == -1) {
+            if (e.bold && e.underline) {
+                TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
+            }
+            _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
+                (Uint8)e.color_fg.red,
+                (Uint8)e.color_fg.green,
+                (Uint8)e.color_fg.blue, 255
+            });
+            _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
+            _text_rect = {(int)((e.x * 100) * 0.16), (int)(e.y * 100), _text_surface->w, _text_surface->h};
+            SDL_FreeSurface(_text_surface);
+            SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
+            TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
+        } else {
+            float x = (e.x * 100) * 0.16;
+            float y = (e.y * 100) * 0.16;
+            _rects[e.id_file].x = (int)x;
+            _rects[e.id_file].y = (int)y;
+            SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
+        }
+    }
 }
 
 std::string Sdl2::getEvent()
@@ -136,7 +130,16 @@ extern "C" void destroy(IDisplayModule* obj) {
     delete obj;
 }
 
-void Sdl2::saveTextures(const std::vector<std::string> &path_texture)
+void Sdl2::saveTextures(const std::vector<std::string> &texture)
 {
-    (void)path_texture;
+    for (auto const &val : texture) {
+        SDL_Surface *_image_surface;
+        _image_surface = IMG_Load(val.c_str());
+        SDL_Texture *_image_texture;
+        _image_texture = SDL_CreateTextureFromSurface(_renderer, _image_surface);
+        std::cout << "load texture: " << val << std::endl;
+        _textures.push_back(_image_texture);
+        _rects.push_back({0, 0, _image_surface->w, _image_surface->h});
+        SDL_FreeSurface(_image_surface);
+    }
 }

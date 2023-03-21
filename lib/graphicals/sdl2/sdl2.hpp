@@ -24,7 +24,7 @@ class Sdl2 : public IDisplayModule {
         void stop();
         void draw();
         void update(std::map<std::string, IGameModule::Entity> entities);
-        void saveTextures(const std::vector<std::string> &path_texture);
+        void saveTextures(const std::vector<std::string> &texture);
         std::string getEvent();
         const std::string &getName() const;
 
@@ -37,10 +37,10 @@ class Sdl2 : public IDisplayModule {
         //text
         TTF_Font *_font;
         SDL_Texture *_text_texture = nullptr;
-        SDL_Surface *_text_surface;
+        SDL_Surface *_text_surface = nullptr;
         SDL_Rect _text_rect;
         //image
-        SDL_Texture *_image_texture = nullptr;
-        SDL_Surface *_image_surface;
-        SDL_Rect _image_rect;
+        //texture
+        std::vector<SDL_Texture *> _textures;
+        std::vector<SDL_Rect> _rects;
 };
