@@ -70,6 +70,10 @@ class IGameModule {
         virtual DIRECTION getDirection() const = 0;
         virtual void setDirection(DIRECTION direction) = 0;
         virtual Entity &getEntity(std::string name) const = 0;
+        virtual void setScore(int score) = 0;
+        virtual void setText(std::string name, std::string text) = 0;
+        virtual void setTime(int time) = 0;
+
     protected:
     private:
 };

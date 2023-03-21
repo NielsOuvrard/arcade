@@ -30,11 +30,19 @@ class AGameModule : public IGameModule {
         std::chrono::high_resolution_clock::time_point getChronoValue() const {return start;};
         void setChronoValue(std::chrono::high_resolution_clock::time_point val) { start = val;};
         std::chrono::duration<float> getTimeElapsed(void) const;
+        void setScore(int score);
+        int getScore(void) const;
+        void setText(std::string name, std::string text);
+        int getTime(void) const;
+        void setTime(int time);
+
     protected:
         mutable std::map<std::string, Entity> _entities;
         GAME_STATUS _status;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
+        int _score = 0;
+        int _time = 0;
         // ça compile pas ici :
         // * error: no viable conversion from 'time_point<std::chrono::steady_clock, duration<[...], ratio<[...], 1000000000>>>'
         // * to 'time_point<std::chrono::system_clock

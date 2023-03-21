@@ -186,11 +186,39 @@ void Nibbler::dataToEntity(void)
             }
             x += 1;
         }
-        // std::cout << std::endl;
         x = 0;
         y += 1;
         row++;
     }
+    x = 4;
+    y = 0;
+    Entity newEntity = {
+        -1,
+        "Time: " + std::to_string(getTime()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("time", newEntity);
+    y = 1;
+    newEntity = {
+        -1,
+        "Score: " + std::to_string(getScore()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("score", newEntity);
 }
 
 void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
@@ -199,6 +227,13 @@ void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
     setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
     _size_snake += eat;
     _apple_remain -= eat;
+    if (eat) {
+        setScore(10);
+        setText("score", "Score: " + std::to_string(getScore()));
+        std::cout << "Score: " << getScore() << std::endl;
+    }
+    setTime(1);
+    setText("time", "Time: " + std::to_string(getTime()));
 }
 
 // return -1 = nop

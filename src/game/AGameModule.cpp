@@ -9,7 +9,6 @@
 
 AGameModule::AGameModule()
 {
-    // _status = IN_GAME;
 }
 
 AGameModule::~AGameModule()
@@ -118,4 +117,29 @@ std::chrono::duration<float> AGameModule::getTimeElapsed(void) const
     auto start = getChronoValue();
     std::chrono::duration<float> timeDiff = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start));
     return timeDiff;
+}
+
+void AGameModule::setScore(int score)
+{
+    _score += score;
+}
+
+int AGameModule::getScore(void) const
+{
+    return _score;
+}
+
+void AGameModule::setText(std::string name, std::string text)
+{
+    _entities.at(name).text = text;
+}
+
+void AGameModule::setTime(int time)
+{
+    _time += time;
+}
+
+int AGameModule::getTime(void) const
+{
+    return _time;
 }
