@@ -261,6 +261,11 @@ int Nibbler::tryMoveHere(IGameModule::DIRECTION direction)
 
 void Nibbler::move(void)
 {
+    if (getTimeElapsed() < std::chrono::milliseconds(200)) {
+        return;
+    } else {
+        setChronoValue(std::chrono::high_resolution_clock::now());
+    }
     int decrement = -1;
     if ((decrement = tryMoveHere(_next_direction)) == -1)
         decrement = tryMoveHere(getDirection());

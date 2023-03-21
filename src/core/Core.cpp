@@ -85,7 +85,6 @@ void Core::mainLoop()
             display = displayLib->getInstance();
             display->init();
         }
-        usleep(10000);
     }
     display->stop();
     delete displayLib;

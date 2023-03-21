@@ -29,13 +29,18 @@ class AGameModule : public IGameModule {
         DIRECTION getDirection() const override;
         void setDirection(DIRECTION direction) override;
         Entity &getEntity(std::string name) const override;
-
+        std::chrono::system_clock::time_point getChronoValue() const {return start;};
+        void setChronoValue(std::chrono::system_clock::time_point val) { start = val;};
+        std::chrono::duration<float> getTimeElapsed(void) const;
     protected:
         mutable std::map<std::string, Entity> _entities;
         GAME_STATUS _status;
         std::string _currentRuntimeGraphicDisplay;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
-
+        // ça compile pas ici :
+        // * error: no viable conversion from 'time_point<std::chrono::steady_clock, duration<[...], ratio<[...], 1000000000>>>'
+        // * to 'time_point<std::chrono::system_clock
+        std::chrono::system_clock::time_point start = std::chrono::high_resolution_clock::now();
     private:
 };
