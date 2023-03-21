@@ -32,11 +32,26 @@ void Snake::generateApple(void)
     }
 }
 
+bool closeToOne (int a, int b)
+{
+    if (a == 0 || b == 0)
+        return false;
+    if (a == b)
+        return true;
+    if (a + 1 == b)
+        return true;
+    if (a - 1 == b)
+        return true;
+    return false;
+}
+
 int Snake::chooseSprite (float x, float y, int value)
 {
-    if (getGrid()[y][x + 1] > 0 && getGrid()[y][x - 1] > 0) // horizontal
+    if (!getGrid().size() || !getGrid()[y].size() || !getGrid()[y][x])
+        return 0;
+    if (getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // horizontal
         return 10;
-    if (getGrid()[y + 1][x] > 0 && getGrid()[y - 1][x] > 0) // vertical
+    if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && y > 0 && closeToOne(getGrid()[y - 1][x], value)) // vertical
         return 1;
     if (value == _size_snake) { // head
         if (getDirection() == DIRECTION::DOWN) {
@@ -49,28 +64,28 @@ int Snake::chooseSprite (float x, float y, int value)
             return 9;
         }
     } else if (value == 1) { // tail
-        if (getGrid()[y + 1][x] == 2) { // move down
+        if (getGrid().size() > y && getGrid()[y + 1][x] == 2) { // move down
             return 11;
-        } else if (getGrid()[y][x - 1] == 2) { // move left
+        } else if (x > 0 && getGrid()[y][x - 1] == 2) { // move left
             return 12;
-        } else if (getGrid()[y][x + 1] == 2) { // move right
+        } else if (getGrid()[y].size() > x && getGrid()[y][x + 1] == 2) { // move right
             return 13;
-        } else if (getGrid()[y - 1][x] == 2) { // move up
+        } else if (y > 0 && getGrid()[y - 1][x] == 2) { // move up
             return 14;
         } else {
             return 10; // ?
         }
     } else {
-        if (getGrid()[y + 1][x] > 0 && getGrid()[y][x - 1] > 0) // down left
+        if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // down left
             return 2;
-        if (getGrid()[y + 1][x] > 0 && getGrid()[y][x + 1] > 0) // down right
+        if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value)) // down right
             return 3;
-        if (getGrid()[y - 1][x] > 0 && getGrid()[y][x - 1] > 0) // up left
+        if (y > 0 && closeToOne(getGrid()[y - 1][x], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // up left
             return 4;
-        if (getGrid()[y - 1][x] > 0 && getGrid()[y][x + 1] > 0) // up right
+        if (y > 0 && closeToOne(getGrid()[y - 1][x], value) && getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value)) // up right
             return 5;
-        return 10; // ?
     }
+    return 10;
 }
 
 void Snake::snakePart(std::vector<int> value, float x, float y, int row, int i)

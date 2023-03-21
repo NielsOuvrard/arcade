@@ -39,6 +39,13 @@ void Nibbler::getInfoSnake (std::vector<std::string> map)
 Nibbler::Nibbler()
 {
     std::vector<std::string> map = fileToArray("lib/games/nibbler/map1.txt");
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j] == 'A') {
+                _apple_remain++;
+            }
+        }
+    }
     generateGrid(map);
     getInfoSnake(map);
     dataToEntity();
@@ -48,13 +55,26 @@ Nibbler::~Nibbler()
 {
 }
 
+bool closeToOne (int a, int b)
+{
+    if (a == 0 || b == 0)
+        return false;
+    if (a == b)
+        return true;
+    if (a + 1 == b)
+        return true;
+    if (a - 1 == b)
+        return true;
+    return false;
+}
+
 int Nibbler::chooseSprite (float x, float y, int value)
 {
     if (!getGrid().size() || !getGrid()[y].size() || !getGrid()[y][x])
         return 0;
-    if (getGrid()[y].size() > x && getGrid()[y][x + 1] > 0 && x > 0 && getGrid()[y][x - 1] > 0) // horizontal
+    if (getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // horizontal
         return 10;
-    if (getGrid().size() > y && getGrid()[y + 1][x] > 0 && y > 0 && getGrid()[y - 1][x] > 0) // vertical
+    if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && y > 0 && closeToOne(getGrid()[y - 1][x], value)) // vertical
         return 1;
     if (value == _size_snake) { // head
         if (getDirection() == DIRECTION::DOWN) {
@@ -79,13 +99,13 @@ int Nibbler::chooseSprite (float x, float y, int value)
             return 10; // ?
         }
     } else {
-        if (getGrid().size() > y && getGrid()[y + 1][x] > 0 && x > 0 && getGrid()[y][x - 1] > 0) // down left
+        if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // down left
             return 2;
-        if (getGrid().size() > y && getGrid()[y + 1][x] > 0 && getGrid()[y].size() > x && getGrid()[y][x + 1] > 0) // down right
+        if (getGrid().size() > y && closeToOne(getGrid()[y + 1][x], value) && getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value)) // down right
             return 3;
-        if (y > 0 && getGrid()[y - 1][x] > 0 && x > 0 && getGrid()[y][x - 1] > 0) // up left
+        if (y > 0 && closeToOne(getGrid()[y - 1][x], value) && x > 0 && closeToOne(getGrid()[y][x - 1], value)) // up left
             return 4;
-        if (y > 0 && getGrid()[y - 1][x] > 0 && getGrid()[y].size() > x && getGrid()[y][x + 1] > 0) // up right
+        if (y > 0 && closeToOne(getGrid()[y - 1][x], value) && getGrid()[y].size() > x && closeToOne(getGrid()[y][x + 1], value)) // up right
             return 5;
     }
     return 10;
@@ -173,59 +193,79 @@ void Nibbler::dataToEntity(void)
     }
 }
 
-void Nibbler::moveHead(int x, int y, bool eat)
+void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
 {
+    setDirection(direction);
     setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
     _size_snake += eat;
+    _apple_remain -= eat;
 }
 
-// turn = change _direction, and try to move
-// how many apple
-// victory condition
-// fix game over
+// return -1 = nop
+// return 0 = not decrement
+// return 1 = decrement
+int Nibbler::tryMoveHere(IGameModule::DIRECTION direction)
+{
+    if (direction == UP && _head_y > 0) {
+        if (getGrid()[_head_y - 1][_head_x] <= -2)
+            return -1;
+        if (getGrid()[_head_y - 1][_head_x] == -1) {
+            moveHead(0, -1, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y - 1][_head_x] >= 1) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(0, -1, false, direction);
+        return 2;
+    } else if (direction == DOWN && getGrid().size() > _head_y) {
+        if (getGrid()[_head_y + 1][_head_x] <= -2)
+            return -1;
+        if (getGrid()[_head_y + 1][_head_x] == -1) {
+            moveHead(0, 1, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y + 1][_head_x] >= 1) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(0, 1, false, direction);
+        return 2;
+    } else if (direction == LEFT && _head_x > 0) {
+        if (getGrid()[_head_y][_head_x - 1] <= -2)
+            return -1;
+        if (getGrid()[_head_y][_head_x - 1] == -1) {
+            moveHead(-1, 0, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y][_head_x - 1] >= 1) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(-1, 0, false, direction);
+        return 2;
+    } else if (direction == RIGHT && getGrid()[_head_y].size() > _head_x) {
+        if (getGrid()[_head_y][_head_x + 1] <= -2)
+            return -1;
+        if (getGrid()[_head_y][_head_x + 1] == -1) {
+            moveHead(1, 0, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y][_head_x + 1] >= 1) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(1, 0, false, direction);
+        return 2;
+    } else {
+        return 0;
+    }
+}
 
 void Nibbler::move(void)
 {
-    if (getDirection() == UP && _head_y > 0 && getGrid()[_head_y - 1][_head_x] > -2) {
-        if (getGrid()[_head_y - 1][_head_x] == -1) {
-            moveHead(0, -1, true);
-            return;
-        } else if (getGrid()[_head_y - 1][_head_x] != 0) {
-            setGameStatus(FINISHED);
-            return;
-        }
-        moveHead(0, -1, false);
-    } else if (getDirection() == DOWN && getGrid().size() > _head_y && getGrid()[_head_y + 1][_head_x] > -2) {
-        if (getGrid()[_head_y + 1][_head_x] == -1) {
-            moveHead(0, 1, true);
-            return;
-        } else if (getGrid()[_head_y + 1][_head_x] != 0) {
-            setGameStatus(FINISHED);
-            return;
-        }
-        moveHead(0, 1, false);
-    } else if (getDirection() == LEFT && _head_x > 0 && getGrid()[_head_y][_head_x - 1] > -2) {
-        if (getGrid()[_head_y][_head_x - 1] == -1) {
-            moveHead(-1, 0, true);
-            return;
-        } else if (getGrid()[_head_y][_head_x - 1] != 0) {
-            setGameStatus(FINISHED);
-            return;
-        }
-        moveHead(-1, 0, false);
-    } else if (getDirection() == RIGHT && getGrid()[_head_y].size() > _head_x && getGrid()[_head_y][_head_x + 1] > -2) {
-        if (getGrid()[_head_y][_head_x + 1] == -1) {
-            moveHead(1, 0, true);
-            return;
-        } else if (getGrid()[_head_y][_head_x + 1] != 0) {
-            setGameStatus(FINISHED);
-            return;
-        }
-        moveHead(1, 0, false);
-    } else {
+    int decrement = -1;
+    if ((decrement = tryMoveHere(_next_direction)) == -1)
+        decrement = tryMoveHere(getDirection());
+    if (decrement != 2)
         return;
-    }
-
     for (int i = 0; i != getGrid().size(); i++) {
         for (int j = 0; j != getGrid()[i].size(); j++) {
             if (getGrid()[i][j] > 0) {
@@ -237,14 +277,17 @@ void Nibbler::move(void)
 
 void Nibbler::update(std::string key)
 {
+    if (!_apple_remain) {
+        setGameStatus(FINISHED);
+    }
     if (key == "LeftArrow" && getDirection() != RIGHT)
-        setDirection(LEFT);
+        _next_direction = LEFT;
     if (key == "RightArrow" && getDirection() != LEFT)
-        setDirection(RIGHT);
+        _next_direction = RIGHT;
     if (key == "UpArrow" && getDirection() != DOWN)
-        setDirection(UP);
+        _next_direction = UP;
     if (key == "DownArrow" && getDirection() != UP)
-        setDirection(DOWN);
+        _next_direction = DOWN;
     if (key == "F1") {
         if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
             setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
