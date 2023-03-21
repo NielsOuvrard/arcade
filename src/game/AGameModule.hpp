@@ -15,8 +15,6 @@ class AGameModule : public IGameModule {
         ~AGameModule();
         void startGame() override;
         bool isGameOver() override;
-        std::string getCurrentRuntimeGraphicDisplay() const override;
-        void setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay) override;
         GAME_STATUS getGameStatus() const override;
         void setGameStatus(GAME_STATUS status) override;
         std::map<std::string, Entity> getInfos() const override;
@@ -35,7 +33,6 @@ class AGameModule : public IGameModule {
     protected:
         mutable std::map<std::string, Entity> _entities;
         GAME_STATUS _status;
-        std::string _currentRuntimeGraphicDisplay;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
         // ça compile pas ici :

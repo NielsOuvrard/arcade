@@ -27,16 +27,6 @@ bool AGameModule::isGameOver()
     return false;
 }
 
-std::string AGameModule::getCurrentRuntimeGraphicDisplay() const
-{
-    return _currentRuntimeGraphicDisplay;
-}
-
-void AGameModule::setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay)
-{
-    _currentRuntimeGraphicDisplay = currentRuntimeGraphicDisplay;
-}
-
 AGameModule::GAME_STATUS AGameModule::getGameStatus() const
 {
     return _status;

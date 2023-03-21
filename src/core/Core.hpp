@@ -31,10 +31,11 @@ class Core {
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
         DLLoader<IDisplayModule> *displayLib;
-        DLLoader<IGameModule> *gameLib;
+        std::vector<IGameModule *> games;
         std::string selectedGameLib;
         std::string selectedDisplayLib;
-        std::string currentRuntimeGraphicDisplay;
+        int currentGameIndex = 0;
+        int currentDisplayIndex = 0;
 };
 
 #endif /* !CORE_HPP_ */

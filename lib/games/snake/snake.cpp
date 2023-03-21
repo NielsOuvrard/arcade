@@ -229,16 +229,6 @@ void Snake::update(std::string key)
         setDirection(UP);
     if (key == "DownArrow" && getDirection() != UP)
         setDirection(DOWN);
-    if (key == "F1") {
-        if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
-        } else if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sdl2.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_ncurses.so");
-        } else {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sfml.so");
-        }
-        return;
-    }
     move();
     dataToEntity();
     if (key.empty())

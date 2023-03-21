@@ -293,16 +293,6 @@ void Nibbler::update(std::string key)
         _next_direction = UP;
     if (key == "DownArrow" && getDirection() != UP)
         _next_direction = DOWN;
-    if (key == "F1") {
-        if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
-        } else if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sdl2.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_ncurses.so");
-        } else {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sfml.so");
-        }
-        return;
-    }
     move();
     dataToEntity();
     if (key.empty())

@@ -27,7 +27,8 @@ void Ncurses::init()
     keyok(32, TRUE); // SPACE
     keyok(10, TRUE); // ENTER
     keyok(127, TRUE); // BACKSPACE
-    keyok(265, TRUE);
+    keyok(265, TRUE); //F1
+    keyok(266, TRUE); //F2
     nodelay(stdscr, TRUE);
     cbreak();
 }
@@ -85,6 +86,8 @@ std::string Ncurses::getEvent()
         return "DownArrow";
     if (c == KEY_F(1))
         return "F1";
+    if (c == KEY_F(2))
+        return "F2";
     if (c == 27)
         return "close";
     if (c == KEY_ENTER || c == 10)

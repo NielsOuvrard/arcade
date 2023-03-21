@@ -106,6 +106,8 @@ std::string Sfml::getEvent()
                     return "DownArrow";
                 case 85:
                     return "F1";
+                case 86:
+                    return "F2";
             }
         }
     }

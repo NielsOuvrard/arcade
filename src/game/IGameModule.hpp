@@ -59,8 +59,6 @@ class IGameModule {
         virtual bool isGameOver() = 0;
         virtual std::vector<std::string> getTextures() = 0;
         virtual std::map<std::string, Entity> getInfos() const = 0;
-        virtual std::string getCurrentRuntimeGraphicDisplay() const = 0;
-        virtual void setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay) = 0;
         virtual GAME_STATUS getGameStatus() const = 0;
         virtual void setGameStatus(GAME_STATUS status) = 0;
         virtual void generateGrid(int lenght) = 0;
