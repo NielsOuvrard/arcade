@@ -112,9 +112,9 @@ AGameModule::Entity &AGameModule::getEntity(std::string name) const
     return _entities.at(name);
 }
 
-std::chrono::duration<float> AGameModule::getTimeElapsed(void) const
+std::chrono::duration<float> AGameModule::getTimeElapsed(std::chrono::high_resolution_clock::time_point clock) const
 {
-    auto start = getChronoValue();
+    auto start = clock;
     std::chrono::duration<float> timeDiff = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start));
     return timeDiff;
 }

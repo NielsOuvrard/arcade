@@ -232,8 +232,6 @@ void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
         setText("score", "Score: " + std::to_string(getScore()));
         std::cout << "Score: " << getScore() << std::endl;
     }
-    setTime(1);
-    setText("time", "Time: " + std::to_string(getTime()));
 }
 
 // return -1 = nop
@@ -296,11 +294,12 @@ int Nibbler::tryMoveHere(IGameModule::DIRECTION direction)
 
 void Nibbler::move(void)
 {
-    if (getTimeElapsed() < std::chrono::milliseconds(200)) {
+    if (getTimeElapsed(start) < std::chrono::milliseconds(200)) {
         return;
     } else {
         setChronoValue(std::chrono::high_resolution_clock::now());
     }
+
     int decrement = -1;
     if ((decrement = tryMoveHere(_next_direction)) == -1)
         decrement = tryMoveHere(getDirection());
@@ -317,6 +316,12 @@ void Nibbler::move(void)
 
 void Nibbler::update(std::string key)
 {
+    if (_status == IN_GAME) {
+        if (getTimeElapsed(scoreClock) >= std::chrono::milliseconds(1000)) {
+            setTime(1);
+            scoreClock = std::chrono::high_resolution_clock::now();
+        }
+    }
     if (!_apple_remain) {
         setGameStatus(FINISHED);
     }

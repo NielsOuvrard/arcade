@@ -29,7 +29,7 @@ class AGameModule : public IGameModule {
         Entity &getEntity(std::string name) const override;
         std::chrono::high_resolution_clock::time_point getChronoValue() const {return start;};
         void setChronoValue(std::chrono::high_resolution_clock::time_point val) { start = val;};
-        std::chrono::duration<float> getTimeElapsed(void) const;
+        std::chrono::duration<float> getTimeElapsed(std::chrono::high_resolution_clock::time_point clock) const;
         void setScore(int score);
         int getScore(void) const;
         void setText(std::string name, std::string text);
@@ -47,5 +47,6 @@ class AGameModule : public IGameModule {
         // * error: no viable conversion from 'time_point<std::chrono::steady_clock, duration<[...], ratio<[...], 1000000000>>>'
         // * to 'time_point<std::chrono::system_clock
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+        std::chrono::high_resolution_clock::time_point scoreClock = std::chrono::high_resolution_clock::now();
     private:
 };
