@@ -14,6 +14,7 @@
 #include <filesystem>
 #include <unistd.h>
 #include <map>
+#include <memory>
 #include "DLLoader.hpp"
 #include "IDisplayModule.hpp"
 #include "AGameModule.hpp"
@@ -26,8 +27,6 @@ class Core {
         std::vector<std::string> getGfxLibs () const { return gfxLibs;}
         void displayMenu();
         void mainLoop();
-        void initializeGames();
-        void findIndex();
         void gameMenuLoop();
 
     protected:
@@ -36,15 +35,13 @@ class Core {
         std::vector<std::string> gfxLibs;
         std::vector<std::string> menuLibs;
         std::vector<IGameModule *> games;
-        std::string selectedGameLib;
-        std::string selectedDisplayLib;
         int currentGameIndex = 0;
         int currentDisplayIndex = 0;
-
-        DLLoader<IDisplayModule> *displayLib;
-        DLLoader<IGameModule> *gameLib;
-        IGameModule *menu;
-        IDisplayModule *display;
+        std::vector<IDisplayModule *> displayList;
+        std::vector<IGameModule *> gameList;
+        IGameModule *menu = nullptr;
+        IDisplayModule *selectedDisplay = nullptr;
+        IGameModule *selectedGame = nullptr;
 };
 
 #endif /* !CORE_HPP_ */

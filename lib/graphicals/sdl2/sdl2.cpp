@@ -47,9 +47,6 @@ void Sdl2::draw()
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
-    for (auto &createText : _renderedTextures) {
-        SDL_DestroyTexture(createText);
-    }
     _renderedTextures.clear();
     for (auto const &entity : entities) {
         IGameModule::Entity e = entity.second;

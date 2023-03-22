@@ -9,6 +9,7 @@
 
 Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal)
 {
+    _status = IN_GAME;
     gameLibs = gameLibsVal;
     gfxLibs = gfxLibsVal;
     float x = 0, y = 0;

@@ -18,6 +18,7 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include <memory>
 
 typedef struct color_s {
     int red;
