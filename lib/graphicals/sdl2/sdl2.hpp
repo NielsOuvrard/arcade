@@ -43,4 +43,5 @@ class Sdl2 : public IDisplayModule {
         //texture
         std::vector<SDL_Texture *> _textures;
         std::vector<SDL_Rect> _rects;
+        std::vector<SDL_Texture *> _renderedTextures;
 };

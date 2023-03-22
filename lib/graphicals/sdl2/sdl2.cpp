@@ -47,6 +47,10 @@ void Sdl2::draw()
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
+    for (auto &createText : _renderedTextures) {
+        SDL_DestroyTexture(createText);
+    }
+    _renderedTextures.clear();
     for (auto const &entity : entities) {
         IGameModule::Entity e = entity.second;
         if (e.id_file == -1) {
@@ -62,6 +66,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
             _text_rect = {(int)((e.x * 100)), (int)(e.y * 100), _text_surface->w, _text_surface->h};
             SDL_FreeSurface(_text_surface);
             SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
+            _renderedTextures.insert(_renderedTextures.end(), _text_texture);
             TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
         } else {
             float x = (e.x * 100) * 0.16;
