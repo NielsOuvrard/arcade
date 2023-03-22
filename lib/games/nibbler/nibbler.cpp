@@ -334,6 +334,7 @@ void Nibbler::update(std::string key)
     if (key == "DownArrow" && getDirection() != UP)
         _next_direction = DOWN;
     move();
+    dataToEntity();
     if (key.empty())
         return;
     if (key == "close") {
