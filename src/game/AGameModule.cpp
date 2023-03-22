@@ -9,7 +9,6 @@
 
 AGameModule::AGameModule()
 {
-    // _status = IN_GAME;
 }
 
 AGameModule::~AGameModule()
@@ -25,16 +24,6 @@ bool AGameModule::isGameOver()
     if (_status == FINISHED)
         return true;
     return false;
-}
-
-std::string AGameModule::getCurrentRuntimeGraphicDisplay() const
-{
-    return _currentRuntimeGraphicDisplay;
-}
-
-void AGameModule::setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay)
-{
-    _currentRuntimeGraphicDisplay = currentRuntimeGraphicDisplay;
 }
 
 AGameModule::GAME_STATUS AGameModule::getGameStatus() const
@@ -123,9 +112,34 @@ AGameModule::Entity &AGameModule::getEntity(std::string name) const
     return _entities.at(name);
 }
 
-std::chrono::duration<float> AGameModule::getTimeElapsed(void) const
+std::chrono::duration<float> AGameModule::getTimeElapsed(std::chrono::high_resolution_clock::time_point clock) const
 {
-    auto start = getChronoValue();
+    auto start = clock;
     std::chrono::duration<float> timeDiff = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start));
     return timeDiff;
+}
+
+void AGameModule::setScore(int score)
+{
+    _score += score;
+}
+
+int AGameModule::getScore(void) const
+{
+    return _score;
+}
+
+void AGameModule::setText(std::string name, std::string text)
+{
+    _entities.at(name).text = text;
+}
+
+void AGameModule::setTime(int time)
+{
+    _time += time;
+}
+
+int AGameModule::getTime(void) const
+{
+    return _time;
 }

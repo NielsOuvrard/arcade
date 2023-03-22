@@ -7,9 +7,8 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal, std::string currentGraphicLibVal)
+Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal)
 {
-    setCurrentRuntimeGraphicDisplay(currentGraphicLibVal);
     gameLibs = gameLibsVal;
     gfxLibs = gfxLibsVal;
     float x = 0, y = 0;
@@ -118,16 +117,6 @@ void Menu::update(std::string key)
     }
     if (key == "Enter" && isGameSelected && isDisplaySelected && name.length() > 19) {
         setGameStatus(FINISHED);
-        return;
-    }
-    if (key == "F1") {
-        if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
-        } else if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sdl2.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_ncurses.so");
-        } else {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sfml.so");
-        }
         return;
     }
     if (gfxLibs.size() != 0 && isGameSelected) {

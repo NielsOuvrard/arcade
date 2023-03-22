@@ -166,6 +166,8 @@ std::string Ncurses::getEvent()
         return "DownArrow";
     if (c == KEY_F(1))
         return "F1";
+    if (c == KEY_F(2))
+        return "F2";
     if (c == 27)
         return "close";
     if (c == KEY_ENTER || c == 10)

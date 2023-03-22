@@ -11,7 +11,7 @@
 #include "AGameModule.hpp"
 class Menu : public AGameModule {
     public:
-        Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs, std::string currentGraphicLib);
+        Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs);
         ~Menu();
         void update(std::string key);
         bool getSelectedStatus() {return hasSelected;};

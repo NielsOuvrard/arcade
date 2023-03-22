@@ -15,8 +15,6 @@ class AGameModule : public IGameModule {
         ~AGameModule();
         void startGame() override;
         bool isGameOver() override;
-        std::string getCurrentRuntimeGraphicDisplay() const override;
-        void setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay) override;
         GAME_STATUS getGameStatus() const override;
         void setGameStatus(GAME_STATUS status) override;
         std::map<std::string, Entity> getInfos() const override;
@@ -31,13 +29,21 @@ class AGameModule : public IGameModule {
         Entity &getEntity(std::string name) const override;
         std::chrono::high_resolution_clock::time_point getChronoValue() const {return start;};
         void setChronoValue(std::chrono::high_resolution_clock::time_point val) { start = val;};
-        std::chrono::duration<float> getTimeElapsed(void) const;
+        std::chrono::duration<float> getTimeElapsed(std::chrono::high_resolution_clock::time_point clock) const;
+        void setScore(int score) override;
+        int getScore(void) const;
+        void setText(std::string name, std::string text) override;
+        int getTime(void) const;
+        void setTime(int time) override;
+
     protected:
         mutable std::map<std::string, Entity> _entities;
         GAME_STATUS _status;
-        std::string _currentRuntimeGraphicDisplay;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
+        int _score = 0;
+        int _time = 0;
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+        std::chrono::high_resolution_clock::time_point scoreClock = std::chrono::high_resolution_clock::now();
     private:
 };

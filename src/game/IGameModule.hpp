@@ -53,14 +53,12 @@ class IGameModule {
             color_t color_bg;
         };
 
-        virtual ~IGameModule () = default ;
+        virtual ~IGameModule () = default;
         virtual void update(std::string key) = 0;
         virtual void startGame() = 0;
         virtual bool isGameOver() = 0;
         virtual std::vector<std::string> getTextures() = 0;
         virtual std::map<std::string, Entity> getInfos() const = 0;
-        virtual std::string getCurrentRuntimeGraphicDisplay() const = 0;
-        virtual void setCurrentRuntimeGraphicDisplay(std::string currentRuntimeGraphicDisplay) = 0;
         virtual GAME_STATUS getGameStatus() const = 0;
         virtual void setGameStatus(GAME_STATUS status) = 0;
         virtual void generateGrid(int lenght) = 0;
@@ -72,6 +70,10 @@ class IGameModule {
         virtual DIRECTION getDirection() const = 0;
         virtual void setDirection(DIRECTION direction) = 0;
         virtual Entity &getEntity(std::string name) const = 0;
+        virtual void setScore(int score) = 0;
+        virtual void setText(std::string name, std::string text) = 0;
+        virtual void setTime(int time) = 0;
+
     protected:
     private:
 };

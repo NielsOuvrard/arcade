@@ -213,11 +213,39 @@ void Nibbler::dataToEntity(void)
             }
             x += 1;
         }
-        // std::cout << std::endl;
         x = 0;
         y += 1;
         row++;
     }
+    x = 4;
+    y = 0;
+    Entity newEntity = {
+        -1,
+        "Time: " + std::to_string(getTime()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("time", newEntity);
+    y = 1;
+    newEntity = {
+        -1,
+        "Score: " + std::to_string(getScore()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("score", newEntity);
 }
 
 void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
@@ -226,6 +254,11 @@ void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
     setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
     _size_snake += eat;
     _apple_remain -= eat;
+    if (eat) {
+        setScore(10);
+        setText("score", "Score: " + std::to_string(getScore()));
+        std::cout << "Score: " << getScore() << std::endl;
+    }
 }
 
 // return -1 = nop
@@ -288,10 +321,12 @@ int Nibbler::tryMoveHere(IGameModule::DIRECTION direction)
 
 void Nibbler::move(void)
 {
-    if (getTimeElapsed() < std::chrono::milliseconds(200))
+    if (getTimeElapsed(start) < std::chrono::milliseconds(200)) {
         return;
-    else
+    } else {
         setChronoValue(std::chrono::high_resolution_clock::now());
+    }
+
     int decrement = -1;
     if ((decrement = tryMoveHere(_next_direction)) == -1)
         decrement = tryMoveHere(getDirection());
@@ -308,6 +343,12 @@ void Nibbler::move(void)
 
 void Nibbler::update(std::string key)
 {
+    if (_status == IN_GAME) {
+        if (getTimeElapsed(scoreClock) >= std::chrono::milliseconds(1000)) {
+            setTime(1);
+            scoreClock = std::chrono::high_resolution_clock::now();
+        }
+    }
     if (!_apple_remain)
         setGameStatus(FINISHED);
     if (key == "LeftArrow" && getDirection() != RIGHT)
@@ -318,16 +359,6 @@ void Nibbler::update(std::string key)
         _next_direction = UP;
     if (key == "DownArrow" && getDirection() != UP)
         _next_direction = DOWN;
-    if (key == "F1") {
-        if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sfml.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sdl2.so");
-        } else if (getCurrentRuntimeGraphicDisplay() == "lib/arcade_sdl2.so") {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_ncurses.so");
-        } else {
-            setCurrentRuntimeGraphicDisplay("lib/arcade_sfml.so");
-        }
-        return;
-    }
     move();
     dataToEntity();
     if (key.empty())

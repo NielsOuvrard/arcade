@@ -59,7 +59,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
                 (Uint8)e.color_fg.blue, 255
             });
             _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
-            _text_rect = {(int)((e.x * 100) * 0.16), (int)(e.y * 100), _text_surface->w, _text_surface->h};
+            _text_rect = {(int)((e.x * 100)), (int)(e.y * 100), _text_surface->w, _text_surface->h};
             SDL_FreeSurface(_text_surface);
             SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
             TTF_SetFontStyle(_font, TTF_STYLE_NORMAL);
