@@ -21,6 +21,7 @@ class Nibbler : public AGameModule {
         Nibbler();
         ~Nibbler();
         void update(std::string key);
+        const std::string &getName() const{return _name;};
 
     protected:
         void move(void);
@@ -37,6 +38,7 @@ class Nibbler : public AGameModule {
         int _size_snake = 0;
         int _apple_remain = 0;
         IGameModule::DIRECTION _next_direction = IGameModule::DIRECTION::RIGHT;
+        std::string _name = "Nibbler";
 };
 
 #endif /* !NIBBLER_HPP_ */

@@ -26,16 +26,25 @@ class Core {
         std::vector<std::string> getGfxLibs () const { return gfxLibs;}
         void displayMenu();
         void mainLoop();
+        void initializeGames();
+        void findIndex();
+        void gameMenuLoop();
+
     protected:
     private:
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
-        DLLoader<IDisplayModule> *displayLib;
+        std::vector<std::string> menuLibs;
         std::vector<IGameModule *> games;
         std::string selectedGameLib;
         std::string selectedDisplayLib;
         int currentGameIndex = 0;
         int currentDisplayIndex = 0;
+
+        DLLoader<IDisplayModule> *displayLib;
+        DLLoader<IGameModule> *gameLib;
+        IGameModule *menu;
+        IDisplayModule *display;
 };
 
 #endif /* !CORE_HPP_ */

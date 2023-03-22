@@ -21,6 +21,7 @@ class Snake : public AGameModule {
         Snake();
         ~Snake();
         void update(std::string key);
+        const std::string &getName() const{return _name;};
 
     protected:
         void move(void);
@@ -33,6 +34,7 @@ class Snake : public AGameModule {
         int _head_x = 0;
         int _head_y = 0;
         int _size_snake = 0;
+        std::string _name = "Snake";
 };
 
 #endif /* !SNAKE_HPP_ */
