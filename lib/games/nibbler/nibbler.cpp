@@ -117,7 +117,7 @@ void Nibbler::snakePart(std::vector<int> value, float x, float y, int row, int i
         "A", "|", "\\", "/", "/", "\\", "M", "3", "E", "W", "=", "^", ">", "<", "v", "#", " "
     };
 
-    int index_snake = chooseSprite(x, y, value[i]);
+    int index_snake = chooseSprite(x, y - 1, value[i]);
     Entity newEntity = {
         index_snake,
         snake[index_snake],
@@ -127,19 +127,46 @@ void Nibbler::snakePart(std::vector<int> value, float x, float y, int row, int i
         false,
         false,
         {0, 255, 0},
+        // ((index_snake >= 6 && snake[index_snake] <= 9) ? {255, 0, 0} : {0, 255, 0}),
         {0, 0, 0},
     };
     setNewEntity(std::to_string(i) + "snake" + std::to_string(row), newEntity);
 }
 
+// TODO :
+// size of text in sfml
+// size of sprite in sfml
+
 void Nibbler::dataToEntity(void)
 {
-    float y = 0, x = 0;
+    // decale d'un carre pour laisser la place au score
+    float y = 1, x = 0;
     int row = 0;
     clearEntities();
+    setNewEntity("Apple", {
+        -1,
+        "Apple remain: " + std::to_string(_apple_remain),
+        "",
+        0,
+        0,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0},
+    });
+    setNewEntity("Time", {
+        -1,
+        "Time: " + std::to_string(89), // TODO time
+        "",
+        10,
+        0,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0},
+    });
     for (std::vector<int> value : getGrid()) {
         for (int i = 0; i < getGrid()[0].size(); i++) {
-            // std::cout << value[i];
             if (value[i] == -2) { // walls
                 Entity newEntity = {
                     15,
@@ -261,11 +288,10 @@ int Nibbler::tryMoveHere(IGameModule::DIRECTION direction)
 
 void Nibbler::move(void)
 {
-    if (getTimeElapsed() < std::chrono::milliseconds(200)) {
+    if (getTimeElapsed() < std::chrono::milliseconds(200))
         return;
-    } else {
+    else
         setChronoValue(std::chrono::high_resolution_clock::now());
-    }
     int decrement = -1;
     if ((decrement = tryMoveHere(_next_direction)) == -1)
         decrement = tryMoveHere(getDirection());
@@ -282,9 +308,8 @@ void Nibbler::move(void)
 
 void Nibbler::update(std::string key)
 {
-    if (!_apple_remain) {
+    if (!_apple_remain)
         setGameStatus(FINISHED);
-    }
     if (key == "LeftArrow" && getDirection() != RIGHT)
         _next_direction = LEFT;
     if (key == "RightArrow" && getDirection() != LEFT)

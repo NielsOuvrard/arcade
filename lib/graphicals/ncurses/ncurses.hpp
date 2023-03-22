@@ -21,9 +21,14 @@ class Ncurses : public IDisplayModule {
         std::string getEvent();
         const std::string &getName() const;
         void saveTextures(const std::vector<std::string> &texture);
-
+        int colorExistInList(color_t color);
+        int pairExistInList(int color_1, int color_2);
+        int addColorToList(color_t color_1, color_t color_2);
+        int handleColor(IGameModule::Entity e);
     protected:
         std::string _name = "SFML";
+        std::vector<color_t> _list_colors;
+        std::vector<std::pair<int, int>> _list_pair_colors;
         int event;
     private:
 };

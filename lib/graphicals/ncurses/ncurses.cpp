@@ -19,6 +19,7 @@ void Ncurses::init()
 {
     initscr();
     start_color();
+    use_default_colors();
     noecho();
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
@@ -28,7 +29,15 @@ void Ncurses::init()
     keyok(10, TRUE); // ENTER
     keyok(127, TRUE); // BACKSPACE
     keyok(265, TRUE);
-    nodelay(stdscr, TRUE);
+
+    keyok(265, TRUE); // UP
+    keyok(264, TRUE); // DOWN
+    keyok(263, TRUE); // LEFT
+    keyok(262, TRUE); // RIGHT
+
+    keyok(259, TRUE); // F1
+    keyok(260, TRUE); // F2
+
     cbreak();
 }
 
@@ -42,28 +51,100 @@ void Ncurses::draw()
     refresh();
 }
 
-#define COLOR_FG 1
-#define COLOR_BG 2
+int Ncurses::colorExistInList(color_t color)
+{
+    int i = 0;
+    for (auto const &c : _list_colors) {
+        if (c.red == color.red
+        && c.green == color.green
+        && c.blue == color.blue)
+            return i;
+        i++;
+    }
+    return -1;
+}
+
+int Ncurses::pairExistInList(int color_1, int color_2)
+{
+    int i = 0;
+    for (auto const &c : _list_pair_colors) {
+        if (c.first == color_1 && c.second == color_2)
+            return i;
+        i++;
+    }
+    return -1;
+}
+#include <iostream>
+#include <fstream>
+#include <string>
+
+// wite a function who write at the end of a file
+void writeAtEnd(std::string str)
+{
+    std::ofstream file;
+    file.open("file.txt", std::ios::app);
+    file << str << std::endl;
+    file.close();
+}
+
+int Ncurses::addColorToList(color_t color_1, color_t color_2)
+{
+    int index_color_1 = colorExistInList(color_1);
+    int index_color_2 = colorExistInList(color_2);
+    if (index_color_1 >= 0 && index_color_2 >= 0) {
+        int index = pairExistInList(index_color_1, index_color_2);
+        if (index >= 0)
+            return index;
+        _list_pair_colors.push_back({index_color_1, index_color_2});
+        init_pair(_list_pair_colors.size() - 1, index_color_1, index_color_2);
+        // writeAtEnd("both exist " + std::to_string(index_color_1) + " " + std::to_string(index_color_2)
+        // + "\tcolor_1 " + std::to_string((color_1.red)) + " " + std::to_string((color_1.green)) + " " + std::to_string((color_1.blue))
+        // + "\tcolor_2 " + std::to_string((color_2.red)) + " " + std::to_string((color_2.green)) + " " + std::to_string((color_2.blue))
+        // );
+        return _list_pair_colors.size() - 1;
+    }
+    if (index_color_1 < 0) {
+        _list_colors.push_back(color_1);
+        index_color_1 = _list_colors.size() - 1;
+        // writeAtEnd("color : " + std::to_string(index_color_1) + " = " + std::to_string(color_1.red / 255) + " " + std::to_string(color_1.green / 255) + " " + std::to_string(color_1.blue));
+        init_color(index_color_1, (color_1.red / 255) * 1000, (color_1.green / 255) * 1000, (color_1.blue / 255) * 1000);
+    }
+    if (index_color_2 < 0) {
+        _list_colors.push_back(color_2);
+        index_color_2 = _list_colors.size() - 1;
+        // writeAtEnd("color : " + std::to_string(index_color_2) + " = " + std::to_string(color_1.red / 255) + " " + std::to_string(color_1.green / 255) + " " + std::to_string(color_1.blue));
+        init_color(index_color_2, (color_2.red / 255) * 1000, (color_2.green / 255) * 1000, (color_2.blue / 255) * 1000);
+    }
+    // writeAtEnd(std::to_string(index_color_1) + " " + std::to_string(index_color_2)
+    // + "\tcolor_1 " + std::to_string((color_1.red)) + " " + std::to_string((color_1.green)) + " " + std::to_string((color_1.blue))
+    // + "\tcolor_2 " + std::to_string((color_2.red)) + " " + std::to_string((color_2.green)) + " " + std::to_string((color_2.blue))
+    // );
+    _list_pair_colors.push_back({index_color_1, index_color_2});
+    init_pair(_list_pair_colors.size() - 1, index_color_1, index_color_2);
+    return _list_pair_colors.size() - 1;
+}
+
+int Ncurses::handleColor(IGameModule::Entity e)
+{
+    int id = addColorToList(e.color_fg, e.color_bg);
+    attron(COLOR_PAIR(id));
+    return id;
+}
 
 void Ncurses::update(std::map<std::string, IGameModule::Entity> entities)
 {
+    erase();
     int i = 0;
     for (auto const &entity : entities) {
         if (entity.second.text.length()) {
             IGameModule::Entity e = entity.second;
-            color_t color_fg = e.color_fg;
-            color_t color_bg = e.color_bg;
-            init_color(COLOR_FG, (color_fg.red / 255) * 1000, (color_fg.green / 255) * 1000, (color_fg.blue / 255) * 1000);
-            init_color(COLOR_BG, (color_bg.red / 255) * 1000, (color_bg.green / 255) * 1000, (color_bg.blue / 255) * 1000);
-            init_pair(1, COLOR_FG, COLOR_BG);
-            attron(COLOR_PAIR(1));
-
+            int id = handleColor(e);
             if (e.bold && e.underline) {
                  attron(A_BOLD);
                  attron(A_UNDERLINE);
             }
             mvprintw((int)e.y, (int)e.x, "%s", e.text.c_str());
-            attroff(COLOR_PAIR(1));
+            attroff(COLOR_PAIR(id));
             attroff(A_UNDERLINE);
             attroff(A_BOLD);
         }

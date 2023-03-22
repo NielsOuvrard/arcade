@@ -21,9 +21,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         y,
         true,
         true,
-        255,
-        255,
-        255
+        {255, 255, 255},
+        {0, 0, 0}
     };
     y += 1;
     setNewEntity("Game Libs", gameEntity);
@@ -41,14 +40,13 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             y,
             bold,
             underline,
-            255,
-            255,
-            255
+            {255, 255, 255},
+            {0, 0, 0}
         };
         setNewEntity(val, gameLib);
         y += 1;
     }
-    Entity gfxEntity = { // old color type (only one color), why it's working ?
+    Entity gfxEntity = {
         -1,
         "GFX Libs",
         "E9967A",
@@ -56,9 +54,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         y,
         true,
         true,
-        255,
-        255,
-        255
+        {255, 255, 255},
+        {0, 0, 0}
     };
     y += 1;
     setNewEntity("GFX Libs", gfxEntity);
@@ -76,9 +73,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             y,
             bold,
             underline,
-            255,
-            255,
-            255
+            {255, 255, 255},
+            {0, 0, 0}
         };
         setNewEntity(val, gfxLib);
         y += 1;
@@ -91,9 +87,8 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         y,
         true,
         true,
-        255,
-        255,
-        255
+        {255, 255, 255},
+        {0, 0, 0}
     };
     setNewEntity("nameTitle", nameTitle);
     x += 1;

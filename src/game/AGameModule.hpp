@@ -38,9 +38,6 @@ class AGameModule : public IGameModule {
         std::string _currentRuntimeGraphicDisplay;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
-        // ça compile pas ici :
-        // * error: no viable conversion from 'time_point<std::chrono::steady_clock, duration<[...], ratio<[...], 1000000000>>>'
-        // * to 'time_point<std::chrono::system_clock
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
     private:
 };
