@@ -111,6 +111,7 @@ void Core::mainLoop()
             displayLib = new DLLoader<IDisplayModule>(gfxLibs[currentDisplayIndex]);
             display = displayLib->getInstance();
             display->init();
+            display->saveTextures(games[currentGameIndex]->getTextures());
         } else if (key == "F2") {
             if (currentGameIndex == gameLibs.size() - 1)
                 currentGameIndex = 0;
