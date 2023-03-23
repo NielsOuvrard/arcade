@@ -378,6 +378,19 @@ void Pacman::update(std::string key)
     }
 }
 
+void Pacman::resetGame(void)
+{
+    _isAlive = true;
+    _isMoving = false;
+    _score = 0;
+    _invincible = 0;
+    _second_sprite = false;
+    _pos_x = 0;
+    _pos_y = 0;
+    _next_direction = RIGHT;
+    _ennemy.clear();
+}
+
 extern "C" IGameModule *create(void) {
     return new Pacman();
 }

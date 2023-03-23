@@ -25,6 +25,7 @@ class Pacman : public AGameModule {
         ~Pacman();
         void update(std::string key);
         const std::string &getName() const{return _name;};
+        void resetGame(void);
 
     protected:
         void move(void);
