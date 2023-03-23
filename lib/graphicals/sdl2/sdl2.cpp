@@ -73,6 +73,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
             SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
         }
     }
+    entities.clear();
 }
 
 std::string Sdl2::getEvent()

@@ -251,15 +251,13 @@ void Snake::resetGame(void)
     scoreClock = std::chrono::high_resolution_clock::now();
     _time = 0;
     _score = 0;
+    _entities.clear();
 }
 
 extern "C" IGameModule *create(void) {
     return new Snake();
 }
 
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
-}
 
 extern "C" std::string getType() {
     return "Game";

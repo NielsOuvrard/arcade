@@ -13,7 +13,6 @@ Ncurses::Ncurses()
 
 Ncurses::~Ncurses()
 {
-    delwin(_window);
 }
 
 void Ncurses::init()
@@ -209,6 +208,3 @@ extern "C" std::string getType(void)
     return "Graphic";
 }
 
-extern "C" void destroy(IDisplayModule* obj) {
-    delete obj;
-}

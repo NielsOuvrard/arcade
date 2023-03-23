@@ -149,10 +149,6 @@ extern "C" IGameModule *create(void) {
     return new GameMenu();
 }
 
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
-}
-
 extern "C" std::string getType() {
     return "Menu";
 }

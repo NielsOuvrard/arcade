@@ -14,6 +14,7 @@
 
 Sfml::Sfml()
 {
+    std::cout << "SFML constructor" << std::endl;
 }
 
 Sfml::~Sfml()
@@ -74,6 +75,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
             _window->draw(sprite);
         }
     }
+    entities.clear();
 }
 
 std::string Sfml::getEvent()
@@ -144,9 +146,6 @@ extern "C" IDisplayModule *create(void)
     return new Sfml();
 }
 
-extern "C" void destroy(IDisplayModule* obj) {
-    delete obj;
-}
 
 extern "C" std::string getType() {
     return "Graphic";
