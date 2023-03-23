@@ -11,18 +11,24 @@
 
 Sdl2::Sdl2()
 {
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+    IMG_Init(0);
+    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
 }
 
 Sdl2::~Sdl2()
 {
+    SDL_DestroyWindow(_window);
+    TTF_CloseFont(_font);
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
 }
 
 void Sdl2::init()
 {
-    SDL_Init(SDL_INIT_VIDEO);
-    TTF_Init();
-    IMG_Init(0);
-    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN);
+    SDL_ShowWindow(_window);
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     _font = TTF_OpenFont("font.ttf", 24);
 }
@@ -30,11 +36,7 @@ void Sdl2::init()
 void Sdl2::stop()
 {
     SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
-    TTF_CloseFont(_font);
-    TTF_Quit();
-    IMG_Quit();
-    SDL_Quit();
+    SDL_HideWindow(_window);
 }
 
 void Sdl2::draw()

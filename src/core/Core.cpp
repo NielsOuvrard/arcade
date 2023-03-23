@@ -9,6 +9,7 @@
 
 Core::Core(const std::string displayLibPath)
 {
+    int i = 0;
     try {
         std::string path = "lib/";
         for (const auto &entry : std::filesystem::directory_iterator(path)) {
@@ -23,7 +24,9 @@ Core::Core(const std::string displayLibPath)
                         selectedDisplay = val->getInstance();
                         std::cout << "SELECTED GRAPHIC LIB : " << entry.path() << std::endl;
                         loadedLibsDisplay.insert(loadedLibsDisplay.end(), val);
+                        currentDisplayIndex = i;
                     }
+                    i++;
                 } else if (type == "Menu") {
                     IGameModule *menuLib = reinterpret_cast<IGameModule *> (val->getInstance());
                     menuList.insert(menuList.end(), menuLib);
@@ -89,6 +92,12 @@ void Core::displayMenu()
             myMenu.update(key);
         }
     }
+    if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex()) {
+        delete selectedDisplay;
+        DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
+        selectedDisplay = val->getInstance();
+        delete val;
+    }
     currentGameIndex = myMenu.getSelectedGameLibIndex();
     currentDisplayIndex = myMenu.getSelectedDisplayLibIndex();
     selectedDisplay->stop();
@@ -99,11 +108,6 @@ void Core::displayMenu()
 
 void Core::gameMenuLoop()
 {
-    delete selectedDisplay;
-    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-    delete val;
-    selectedDisplay = val->getInstance();
-    selectedDisplay->init();
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[0];
     selectedDisplay->init();
@@ -187,11 +191,6 @@ void Core::mainLoop()
 
 void Core::endGameLoop()
 {
-    delete selectedDisplay;
-    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-    selectedDisplay = val->getInstance();
-    delete val;
-    selectedDisplay->init();
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[1];
     selectedDisplay->init();
