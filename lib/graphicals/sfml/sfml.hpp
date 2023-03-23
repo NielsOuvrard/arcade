@@ -30,11 +30,11 @@ class Sfml : public IDisplayModule {
         void saveTextures(const std::vector<std::string> &texture);
         std::string getEvent();
         const std::string &getName() const;
-
+        void resetDisplay();
     protected:
         // sf::RenderWindow _window;
         // sf::RenderWindow window (sf::VideoMode(500,200) , "ma fenetre");
-        sf::RenderWindow* _window = nullptr;
+        sf::RenderWindow _window{sf::VideoMode(1920, 1080), "Arcade - SFML"};
         sf::Event _event;
         std::string _name = "SFML";
         sf::Font font;

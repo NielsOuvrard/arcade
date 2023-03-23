@@ -238,6 +238,21 @@ void Snake::update(std::string key)
     }
 }
 
+void Snake::resetGame(void)
+{
+    generateGrid(100);
+    dataToEntity();
+    generateApple();
+    _head_x = 4;
+    _head_y = 3;
+    _size_snake = 4;
+    _grid.clear();
+    start = std::chrono::high_resolution_clock::now();
+    scoreClock = std::chrono::high_resolution_clock::now();
+    _time = 0;
+    _score = 0;
+}
+
 extern "C" IGameModule *create(void) {
     return new Snake();
 }

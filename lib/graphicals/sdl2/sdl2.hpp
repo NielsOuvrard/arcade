@@ -27,7 +27,7 @@ class Sdl2 : public IDisplayModule {
         void saveTextures(const std::vector<std::string> &texture);
         std::string getEvent();
         const std::string &getName() const;
-
+        void resetDisplay();
     protected:
     private:
         SDL_Window *_window;

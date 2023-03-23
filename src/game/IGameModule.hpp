@@ -18,6 +18,7 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include <memory>
 
 typedef struct color_s {
     int red;
@@ -31,7 +32,8 @@ class IGameModule {
             MENU,
             PAUSED,
             IN_GAME,
-            FINISHED
+            FINISHED,
+            RESTART
         };
 
         enum DIRECTION {
@@ -74,6 +76,7 @@ class IGameModule {
         virtual void setScore(int score) = 0;
         virtual void setText(std::string name, std::string text) = 0;
         virtual void setTime(int time) = 0;
+        virtual void resetGame(void) = 0;
         virtual const std::string &getName() const = 0;
 
     protected:

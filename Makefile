@@ -63,9 +63,12 @@ pacman:
 	@ g++ -shared -o lib/arcade_pacman.so -fPIC $(SRC_LIB_GAMES)/pacman/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
 gameMenu:
-	@ g++ -shared -o lib/arcade_menu.so -fPIC $(SRC_LIB_GAMES)/gameMenu/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
+	@ g++ -shared -o lib/arcade_game_menu.so -fPIC $(SRC_LIB_GAMES)/game_menu/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
-games: snake nibbler gameMenu pacman
+gameOver:
+	@ g++ -shared -o lib/arcade_game_over.so -fPIC $(SRC_LIB_GAMES)/game_over/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
+
+games: snake nibbler gameMenu pacman gameOver
 
 graphicals:	sfml ncurses sdl2
 

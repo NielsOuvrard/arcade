@@ -13,11 +13,13 @@ Ncurses::Ncurses()
 
 Ncurses::~Ncurses()
 {
+    delwin(_window);
 }
 
 void Ncurses::init()
 {
-    initscr();
+    resetDisplay();
+    _window = initscr();
     start_color();
     use_default_colors();
     noecho();
@@ -189,6 +191,12 @@ const std::string & Ncurses::getName() const
 void Ncurses::saveTextures(const std::vector<std::string> &path_texture)
 {
     (void)path_texture;
+}
+
+void Ncurses::resetDisplay(void)
+{
+    _list_colors.clear();
+    _list_pair_colors.clear();
 }
 
 extern "C" IDisplayModule *create(void)

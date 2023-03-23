@@ -14,11 +14,19 @@
 #include <filesystem>
 #include <unistd.h>
 #include <map>
+#include <memory>
 #include "DLLoader.hpp"
 #include "IDisplayModule.hpp"
 #include "AGameModule.hpp"
 #include "Menu.hpp"
 class Core {
+    class Error : public std::exception {
+        public:
+            Error(std::string val) noexcept : msg(val) {};
+            const char *what() const noexcept override {return msg.c_str();}
+        private:
+            std::string msg;
+    };
     public:
         Core(const std::string displayLibPath);
         ~Core();
@@ -26,9 +34,8 @@ class Core {
         std::vector<std::string> getGfxLibs () const { return gfxLibs;}
         void displayMenu();
         void mainLoop();
-        void initializeGames();
-        void findIndex();
         void gameMenuLoop();
+        void endGameLoop();
 
     protected:
     private:
@@ -36,15 +43,16 @@ class Core {
         std::vector<std::string> gfxLibs;
         std::vector<std::string> menuLibs;
         std::vector<IGameModule *> games;
-        std::string selectedGameLib;
-        std::string selectedDisplayLib;
         int currentGameIndex = 0;
         int currentDisplayIndex = 0;
-
-        DLLoader<IDisplayModule> *displayLib;
-        DLLoader<IGameModule> *gameLib;
-        IGameModule *menu;
-        IDisplayModule *display;
+        int currentMenuIndex = 0;
+        std::vector<IDisplayModule *> displayList;
+        std::vector<IGameModule *> gameList;
+        std::vector<IGameModule *> menuList;
+        std::vector<DLLoader<void> *> loadedLibs;
+        IDisplayModule *selectedDisplay = nullptr;
+        IGameModule *selectedGame = nullptr;
+        IGameModule *selectedMenu = nullptr;
 };
 
 #endif /* !CORE_HPP_ */

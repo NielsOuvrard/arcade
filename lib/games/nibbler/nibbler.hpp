@@ -15,7 +15,7 @@ class Nibbler : public AGameModule {
         ~Nibbler();
         void update(std::string key);
         const std::string &getName() const{return _name;};
-
+        void resetGame(void);
     protected:
         void move(void);
         void dataToEntity(void);

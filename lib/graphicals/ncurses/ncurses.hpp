@@ -25,10 +25,12 @@ class Ncurses : public IDisplayModule {
         int pairExistInList(int color_1, int color_2);
         int addColorToList(color_t color_1, color_t color_2);
         int handleColor(IGameModule::Entity e);
+        void resetDisplay(void);
     protected:
         std::string _name = "SFML";
         std::vector<color_t> _list_colors;
         std::vector<std::pair<int, int>> _list_pair_colors;
+        WINDOW *_window = nullptr;
         int event;
     private:
 };
