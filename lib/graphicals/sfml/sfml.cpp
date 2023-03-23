@@ -109,7 +109,7 @@ std::string Sfml::getEvent()
                 case 86:
                     return "F2";
                 case 36:
-                    return "close";
+                    return "ESC";
             }
         }
     }

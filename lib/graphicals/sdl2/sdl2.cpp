@@ -11,7 +11,6 @@
 
 Sdl2::Sdl2()
 {
-    SDL_HideWindow(_window);
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
@@ -20,10 +19,6 @@ Sdl2::Sdl2()
 
 Sdl2::~Sdl2()
 {
-    SDL_DestroyWindow(_window);
-    TTF_Quit();
-    IMG_Quit();
-    SDL_Quit();
 }
 
 void Sdl2::init()
@@ -36,15 +31,15 @@ void Sdl2::init()
 
 void Sdl2::stop()
 {
-    SDL_HideWindow(_window);
-    TTF_CloseFont(_font);
     SDL_DestroyRenderer(_renderer);
+    TTF_CloseFont(_font);
 }
 
 void Sdl2::draw()
 {
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
     SDL_RenderPresent(_renderer);
+    SDL_Delay(1000/60);
 }
 
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
@@ -87,7 +82,7 @@ std::string Sdl2::getEvent()
         if (_event.type == SDL_KEYDOWN && _event.key.repeat == 0) {
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    return "close";
+                    return "ESC";
                 case SDLK_RETURN:
                     return "Enter";
                 case SDLK_LEFT:
