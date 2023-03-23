@@ -87,6 +87,41 @@ void AGameModule::generateGrid(std::vector<std::string> grid)
     }
 }
 
+void AGameModule::generateGrid(std::vector<std::string> grid, bool pacman)
+{
+    // # = wall
+    // . = small food   (+1)
+    // o = medium food  (+5)
+    // O = big food     (+10)
+    // @ = spawn
+    // X = ennemy
+    // < / > = teleport
+    for (auto &line : grid) {
+        std::vector<int> val;
+        for (auto &c : line) {
+            if (c == '#')
+                val.push_back(-2); // wall
+            else if (c == ' ')
+                val.push_back(0); // empty
+            else if (c == '@')
+                val.push_back(0); // player
+            else if (c == '.')
+                val.push_back(2); // small food
+            else if (c == 'o')
+                val.push_back(3); // medium food
+            else if (c == 'O')
+                val.push_back(4); // big food
+            else if (c == 'X')
+                val.push_back(0); // ennemy
+            else if (c == '<')
+                val.push_back(6); // teleport left
+            else if (c == '>')
+                val.push_back(7); // teleport right
+        }
+        _grid.push_back(val);
+    }
+}
+
 std::vector<std::vector<int>> AGameModule::getGrid() const
 {
     return _grid;

@@ -20,6 +20,8 @@ class AGameModule : public IGameModule {
         std::map<std::string, Entity> getInfos() const override;
         void generateGrid(int lenght) override;
         void generateGrid(std::vector<std::string>) override;
+        void generateGrid(std::vector<std::string> grid, bool pacman) override;
+
         std::vector<std::vector<int>> getGrid() const override;
         void setGridValue(int y, int x, int value) override;
         void setNewEntity(std::string name, Entity entity) override;

@@ -11,13 +11,6 @@
 
 class Nibbler : public AGameModule {
     public:
-        struct box {
-            int new_x;
-            int new_y;
-            int x;
-            int y;
-        } typedef t_box;
-
         Nibbler();
         ~Nibbler();
         void update(std::string key);
