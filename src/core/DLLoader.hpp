@@ -41,11 +41,9 @@ class DLLoader {
             instance = func();
         };
         ~DLLoader(){
-            void (*func)(T  *);
-            func = (void (*) (T *)) dlsym(lib, "destroy");
             char *error = dlerror();
-            func(instance);
             dlclose(lib);
+            std::cout << "destroy" << std::endl;
             error = dlerror();
         };
         T *getInstance(void) {

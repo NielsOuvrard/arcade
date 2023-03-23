@@ -42,6 +42,7 @@ class Core {
         std::vector<IDisplayModule *> displayList;
         std::vector<IGameModule *> gameList;
         std::vector<IGameModule *> menuList;
+        std::vector<DLLoader<void> *> loadedLibs;
         IDisplayModule *selectedDisplay = nullptr;
         IGameModule *selectedGame = nullptr;
         IGameModule *selectedMenu = nullptr;

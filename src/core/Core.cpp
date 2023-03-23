@@ -35,6 +35,7 @@ Core::Core(const std::string displayLibPath)
                     gameLibs.insert(gameLibs.end(),entry.path());
                     std::cout << "GAME LIB : " << entry.path() << std::endl;;
                 }
+                loadedLibs.insert(loadedLibs.end(), val);
             }
         }
     } catch (std::exception &e){
@@ -46,14 +47,20 @@ Core::Core(const std::string displayLibPath)
 Core::~Core()
 {
     for (auto val : displayList) {
+        std::cout << "ici" << std::endl;
         delete val;
     }
     for (auto val : gameList) {
+        std::cout << "la" << std::endl;
         delete val;
     }
     // if (au)
     //     delete menu;
     for (auto val : menuList) {
+        std::cout << "bas" << std::endl;
+        delete val;
+    }
+    for (auto val : loadedLibs) {
         delete val;
     }
 }
