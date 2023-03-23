@@ -34,6 +34,7 @@ class DLLoader {
             }
             T *(*func)(void);
             func = (T * (*) ()) dlsym(lib, "create");
+            std::cout << "create" << std::endl;
             error = dlerror();
             if (error != NULL) {
                 std::cout << "ici" << std::endl;
