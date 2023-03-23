@@ -28,6 +28,7 @@ class Core {
         void displayMenu();
         void mainLoop();
         void gameMenuLoop();
+        void endGameLoop();
 
     protected:
     private:
@@ -37,11 +38,13 @@ class Core {
         std::vector<IGameModule *> games;
         int currentGameIndex = 0;
         int currentDisplayIndex = 0;
+        int currentMenuIndex = 0;
         std::vector<IDisplayModule *> displayList;
         std::vector<IGameModule *> gameList;
-        IGameModule *menu = nullptr;
+        std::vector<IGameModule *> menuList;
         IDisplayModule *selectedDisplay = nullptr;
         IGameModule *selectedGame = nullptr;
+        IGameModule *selectedMenu = nullptr;
 };
 
 #endif /* !CORE_HPP_ */

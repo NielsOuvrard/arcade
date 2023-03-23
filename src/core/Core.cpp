@@ -23,11 +23,12 @@ Core::Core(const std::string displayLibPath)
                         selectedDisplay = display;
                     }
                     gfxLibs.insert(gfxLibs.end(),entry.path());
+                    std::cout << "GRAPHIC LIB : " << entry.path() << std::endl;;
                 } else if (type == "Menu") {
-                    std::cout << "MENU LIB : " << entry.path() << std::endl;;
                     IGameModule *menuLib = reinterpret_cast<IGameModule *> (val->getInstance());
-                    menu = menuLib;
+                    menuList.insert(menuList.end(), menuLib);
                     menuLibs.insert(menuLibs.end(),entry.path());
+                    std::cout << "MENU LIB : " << entry.path() << std::endl;;
                 } else {
                     IGameModule *game = reinterpret_cast<IGameModule *> (val->getInstance());
                     gameList.insert(gameList.end(), game);
@@ -50,8 +51,11 @@ Core::~Core()
     for (auto val : gameList) {
         delete val;
     }
-    if (menu)
-        delete menu;
+    // if (au)
+    //     delete menu;
+    for (auto val : menuList) {
+        delete val;
+    }
 }
 
 void Core::displayMenu()
@@ -85,11 +89,12 @@ void Core::gameMenuLoop()
 {
     selectedDisplay = displayList[currentDisplayIndex];
     selectedGame = gameList[currentGameIndex];
+    selectedMenu = menuList[0];
     selectedDisplay->init();
-    menu->startGame();
-    menu->setText("Game", selectedGame->getName());
-    while (menu->getGameStatus() != IGameModule::FINISHED && menu->getGameStatus() != IGameModule::MENU) {
-        selectedDisplay->update(menu->getInfos());
+    selectedMenu->startGame();
+    selectedMenu->setText("Game", selectedGame->getName());
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED && selectedMenu->getGameStatus() != IGameModule::MENU) {
+        selectedDisplay->update(selectedMenu->getInfos());
         selectedDisplay->draw();
         std::string key = selectedDisplay->getEvent();
         if (key == "F1") {
@@ -106,13 +111,13 @@ void Core::gameMenuLoop()
             else
                 currentGameIndex++;
             selectedGame = gameList[currentGameIndex];
-            menu->setText("Game", selectedGame->getName());
+            selectedMenu->setText("Game", selectedGame->getName());
         } else {
-            menu->update(key);
+            selectedMenu->update(key);
         }
     }
     selectedDisplay->stop();
-    if (menu->getGameStatus() == IGameModule::MENU) {
+    if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         displayMenu();
     } else {
         mainLoop();
@@ -149,4 +154,36 @@ void Core::mainLoop()
         }
     }
     selectedDisplay->stop();
+    endGameLoop();
+}
+
+void Core::endGameLoop()
+{
+    selectedDisplay = displayList[currentDisplayIndex];
+    selectedGame = gameList[currentGameIndex];
+    selectedMenu = menuList[1];
+    selectedDisplay->init();
+    selectedMenu->startGame();
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED && selectedMenu->getGameStatus() != IGameModule::MENU) {
+        selectedDisplay->update(selectedMenu->getInfos());
+        selectedDisplay->draw();
+        std::string key = selectedDisplay->getEvent();
+        if (key == "F1") {
+            if (currentDisplayIndex == gfxLibs.size() - 1)
+                currentDisplayIndex = 0;
+            else
+                currentDisplayIndex++;
+            selectedDisplay->stop();
+            selectedDisplay = displayList[currentDisplayIndex];
+            selectedDisplay->init();
+        } else {
+            selectedMenu->update(key);
+        }
+    }
+    selectedDisplay->stop();
+    if (selectedMenu->getGameStatus() == IGameModule::MENU) {
+        gameMenuLoop();
+    } else if (selectedMenu->getGameStatus() == IGameModule::RESTART) {
+        mainLoop();
+    }
 }

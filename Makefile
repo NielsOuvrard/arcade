@@ -60,9 +60,12 @@ nibbler:
 	@ g++ -shared -o lib/arcade_nibbler.so -fPIC $(SRC_LIB_GAMES)/nibbler/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
 gameMenu:
-	@ g++ -shared -o lib/arcade_menu.so -fPIC $(SRC_LIB_GAMES)/gameMenu/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
+	@ g++ -shared -o lib/arcade_game_menu.so -fPIC $(SRC_LIB_GAMES)/game_menu/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
-games: snake nibbler gameMenu
+gameOver:
+	@ g++ -shared -o lib/arcade_game_over.so -fPIC $(SRC_LIB_GAMES)/game_over/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
+
+games: snake nibbler gameMenu gameOver
 
 graphicals:	sfml ncurses sdl2
 
