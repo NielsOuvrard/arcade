@@ -17,7 +17,6 @@ Sdl2::Sdl2()
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
-    _font = TTF_OpenFont("font.ttf", 24);
 }
 
 Sdl2::~Sdl2()
@@ -33,6 +32,7 @@ Sdl2::~Sdl2()
 void Sdl2::init()
 {
     SDL_ShowWindow(_window);
+    _font = TTF_OpenFont("font.ttf", 24);
     resetDisplay();
 }
 
