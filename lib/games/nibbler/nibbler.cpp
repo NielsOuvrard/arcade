@@ -144,10 +144,10 @@ void Nibbler::dataToEntity(void)
     int row = 0;
     clearEntities();
     setNewEntity("Apple", {
-        0,
+        -1,
         "Apple remain: " + std::to_string(_apple_remain),
         "",
-        60,
+        0,
         0,
         false,
         false,

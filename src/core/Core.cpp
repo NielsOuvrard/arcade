@@ -148,51 +148,5 @@ void Core::mainLoop()
             selectedGame->update(key);
         }
     }
-    display->stop();
-    delete gameLib;
-    delete displayLib;
-    endGameLoop();
-}
-
-void Core::endGameLoop()
-{
-    displayLib = new DLLoader<IDisplayModule> (selectedDisplayLib);
-    gameLib = new DLLoader<IGameModule> (menuLibs[1]);
-    menu = gameLib->getInstance();
-    display = displayLib->getInstance();
-    findIndex();
-    display->init();
-    menu->startGame();
-    while (menu->getGameStatus() != IGameModule::FINISHED && menu->getGameStatus() != IGameModule::MENU && menu->getGameStatus() != IGameModule::RESTART) {
-        display->update(menu->getInfos());
-        display->draw();
-        std::string key = display->getEvent();
-        if (key == "F1") {
-            if (currentDisplayIndex == gfxLibs.size() - 1)
-                currentDisplayIndex = 0;
-            else
-                currentDisplayIndex++;
-            display->stop();
-            delete display;
-            selectedDisplayLib = gfxLibs[currentDisplayIndex];
-            displayLib = new DLLoader<IDisplayModule>(gfxLibs[currentDisplayIndex]);
-            display = displayLib->getInstance();
-            display->init();
-        } else {
-            menu->update(key);
-        }
-    }
-    display->stop();
-    if (menu->getGameStatus() == IGameModule::MENU) {
-        delete gameLib;
-        delete displayLib;
-        gameMenuLoop();
-    } else if (menu->getGameStatus() == IGameModule::RESTART) {
-        delete gameLib;
-        delete displayLib;
-        mainLoop();
-    } else {
-        delete gameLib;
-        delete displayLib;
-    }
+    selectedDisplay->stop();
 }

@@ -32,8 +32,7 @@ class IGameModule {
             MENU,
             PAUSED,
             IN_GAME,
-            FINISHED,
-            RESTART
+            FINISHED
         };
 
         enum DIRECTION {

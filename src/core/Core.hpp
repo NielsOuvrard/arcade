@@ -28,7 +28,6 @@ class Core {
         void displayMenu();
         void mainLoop();
         void gameMenuLoop();
-        void endGameLoop();
 
     protected:
     private:
