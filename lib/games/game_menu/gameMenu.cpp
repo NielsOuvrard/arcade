@@ -60,7 +60,7 @@ void GameMenu::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
     if (options.size() != 0) {
         if (key == "Enter") {

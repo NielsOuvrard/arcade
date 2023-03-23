@@ -11,17 +11,15 @@
 
 Sdl2::Sdl2()
 {
-    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     SDL_HideWindow(_window);
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
+    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL);
 }
 
 Sdl2::~Sdl2()
 {
-    SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
     TTF_Quit();
     IMG_Quit();
@@ -31,7 +29,8 @@ Sdl2::~Sdl2()
 void Sdl2::init()
 {
     SDL_ShowWindow(_window);
-    _font = TTF_OpenFont("font.ttf", 24);
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    _font = TTF_OpenFont("font.ttf", 60);
     resetDisplay();
 }
 
@@ -39,6 +38,7 @@ void Sdl2::stop()
 {
     SDL_HideWindow(_window);
     TTF_CloseFont(_font);
+    SDL_DestroyRenderer(_renderer);
 }
 
 void Sdl2::draw()
@@ -55,7 +55,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
         IGameModule::Entity e = entity.second;
         if (e.id_file == -1) {
             if (e.bold && e.underline) {
-                TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
+                TTF_SetFontStyle(_font, TTF_STYLE_UNDERLINE);
             }
             _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
                 (Uint8)e.color_fg.red,
@@ -71,12 +71,8 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             float x = (e.x * 100) * 0.16;
             float y = (e.y * 100) * 0.16;
-            std::cout << "float x : " << x << std::endl;
-            std::cout << "float y : " << y << std::endl;
             _rects[e.id_file].x = (int)x;
             _rects[e.id_file].y = (int)y;
-            std::cout << "int x : " << _rects[e.id_file].x << std::endl;
-            std::cout << "int y : " << _rects[e.id_file].y  << std::endl;
             SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
         }
     }

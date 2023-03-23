@@ -234,7 +234,7 @@ void Snake::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
 }
 

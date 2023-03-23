@@ -104,7 +104,7 @@ void Menu::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
     if (key == "Backspace" && name.length() > 18) {
         name.resize(name.length() - 1);

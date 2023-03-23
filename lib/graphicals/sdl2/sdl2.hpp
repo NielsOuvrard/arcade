@@ -30,8 +30,8 @@ class Sdl2 : public IDisplayModule {
         void resetDisplay();
     protected:
     private:
-        SDL_Window *_window;
-        SDL_Renderer *_renderer;
+        SDL_Window *_window = nullptr;
+        SDL_Renderer *_renderer = nullptr;
         SDL_Event _event;
         std::string _name = "SDL2";
         //text

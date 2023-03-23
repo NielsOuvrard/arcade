@@ -33,7 +33,8 @@ class IGameModule {
             PAUSED,
             IN_GAME,
             FINISHED,
-            RESTART
+            RESTART,
+            CLOSED
         };
 
         enum DIRECTION {

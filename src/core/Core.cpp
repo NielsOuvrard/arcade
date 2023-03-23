@@ -73,7 +73,7 @@ void Core::displayMenu()
 {
     Menu myMenu = Menu(gameLibs, gfxLibs);
     selectedDisplay->init();
-    while (myMenu.getGameStatus() != IGameModule::FINISHED) {
+    while (myMenu.getGameStatus() != IGameModule::FINISHED && myMenu.getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->update(myMenu.getInfos());
         selectedDisplay->draw();
         std::string key = selectedDisplay->getEvent();
@@ -92,8 +92,9 @@ void Core::displayMenu()
     currentGameIndex = myMenu.getSelectedGameLibIndex();
     currentDisplayIndex = myMenu.getSelectedDisplayLibIndex();
     selectedDisplay->stop();
-    if (myMenu.getSelectedStatus())
+    if (myMenu.getSelectedStatus()) {
         gameMenuLoop();
+    }
 }
 
 void Core::gameMenuLoop()
@@ -105,7 +106,9 @@ void Core::gameMenuLoop()
     selectedMenu->resetGame();
     selectedMenu->startGame();
     selectedMenu->setText("Game", selectedGame->getName());
-    while (selectedMenu->getGameStatus() != IGameModule::FINISHED && selectedMenu->getGameStatus() != IGameModule::MENU) {
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED
+    && selectedMenu->getGameStatus() != IGameModule::MENU
+    && selectedMenu->getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->update(selectedMenu->getInfos());
         selectedDisplay->draw();
         std::string key = selectedDisplay->getEvent();
@@ -131,7 +134,7 @@ void Core::gameMenuLoop()
     selectedDisplay->stop();
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         displayMenu();
-    } else {
+    } else if (selectedMenu->getGameStatus() == IGameModule::FINISHED ){
         selectedGame->resetGame();
         mainLoop();
     }
@@ -144,7 +147,7 @@ void Core::mainLoop()
     selectedDisplay->resetDisplay();
     selectedDisplay->saveTextures(selectedGame->getTextures());
     selectedGame->startGame();
-    while (selectedGame->getGameStatus() != IGameModule::FINISHED) {
+    while (selectedGame->getGameStatus() != IGameModule::FINISHED && selectedGame->getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->update(selectedGame->getInfos());
         selectedDisplay->draw();
         std::string key = selectedDisplay->getEvent();
@@ -168,7 +171,8 @@ void Core::mainLoop()
         }
     }
     selectedDisplay->stop();
-    endGameLoop();
+    if (selectedGame->getGameStatus() != IGameModule::CLOSED)
+        endGameLoop();
 }
 
 void Core::endGameLoop()
