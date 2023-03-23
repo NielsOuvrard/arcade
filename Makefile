@@ -62,7 +62,10 @@ nibbler:
 gameMenu:
 	@ g++ -shared -o lib/arcade_menu.so -fPIC $(SRC_LIB_GAMES)/gameMenu/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
 
-games: snake nibbler gameMenu
+endGame:
+	@ g++ -shared -o lib/arcade_endGame.so -fPIC $(SRC_LIB_GAMES)/endGame/*.cpp ./src/game/AGameModule.cpp $(INCLUDE_PATH)
+
+games: snake nibbler gameMenu endGame
 
 graphicals:	sfml ncurses sdl2
 
