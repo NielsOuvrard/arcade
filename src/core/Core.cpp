@@ -91,6 +91,7 @@ void Core::gameMenuLoop()
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[0];
     selectedDisplay->init();
+    selectedMenu->resetGame();
     selectedMenu->startGame();
     selectedMenu->setText("Game", selectedGame->getName());
     while (selectedMenu->getGameStatus() != IGameModule::FINISHED && selectedMenu->getGameStatus() != IGameModule::MENU) {
@@ -120,6 +121,7 @@ void Core::gameMenuLoop()
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         displayMenu();
     } else {
+        selectedGame->resetGame();
         mainLoop();
     }
 }
@@ -128,6 +130,7 @@ void Core::mainLoop()
 {
     selectedGame = gameList[currentGameIndex];
     selectedDisplay->init();
+    selectedDisplay->resetDisplay();
     selectedDisplay->saveTextures(selectedGame->getTextures());
     selectedGame->startGame();
     while (selectedGame->getGameStatus() != IGameModule::FINISHED) {
@@ -184,6 +187,7 @@ void Core::endGameLoop()
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         gameMenuLoop();
     } else if (selectedMenu->getGameStatus() == IGameModule::RESTART) {
+        selectedGame->resetGame();
         mainLoop();
     }
 }

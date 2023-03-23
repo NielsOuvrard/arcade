@@ -18,7 +18,7 @@ class GameMenu : public AGameModule {
         std::string getSelectedOption() const { return options[selectedOptionIndex];};
         std::vector<std::string> getTextures();
         const std::string &getName() const{return _name;};
-
+        void resetGame(void);
     protected:
         int selectedOptionIndex = 0;
         bool hasSelected = false;

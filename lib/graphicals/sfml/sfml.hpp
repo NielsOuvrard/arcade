@@ -30,7 +30,7 @@ class Sfml : public IDisplayModule {
         void saveTextures(const std::vector<std::string> &texture);
         std::string getEvent();
         const std::string &getName() const;
-
+        void resetDisplay();
     protected:
         // sf::RenderWindow _window;
         // sf::RenderWindow window (sf::VideoMode(500,200) , "ma fenetre");

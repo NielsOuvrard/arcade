@@ -203,3 +203,8 @@ void Menu::update(std::string key)
         }
     }
 }
+
+void Menu::resetGame(void)
+{
+    
+}

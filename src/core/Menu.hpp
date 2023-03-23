@@ -19,7 +19,7 @@ class Menu : public AGameModule {
         int getSelectedDisplayLibIndex() const {return selectedDisplayIndex;};
         std::vector<std::string> getTextures(void){return std::vector<std::string>();};
         const std::string &getName() const{return name;};
-
+        void resetGame(void);
     protected:
         std::string name = "Enter your name : ";
         int selectedGameIndex = 0;

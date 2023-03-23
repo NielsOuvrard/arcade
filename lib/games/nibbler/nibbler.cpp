@@ -368,6 +368,33 @@ void Nibbler::update(std::string key)
     }
 }
 
+void Nibbler::resetGame(void)
+{
+    _entities.clear();
+    _grid.clear();
+    start = std::chrono::high_resolution_clock::now();
+    scoreClock = std::chrono::high_resolution_clock::now();
+    _time = 0;
+    _score = 0;
+    _next_direction = IGameModule::DIRECTION::RIGHT;
+    _head_x = 0;
+    _head_y = 0;
+    _size_snake = 0;
+    _apple_remain = 0;
+    std::vector<std::string> map = fileToArray("lib/games/nibbler/map1.txt");
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j] == 'A') {
+                _apple_remain++;
+            }
+        }
+    }
+    generateGrid(map);
+    getInfoSnake(map);
+    dataToEntity();
+
+}
+
 extern "C" IGameModule *create(void) {
     return new Nibbler();
 }

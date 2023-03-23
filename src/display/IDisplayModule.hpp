@@ -26,6 +26,7 @@ class IDisplayModule {
         virtual void saveTextures(const std::vector<std::string> &texture) = 0;
         virtual std::string getEvent() = 0;
         virtual const std::string &getName() const = 0;
+        virtual void resetDisplay() = 0;
 };
 
 #endif /* !DISPLAY_MODULE_I */

@@ -129,6 +129,11 @@ const std::string & Sfml::getName() const
     return _name;
 }
 
+void Sfml::resetDisplay(void)
+{
+    _textures.clear();
+}
+
 extern "C" IDisplayModule *create(void)
 {
     return new Sfml();

@@ -76,7 +76,7 @@ void GameOver::update(std::string key)
         setGameStatus(FINISHED);
     }
     if (options.size() != 0) {
-        if (key == "Enter" && !getSelectedStatus()) {
+        if (key == "Enter") {
             if (getSelectedOption() == "Menu") {
                 setGameStatus(MENU);
             } else if (getSelectedOption() == "Restart") {
@@ -108,6 +108,66 @@ void GameOver::update(std::string key)
             return;
         }
     }
+}
+
+void GameOver::resetGame(void)
+{
+    _entities.clear();
+    float x = 0, y = 0;
+    Entity gameEntity = {
+        -1,
+        "Game Over",
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    y += 1;
+    setNewEntity("GameOver", gameEntity);
+    gameEntity = {
+        -1,
+        "Restart",
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    y += 1;
+    setNewEntity("Restart", gameEntity);
+    gameEntity = {
+        -1,
+        "Menu",
+        "E9967A",
+        x,
+        y,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    y += 1;
+    setNewEntity("Menu", gameEntity);
+    gameEntity = {
+        -1,
+        "Quit",
+        "E9967A",
+        x,
+        y,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    y += 1;
+    setNewEntity("Quit", gameEntity);
+    selectedOptionIndex = 0;
+    hasSelected = false;
 }
 
 std::vector<std::string> GameOver::getTextures() {

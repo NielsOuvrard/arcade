@@ -118,6 +118,13 @@ const std::string &Sdl2::getName() const
     return _name;
 }
 
+void Sdl2::resetDisplay(void)
+{
+    _textures.clear();
+    _rects.clear();
+    _renderedTextures.clear();
+}
+
 extern "C" IDisplayModule *create(void)
 {
     return new  Sdl2();
