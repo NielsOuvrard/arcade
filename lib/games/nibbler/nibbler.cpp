@@ -38,7 +38,7 @@ void Nibbler::getInfoSnake (std::vector<std::string> map)
 
 Nibbler::Nibbler()
 {
-    std::vector<std::string> map = fileToArray("lib/games/nibbler/map1.txt");
+    std::vector<std::string> map = fileToArray("lib/games/nibbler/map2.txt");
     for (int i = 0; i < map.size(); i++) {
         for (int j = 0; j < map[i].size(); j++) {
             if (map[i][j] == 'A') {
@@ -143,28 +143,6 @@ void Nibbler::dataToEntity(void)
     float y = 1, x = 0;
     int row = 0;
     clearEntities();
-    setNewEntity("Apple", {
-        -1,
-        "Apple remain: " + std::to_string(_apple_remain),
-        "",
-        0,
-        0,
-        false,
-        false,
-        {255, 255, 255},
-        {0, 0, 0},
-    });
-    setNewEntity("Time", {
-        -1,
-        "Time: " + std::to_string(89), // TODO time
-        "",
-        10,
-        0,
-        false,
-        false,
-        {255, 255, 255},
-        {0, 0, 0},
-    });
     for (std::vector<int> value : getGrid()) {
         for (int i = 0; i < getGrid()[0].size(); i++) {
             if (value[i] == -2) { // walls
@@ -246,6 +224,18 @@ void Nibbler::dataToEntity(void)
         255
     };
     setNewEntity("score", newEntity);
+    y = 2;
+    setNewEntity("Apple", {
+        -1,
+        "Apple remain: " + std::to_string(_apple_remain),
+        "",
+        x,
+        y,
+        true,
+        true,
+        {255, 255, 255},
+        {0, 0, 0},
+    });
 }
 
 void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
