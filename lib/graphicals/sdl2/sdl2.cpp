@@ -11,20 +11,18 @@
 
 Sdl2::Sdl2()
 {
-    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN);
+    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     SDL_HideWindow(_window);
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
-    _font = TTF_OpenFont("font.ttf", 24);
 }
 
 Sdl2::~Sdl2()
 {
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
-    TTF_CloseFont(_font);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
@@ -33,19 +31,20 @@ Sdl2::~Sdl2()
 void Sdl2::init()
 {
     SDL_ShowWindow(_window);
+    _font = TTF_OpenFont("font.ttf", 24);
     resetDisplay();
 }
 
 void Sdl2::stop()
 {
     SDL_HideWindow(_window);
+    TTF_CloseFont(_font);
 }
 
 void Sdl2::draw()
 {
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
     SDL_RenderPresent(_renderer);
-    SDL_Delay(1000/60);
 }
 
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
@@ -72,8 +71,12 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             float x = (e.x * 100) * 0.16;
             float y = (e.y * 100) * 0.16;
+            std::cout << "float x : " << x << std::endl;
+            std::cout << "float y : " << y << std::endl;
             _rects[e.id_file].x = (int)x;
             _rects[e.id_file].y = (int)y;
+            std::cout << "int x : " << _rects[e.id_file].x << std::endl;
+            std::cout << "int y : " << _rects[e.id_file].y  << std::endl;
             SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
         }
     }
