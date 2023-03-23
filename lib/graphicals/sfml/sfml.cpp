@@ -15,9 +15,8 @@
 Sfml::Sfml()
 {
     _window = std::unique_ptr<sf::RenderWindow>(
-    new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML")
-  );
-    _window->setVisible(false);
+        new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML")
+    );
 }
 
 Sfml::~Sfml()
@@ -26,6 +25,9 @@ Sfml::~Sfml()
 
 void Sfml::init()
 {
+    _window = std::unique_ptr<sf::RenderWindow>(
+        new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML")
+    );
     _window->create(sf::VideoMode(1920, 1080), "Arcade - SFML");
     _window->setVisible(true);
     _window->setKeyRepeatEnabled(false);
@@ -35,6 +37,7 @@ void Sfml::init()
 void Sfml::stop()
 {
     _window->setVisible(false);
+    _window.reset();
 }
 
 void Sfml::draw()
