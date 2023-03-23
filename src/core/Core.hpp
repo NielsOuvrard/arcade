@@ -20,6 +20,13 @@
 #include "AGameModule.hpp"
 #include "Menu.hpp"
 class Core {
+    class Error : public std::exception {
+        public:
+            Error(std::string val) noexcept : msg(val) {};
+            const char *what() const noexcept override {return msg.c_str();}
+        private:
+            std::string msg;
+    };
     public:
         Core(const std::string displayLibPath);
         ~Core();

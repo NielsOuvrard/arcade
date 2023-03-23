@@ -14,6 +14,7 @@
 
 Sfml::Sfml()
 {
+    _window.setVisible(false);
 }
 
 Sfml::~Sfml()
@@ -22,27 +23,26 @@ Sfml::~Sfml()
 
 void Sfml::init()
 {
-    _window = new sf::RenderWindow;
-    _window->create(sf::VideoMode(1920, 1080), "Arcade - SFML");
-    _window->setKeyRepeatEnabled(false);
+    _window.create(sf::VideoMode(1920, 1080), "Arcade - SFML");
+    _window.setVisible(true);
+    _window.setKeyRepeatEnabled(false);
     font.loadFromFile("font.ttf");
 }
 
 void Sfml::stop()
 {
-    _window->close();
-    delete _window;
+    _window.setVisible(false);
 }
 
 void Sfml::draw()
 {
     // in case of error
-    if (!_window->isOpen()) {
+    if (!_window.isOpen()) {
         return;
     }
     // draw...
 
-    _window->display();
+    _window.display();
 }
 
 void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
@@ -50,7 +50,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
     if (entities.size() == 0) {
         return;
     }
-    _window->clear();
+    _window.clear();
     for (auto const &val : entities) {
         IGameModule::Entity entity = val.second;
         if (entity.id_file == -1) {
@@ -63,12 +63,12 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
             text.setFillColor(color);
             text.setPosition(sf::Vector2f(entity.x * 100, entity.y * 100));
             text.setCharacterSize(60);
-            _window->draw(text);
+            _window.draw(text);
         } else {
             sf::Sprite sprite;
             sprite.setTexture(_textures[entity.id_file]);
             sprite.setPosition(sf::Vector2f((entity.x * 100) * 0.16, (entity.y * 100) * 0.16));
-            _window->draw(sprite);
+            _window.draw(sprite);
         }
     }
 }
@@ -76,7 +76,7 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
 std::string Sfml::getEvent()
 {
     sf::Event event;
-    while (_window->pollEvent(event)) {
+    while (_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return "close";
         if (event.type == sf::Event::TextEntered) {

@@ -42,6 +42,10 @@ Core::Core(const std::string displayLibPath)
         std::cout << e.what() << std::endl;
         exit(84);
     }
+    if (selectedDisplay == nullptr) {
+        std::cerr << "Provided display lib is not accessible." << std::endl;
+        exit(84);
+    }
 }
 
 Core::~Core()
@@ -174,7 +178,9 @@ void Core::endGameLoop()
     selectedMenu = menuList[1];
     selectedDisplay->init();
     selectedMenu->startGame();
-    while (selectedMenu->getGameStatus() != IGameModule::FINISHED && selectedMenu->getGameStatus() != IGameModule::MENU) {
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED &&
+    selectedMenu->getGameStatus() != IGameModule::MENU &&
+    selectedMenu->getGameStatus() != IGameModule::RESTART) {
         selectedDisplay->update(selectedMenu->getInfos());
         selectedDisplay->draw();
         std::string key = selectedDisplay->getEvent();
