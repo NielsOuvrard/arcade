@@ -11,13 +11,6 @@
 
 class Nibbler : public AGameModule {
     public:
-        struct box {
-            int new_x;
-            int new_y;
-            int x;
-            int y;
-        } typedef t_box;
-
         Nibbler();
         ~Nibbler();
         void update(std::string key);
@@ -31,7 +24,6 @@ class Nibbler : public AGameModule {
         void snakePart(std::vector<int> value, float x, float y, int row, int i);
         void getInfoSnake (std::vector<std::string> map);
         int tryMoveHere(IGameModule::DIRECTION direction);
-
         std::vector<std::string> getTextures(void);
         int _head_x = 0;
         int _head_y = 0;

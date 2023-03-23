@@ -11,13 +11,6 @@
 
 class Snake : public AGameModule {
     public:
-        struct box {
-            int new_x;
-            int new_y;
-            int x;
-            int y;
-        } typedef t_box;
-
         Snake();
         ~Snake();
         void update(std::string key);
