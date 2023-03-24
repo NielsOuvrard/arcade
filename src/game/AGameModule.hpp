@@ -40,7 +40,7 @@ class AGameModule : public IGameModule {
 
     protected:
         mutable std::map<std::string, Entity> _entities;
-        GAME_STATUS _status;
+        GAME_STATUS _status = NOT_STARTED;
         DIRECTION _direction = DIRECTION::RIGHT;
         std::vector<std::vector<int>> _grid;
         int _score = 0;

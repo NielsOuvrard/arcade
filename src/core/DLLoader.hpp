@@ -50,7 +50,7 @@ class DLLoader {
                 std::cout << "ici" << std::endl;
                 throw Error(error);
             }
-            return (func());
+            return func();
         };
         std::string getInstanceType() const {
             std::string (*func)(void);

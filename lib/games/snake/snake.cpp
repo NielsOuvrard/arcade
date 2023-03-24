@@ -9,16 +9,18 @@
 
 Snake::Snake()
 {
-    generateGrid(100);
-    dataToEntity();
-    generateApple();
-    _head_x = 4;
-    _head_y = 3;
-    _size_snake = 4;
+    std::cout << "snake create" << std::endl;
+    // generateGrid(100);
+    // dataToEntity();
+    // generateApple();
+    // _head_x = 4;
+    // _head_y = 3;
+    // _size_snake = 4;
 }
 
 Snake::~Snake()
 {
+    std::cout << "snake destroy" << std::endl;
 }
 
 void Snake::generateApple(void)
@@ -255,6 +257,7 @@ void Snake::resetGame(void)
 }
 
 extern "C" IGameModule *create(void) {
+    std::cout << "create snake" << std::endl;
     return new Snake();
 }
 

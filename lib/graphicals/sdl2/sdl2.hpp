@@ -36,7 +36,6 @@ class Sdl2 : public IDisplayModule {
         std::string _name = "SDL2";
         //text
         TTF_Font *_font;
-        SDL_Texture *_text_texture = nullptr;
         SDL_Surface *_text_surface = nullptr;
         SDL_Rect _text_rect;
         //image

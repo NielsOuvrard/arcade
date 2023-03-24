@@ -13,13 +13,7 @@
 #include "sfml.hpp"
 
 Sfml::Sfml()
-{
-    _window = std::unique_ptr<sf::RenderWindow>(
-        new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML")
-    );
-    _window->setVisible(false);
-    std::cout << "SFML constructor" << std::endl;
-}
+{}
 
 Sfml::~Sfml()
 {
@@ -27,6 +21,11 @@ Sfml::~Sfml()
 
 void Sfml::init()
 {
+    _window = std::unique_ptr<sf::RenderWindow>(
+        new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML")
+    );
+    _window->setVisible(false);
+    std::cout << "SFML constructor" << std::endl;
     _window->setVisible(true);
     _window->setKeyRepeatEnabled(false);
     font.loadFromFile("font.ttf");

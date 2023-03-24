@@ -14,13 +14,15 @@ Sdl2::Sdl2()
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
-    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
+
 }
 
 Sdl2::~Sdl2()
 {
-    SDL_DestroyWindow(_window);
-    TTF_CloseFont(_font);
+    if (_renderer)
+        SDL_DestroyRenderer(_renderer);
+    if (_font)
+        TTF_CloseFont(_font);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
@@ -28,15 +30,14 @@ Sdl2::~Sdl2()
 
 void Sdl2::init()
 {
-    SDL_ShowWindow(_window);
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
     _font = TTF_OpenFont("font.ttf", 24);
+    SDL_ShowWindow(_window);
 }
 
 void Sdl2::stop()
 {
-    SDL_DestroyRenderer(_renderer);
-    SDL_HideWindow(_window);
 }
 
 void Sdl2::draw()
@@ -49,9 +50,10 @@ void Sdl2::draw()
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
-    for (auto const &texture : _renderedTextures) {
-        SDL_DestroyTexture(texture);
+    for (auto texture : _renderedTextures) {
+            SDL_DestroyTexture(texture);
     }
+    _renderedTextures.clear();
     for (auto const &entity : entities) {
         IGameModule::Entity e = entity.second;
         if (e.id_file == -1) {
@@ -63,9 +65,8 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
                 (Uint8)e.color_fg.green,
                 (Uint8)e.color_fg.blue, 255
             });
-            _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
+            SDL_Texture *_text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
             _text_rect = {(int)((e.x * 100)), (int)(e.y * 100), _text_surface->w, _text_surface->h};
-            _textures.insert(_textures.end(), _text_texture);
             SDL_FreeSurface(_text_surface);
             SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
             _renderedTextures.insert(_renderedTextures.end(), _text_texture);
@@ -126,11 +127,13 @@ const std::string &Sdl2::getName() const
 
 void Sdl2::resetDisplay(void)
 {
-    for (auto const &texture : _textures) {
-        SDL_DestroyTexture(texture);
-    }
     _textures.clear();
     _rects.clear();
+    _renderedTextures.clear();
+    for (auto texture : _renderedTextures) {
+        if (texture)
+            SDL_DestroyTexture(texture);
+    }
     _renderedTextures.clear();
 }
 

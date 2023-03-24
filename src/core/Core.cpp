@@ -9,70 +9,97 @@
 
 Core::Core(const std::string displayLibPath)
 {
+    menuDisplayLibPath = displayLibPath;
+}
+
+void Core::init(void)
+{
     int i = 0;
     try {
         std::string path = "lib/";
+        void **lib;
         for (const auto &entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".so") {
-                DLLoader<void> *val = new DLLoader<void> (entry.path());
-                std::string type = val->getInstanceType();
+                lib = (void **) dlopen(entry.path().c_str(), RTLD_NOW);
+                std::string (*func)(void);
+                func = (std::string  (*) ()) dlsym(lib, "getType");
+                std::string type = func();
+                dlclose(lib);
                 if (type == "Graphic") {
                     gfxLibs.insert(gfxLibs.end(),entry.path());
                     std::cout << "GRAPHIC LIB : " << entry.path() << std::endl;
-                    if (entry.path() == displayLibPath) {
-                        DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (entry.path());
-                        selectedDisplay = val->getInstance();
-                        std::cout << "SELECTED GRAPHIC LIB : " << entry.path() << std::endl;
-                        loadedLibsDisplay.insert(loadedLibsDisplay.end(), val);
+                    if (entry.path() == menuDisplayLibPath) {
                         currentDisplayIndex = i;
                     }
                     i++;
                 } else if (type == "Menu") {
-                    IGameModule *menuLib = reinterpret_cast<IGameModule *> (val->getInstance());
+                    DLLoader<IGameModule> *menu = new DLLoader<IGameModule> (entry.path());
+                    loadedLibs.insert(loadedLibs.end(),menu);
+                    IGameModule *menuLib = menu->getInstance();
                     menuList.insert(menuList.end(), menuLib);
                     menuLibs.insert(menuLibs.end(),entry.path());
                     std::cout << "MENU LIB : " << entry.path() << std::endl;;
                 } else {
-                    IGameModule *game = reinterpret_cast<IGameModule *> (val->getInstance());
+                    DLLoader<IGameModule> *gameLib = new DLLoader<IGameModule> (entry.path());
+                    loadedLibs.insert(loadedLibs.end(),gameLib);
+                    std::cout << gameLib->getInstanceType() << std::endl;
+                    IGameModule *game = gameLib->getInstance();
                     gameList.insert(gameList.end(), game);
                     gameLibs.insert(gameLibs.end(),entry.path());
-                    std::cout << "GAME LIB : " << entry.path() << std::endl;;
+                    std::cout << "GAME LIB : " << entry.path() << std::endl;
                 }
-                loadedLibs.insert(loadedLibs.end(), val);
             }
         }
+        loadGraphicLib(gfxLibs[currentDisplayIndex]);
     } catch (std::exception &e){
-        std::cout << e.what() << std::endl;
-        exit(84);
+        throw Error("Error while loading libs.");
     }
-    if (selectedDisplay == nullptr) {
-        std::cerr << "Provided display lib is not accessible." << std::endl;
-        exit(84);
+    if (currentDisplayIndex == -1) {
+        throw Error("Provided display lib is not accessible.");
     }
 }
 
 Core::~Core()
 {
+    std::cout << "destructor has been called" << std::endl;
     for (auto val : gameList) {
-        std::cout << "la" << std::endl;
         delete val;
     }
     for (auto val : menuList) {
-        std::cout << "bas" << std::endl;
         delete val;
     }
     for (auto val : loadedLibs) {
         delete val;
     }
-    for (auto val : loadedLibsDisplay) {
-        delete val;
+    if (selectedDisplay) {
+        delete selectedDisplay;
+        std::cout << "delete display" << std::endl;
     }
+    if (loadedDisplayLib) {
+        delete loadedDisplayLib;
+        std::cout << "delete display lib" << std::endl;
+    }
+}
+
+void Core::loadGraphicLib(std::string path)
+{
+    std::cout << "je rentre ici" << std::endl;
+    if (selectedDisplay != nullptr) {
+        selectedDisplay->stop();
+        delete selectedDisplay;
+    }
+    if (loadedDisplayLib != nullptr) {
+        delete loadedDisplayLib;
+    }
+    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (path);
+    loadedDisplayLib = val;
+    selectedDisplay = val->getInstance();
+    selectedDisplay->init();
 }
 
 void Core::displayMenu()
 {
     Menu myMenu = Menu(gameLibs, gfxLibs);
-    selectedDisplay->init();
     while (myMenu.getGameStatus() != IGameModule::FINISHED && myMenu.getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->update(myMenu.getInfos());
         selectedDisplay->draw();
@@ -82,35 +109,28 @@ void Core::displayMenu()
                 currentDisplayIndex = 0;
             else
                 currentDisplayIndex++;
-            selectedDisplay->stop();
-            delete selectedDisplay;
-            DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-            selectedDisplay = val->getInstance();
-            delete val;
-            selectedDisplay->init();
+            loadGraphicLib(gfxLibs[currentDisplayIndex]);
         } else {
             myMenu.update(key);
         }
     }
     if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex()) {
-        delete selectedDisplay;
-        DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-        selectedDisplay = val->getInstance();
-        delete val;
+        loadGraphicLib(gfxLibs[myMenu.getSelectedDisplayLibIndex()]);
     }
     currentGameIndex = myMenu.getSelectedGameLibIndex();
     currentDisplayIndex = myMenu.getSelectedDisplayLibIndex();
-    selectedDisplay->stop();
+    selectedDisplay->resetDisplay();
     if (myMenu.getSelectedStatus()) {
         gameMenuLoop();
     }
+    selectedDisplay->stop();
 }
 
 void Core::gameMenuLoop()
 {
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[0];
-    selectedDisplay->init();
+    selectedDisplay->resetDisplay();
     selectedMenu->resetGame();
     selectedMenu->startGame();
     selectedMenu->setText("Game", selectedGame->getName());
@@ -125,12 +145,7 @@ void Core::gameMenuLoop()
                 currentDisplayIndex = 0;
             else
                 currentDisplayIndex++;
-            selectedDisplay->stop();
-            delete selectedDisplay;
-            DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-            selectedDisplay = val->getInstance();
-            delete val;
-            selectedDisplay->init();
+            loadGraphicLib(gfxLibs[currentDisplayIndex]);
         } else if (key == "F2") {
             if (currentGameIndex == gameLibs.size() - 1)
                 currentGameIndex = 0;
@@ -142,19 +157,20 @@ void Core::gameMenuLoop()
             selectedMenu->update(key);
         }
     }
-    selectedDisplay->stop();
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
+        selectedGame->resetGame();
+        selectedDisplay->resetDisplay();
         displayMenu();
     } else if (selectedMenu->getGameStatus() == IGameModule::FINISHED ){
         selectedGame->resetGame();
         mainLoop();
     }
+    selectedDisplay->stop();
 }
 
 void Core::mainLoop()
 {
     selectedGame = gameList[currentGameIndex];
-    selectedDisplay->init();
     selectedDisplay->resetDisplay();
     selectedDisplay->saveTextures(selectedGame->getTextures());
     selectedGame->startGame();
@@ -167,12 +183,7 @@ void Core::mainLoop()
                 currentDisplayIndex = 0;
             else
                 currentDisplayIndex++;
-            selectedDisplay->stop();
-            delete selectedDisplay;
-            DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-            selectedDisplay = val->getInstance();
-            delete val;
-            selectedDisplay->init();
+            loadGraphicLib(gfxLibs[currentDisplayIndex]);
             selectedDisplay->saveTextures(selectedGame->getTextures());
         } else if (key == "F2") {
             if (currentGameIndex == gameLibs.size() - 1)
@@ -184,16 +195,17 @@ void Core::mainLoop()
             selectedGame->update(key);
         }
     }
-    selectedDisplay->stop();
-    if (selectedGame->getGameStatus() != IGameModule::CLOSED)
+    if (selectedGame->getGameStatus() != IGameModule::CLOSED) {
+        selectedDisplay->resetDisplay();
         endGameLoop();
+    }
+    selectedDisplay->stop();
 }
 
 void Core::endGameLoop()
 {
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[1];
-    selectedDisplay->init();
     selectedMenu->startGame();
     while (selectedMenu->getGameStatus() != IGameModule::FINISHED &&
     selectedMenu->getGameStatus() != IGameModule::MENU &&
@@ -206,20 +218,16 @@ void Core::endGameLoop()
                 currentDisplayIndex = 0;
             else
                 currentDisplayIndex++;
-            selectedDisplay->stop();
-            delete selectedDisplay;
-            DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
-            selectedDisplay = val->getInstance();
-            selectedDisplay->init();
+            loadGraphicLib(gfxLibs[currentDisplayIndex]);
         } else {
             selectedMenu->update(key);
         }
     }
-    selectedDisplay->stop();
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         gameMenuLoop();
     } else if (selectedMenu->getGameStatus() == IGameModule::RESTART) {
         selectedGame->resetGame();
         mainLoop();
     }
+    selectedDisplay->stop();
 }

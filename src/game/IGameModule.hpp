@@ -34,7 +34,8 @@ class IGameModule {
             IN_GAME,
             FINISHED,
             RESTART,
-            CLOSED
+            CLOSED,
+            NOT_STARTED
         };
 
         enum DIRECTION {
