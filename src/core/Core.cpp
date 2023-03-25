@@ -50,7 +50,10 @@ void Core::init(void)
                 }
             }
         }
-        loadGraphicLib(gfxLibs[currentDisplayIndex]);
+        DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (gfxLibs[currentDisplayIndex]);
+        loadedDisplayLib = val;
+        selectedDisplay = val->getInstance();
+        selectedDisplay->init();
     } catch (std::exception &e){
         throw Error("Error while loading libs.");
     }
@@ -114,7 +117,7 @@ void Core::displayMenu()
             myMenu.update(key);
         }
     }
-    if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex()) {
+    if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex() && myMenu.getSelectedStatus() == IGameModule::FINISHED) {
         loadGraphicLib(gfxLibs[myMenu.getSelectedDisplayLibIndex()]);
     }
     currentGameIndex = myMenu.getSelectedGameLibIndex();
@@ -123,7 +126,6 @@ void Core::displayMenu()
     if (myMenu.getSelectedStatus()) {
         gameMenuLoop();
     }
-    selectedDisplay->stop();
 }
 
 void Core::gameMenuLoop()
@@ -165,7 +167,6 @@ void Core::gameMenuLoop()
         selectedGame->resetGame();
         mainLoop();
     }
-    selectedDisplay->stop();
 }
 
 void Core::mainLoop()

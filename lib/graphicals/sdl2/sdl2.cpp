@@ -19,12 +19,10 @@ Sdl2::Sdl2()
 
 Sdl2::~Sdl2()
 {
-    if (_renderer)
-        SDL_DestroyRenderer(_renderer);
     if (_font)
         TTF_CloseFont(_font);
-    TTF_Quit();
     IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -38,6 +36,9 @@ void Sdl2::init()
 
 void Sdl2::stop()
 {
+    if (_renderer)
+        SDL_DestroyRenderer(_renderer);
+    SDL_DestroyWindow(_window);
 }
 
 void Sdl2::draw()
