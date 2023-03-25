@@ -33,16 +33,17 @@ void Core::init(void)
                     }
                     i++;
                 } else if (type == "Menu") {
-                    std::shared_ptr<DLLoader<IGameModule>> menu = std::make_shared<DLLoader<IGameModule>> (entry.path());
-                    loadedLibs.insert(loadedLibs.end(), menu);
-                    std::shared_ptr<IGameModule *> menuLib = std::make_shared <IGameModule *> (menu->getInstance());
+                    DLLoader<IGameModule> *menu = new DLLoader<IGameModule> (entry.path());
+                    loadedLibs.insert(loadedLibs.end(),menu);
+                    IGameModule *menuLib = menu->getInstance();
                     menuList.insert(menuList.end(), menuLib);
                     menuLibs.insert(menuLibs.end(),entry.path());
                     std::cout << "MENU LIB : " << entry.path() << std::endl;;
                 } else {
-                    std::shared_ptr<DLLoader<IGameModule>> gameLib = std::make_shared<DLLoader<IGameModule>> (entry.path());
+                    DLLoader<IGameModule> *gameLib = new DLLoader<IGameModule> (entry.path());
                     loadedLibs.insert(loadedLibs.end(),gameLib);
-                    std::shared_ptr<IGameModule *> game = std::make_shared <IGameModule *> (gameLib->getInstance());
+                    std::cout << gameLib->getInstanceType() << std::endl;
+                    IGameModule *game = gameLib->getInstance();
                     gameList.insert(gameList.end(), game);
                     gameLibs.insert(gameLibs.end(),entry.path());
                     std::cout << "GAME LIB : " << entry.path() << std::endl;
@@ -61,27 +62,48 @@ void Core::init(void)
 Core::~Core()
 {
     std::cout << "destructor has been called" << std::endl;
+    for (auto val : gameList) {
+        delete val;
+    }
+    for (auto val : menuList) {
+        delete val;
+    }
+    for (auto val : loadedLibs) {
+        delete val;
+    }
+    if (selectedDisplay) {
+        delete selectedDisplay;
+        std::cout << "delete display" << std::endl;
+    }
+    if (loadedDisplayLib) {
+        delete loadedDisplayLib;
+        std::cout << "delete display lib" << std::endl;
+    }
 }
 
 void Core::loadGraphicLib(std::string path)
 {
     std::cout << "je rentre ici" << std::endl;
     if (selectedDisplay != nullptr) {
-        (*selectedDisplay)->stop();
+        selectedDisplay->stop();
+        delete selectedDisplay;
     }
-    std::shared_ptr<DLLoader<IDisplayModule>> val = std::make_shared<DLLoader<IDisplayModule>> (path);
+    if (loadedDisplayLib != nullptr) {
+        delete loadedDisplayLib;
+    }
+    DLLoader<IDisplayModule> *val = new DLLoader<IDisplayModule> (path);
     loadedDisplayLib = val;
-    selectedDisplay = std::make_shared<IDisplayModule *> (val->getInstance());
-    (*selectedDisplay)->init();
+    selectedDisplay = val->getInstance();
+    selectedDisplay->init();
 }
 
 void Core::displayMenu()
 {
     Menu myMenu = Menu(gameLibs, gfxLibs);
     while (myMenu.getGameStatus() != IGameModule::FINISHED && myMenu.getGameStatus() != IGameModule::CLOSED) {
-        (*selectedDisplay)->update(myMenu.getInfos());
-        (*selectedDisplay)->draw();
-        std::string key = (*selectedDisplay)->getEvent();
+        selectedDisplay->update(myMenu.getInfos());
+        selectedDisplay->draw();
+        std::string key = selectedDisplay->getEvent();
         if (key == "F1") {
             if (currentDisplayIndex == gfxLibs.size() - 1)
                 currentDisplayIndex = 0;
@@ -97,27 +119,27 @@ void Core::displayMenu()
     }
     currentGameIndex = myMenu.getSelectedGameLibIndex();
     currentDisplayIndex = myMenu.getSelectedDisplayLibIndex();
-    (*selectedDisplay)->resetDisplay();
+    selectedDisplay->resetDisplay();
     if (myMenu.getSelectedStatus()) {
         gameMenuLoop();
     }
-    (*selectedDisplay)->stop();
+    selectedDisplay->stop();
 }
 
 void Core::gameMenuLoop()
 {
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[0];
-    (*selectedDisplay)->resetDisplay();
-    (*selectedMenu)->resetGame();
-    (*selectedMenu)->startGame();
-    (*selectedMenu)->setText("Game", (*selectedGame)->getName());
-    while ((*selectedMenu)->getGameStatus() != IGameModule::FINISHED
-    && (*selectedMenu)->getGameStatus() != IGameModule::MENU
-    && (*selectedMenu)->getGameStatus() != IGameModule::CLOSED) {
-        (*selectedDisplay)->update((*selectedMenu)->getInfos());
-        (*selectedDisplay)->draw();
-        std::string key = (*selectedDisplay)->getEvent();
+    selectedDisplay->resetDisplay();
+    selectedMenu->resetGame();
+    selectedMenu->startGame();
+    selectedMenu->setText("Game", selectedGame->getName());
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED
+    && selectedMenu->getGameStatus() != IGameModule::MENU
+    && selectedMenu->getGameStatus() != IGameModule::CLOSED) {
+        selectedDisplay->update(selectedMenu->getInfos());
+        selectedDisplay->draw();
+        std::string key = selectedDisplay->getEvent();
         if (key == "F1") {
             if (currentDisplayIndex == gfxLibs.size() - 1)
                 currentDisplayIndex = 0;
@@ -130,39 +152,39 @@ void Core::gameMenuLoop()
             else
                 currentGameIndex++;
             selectedGame = gameList[currentGameIndex];
-            (*selectedMenu)->setText("Game", (*selectedGame)->getName());
+            selectedMenu->setText("Game", selectedGame->getName());
         } else {
-            (*selectedMenu)->update(key);
+            selectedMenu->update(key);
         }
     }
-    if ((*selectedMenu)->getGameStatus() == IGameModule::MENU) {
-        (*selectedGame)->resetGame();
-        (*selectedDisplay)->resetDisplay();
+    if (selectedMenu->getGameStatus() == IGameModule::MENU) {
+        selectedGame->resetGame();
+        selectedDisplay->resetDisplay();
         displayMenu();
-    } else if ((*selectedMenu)->getGameStatus() == IGameModule::FINISHED ){
-        (*selectedGame)->resetGame();
+    } else if (selectedMenu->getGameStatus() == IGameModule::FINISHED ){
+        selectedGame->resetGame();
         mainLoop();
     }
-    (*selectedDisplay)->stop();
+    selectedDisplay->stop();
 }
 
 void Core::mainLoop()
 {
     selectedGame = gameList[currentGameIndex];
-    (*selectedDisplay)->resetDisplay();
-    (*selectedDisplay)->saveTextures((*selectedGame)->getTextures());
-    (*selectedGame)->startGame();
-    while ((*selectedGame)->getGameStatus() != IGameModule::FINISHED && (*selectedGame)->getGameStatus() != IGameModule::CLOSED) {
-        (*selectedDisplay)->update((*selectedGame)->getInfos());
-        (*selectedDisplay)->draw();
-        std::string key = (*selectedDisplay)->getEvent();
+    selectedDisplay->resetDisplay();
+    selectedDisplay->saveTextures(selectedGame->getTextures());
+    selectedGame->startGame();
+    while (selectedGame->getGameStatus() != IGameModule::FINISHED && selectedGame->getGameStatus() != IGameModule::CLOSED) {
+        selectedDisplay->update(selectedGame->getInfos());
+        selectedDisplay->draw();
+        std::string key = selectedDisplay->getEvent();
         if (key == "F1") {
             if (currentDisplayIndex == gfxLibs.size() - 1)
                 currentDisplayIndex = 0;
             else
                 currentDisplayIndex++;
             loadGraphicLib(gfxLibs[currentDisplayIndex]);
-            (*selectedDisplay)->saveTextures((*selectedGame)->getTextures());
+            selectedDisplay->saveTextures(selectedGame->getTextures());
         } else if (key == "F2") {
             if (currentGameIndex == gameLibs.size() - 1)
                 currentGameIndex = 0;
@@ -170,27 +192,27 @@ void Core::mainLoop()
                 currentGameIndex++;
             selectedGame = gameList[currentGameIndex];
         } else {
-            (*selectedGame)->update(key);
+            selectedGame->update(key);
         }
     }
-    if ((*selectedGame)->getGameStatus() != IGameModule::CLOSED) {
-        (*selectedDisplay)->resetDisplay();
+    if (selectedGame->getGameStatus() != IGameModule::CLOSED) {
+        selectedDisplay->resetDisplay();
         endGameLoop();
     }
-    (*selectedDisplay)->stop();
+    selectedDisplay->stop();
 }
 
 void Core::endGameLoop()
 {
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[1];
-    (*selectedMenu)->startGame();
-    while ((*selectedMenu)->getGameStatus() != IGameModule::FINISHED &&
-    (*selectedMenu)->getGameStatus() != IGameModule::MENU &&
-    (*selectedMenu)->getGameStatus() != IGameModule::RESTART) {
-        (*selectedDisplay)->update((*selectedMenu)->getInfos());
-        (*selectedDisplay)->draw();
-        std::string key = (*selectedDisplay)->getEvent();
+    selectedMenu->startGame();
+    while (selectedMenu->getGameStatus() != IGameModule::FINISHED &&
+    selectedMenu->getGameStatus() != IGameModule::MENU &&
+    selectedMenu->getGameStatus() != IGameModule::RESTART) {
+        selectedDisplay->update(selectedMenu->getInfos());
+        selectedDisplay->draw();
+        std::string key = selectedDisplay->getEvent();
         if (key == "F1") {
             if (currentDisplayIndex == gfxLibs.size() - 1)
                 currentDisplayIndex = 0;
@@ -198,14 +220,14 @@ void Core::endGameLoop()
                 currentDisplayIndex++;
             loadGraphicLib(gfxLibs[currentDisplayIndex]);
         } else {
-            (*selectedMenu)->update(key);
+            selectedMenu->update(key);
         }
     }
-    if ((*selectedMenu)->getGameStatus() == IGameModule::MENU) {
+    if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         gameMenuLoop();
-    } else if ((*selectedMenu)->getGameStatus() == IGameModule::RESTART) {
-        (*selectedGame)->resetGame();
+    } else if (selectedMenu->getGameStatus() == IGameModule::RESTART) {
+        selectedGame->resetGame();
         mainLoop();
     }
-    (*selectedDisplay)->stop();
+    selectedDisplay->stop();
 }
