@@ -49,14 +49,14 @@ class Core {
         int currentGameIndex = 0;
         int currentDisplayIndex = -1;
         int currentMenuIndex = 0;
-        std::vector<IGameModule *> gameList;
-        std::vector<IGameModule *> menuList;
-        std::vector<DLLoader<IGameModule> *> loadedLibs;
+        std::vector<std::shared_ptr<IGameModule *>> gameList;
+        std::vector<std::shared_ptr<IGameModule *>> menuList;
+        std::vector<std::shared_ptr<DLLoader<IGameModule>>> loadedLibs;
         std::vector<DLLoader<IDisplayModule> *> loadedLibsDisplay;
-        IDisplayModule *selectedDisplay = nullptr;
-        IGameModule *selectedGame = nullptr;
-        IGameModule *selectedMenu = nullptr;
-        DLLoader<IDisplayModule> *loadedDisplayLib = nullptr;
+        std::shared_ptr <IDisplayModule *> selectedDisplay;
+        std::shared_ptr<IGameModule *> selectedGame;
+        std::shared_ptr<IGameModule *> selectedMenu;
+        std::shared_ptr<DLLoader<IDisplayModule>> loadedDisplayLib = nullptr;
 };
 
 #endif /* !CORE_HPP_ */
