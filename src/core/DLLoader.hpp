@@ -26,6 +26,7 @@ class DLLoader {
     };
     public:
         DLLoader(std::string name){
+            std::cout << "DLLoader loaded !" << std::endl;
             const char *val = name.c_str();
             lib = (void **) dlopen(val, RTLD_NOW);
             char *error = dlerror();
@@ -36,7 +37,7 @@ class DLLoader {
         ~DLLoader(){
             char *error = dlerror();
             dlclose(lib);
-            std::cout << "destroy" << std::endl;
+            std::cout << "DLLoader unloaded !" << std::endl;
             error = dlerror();
             if (error)
                 std::cout << error << std::endl;
