@@ -2,36 +2,50 @@
 ** EPITECH PROJECT, 2023
 ** B-OOP-400-MAR-4-1-arcade-adam.elaoumari [WSL : Ubuntu]
 ** File description:
-** Snake
+** snake
 */
 
 #include "snake.hpp"
+#include <string>
+#include <iostream>
+#include <fstream>
+
+std::vector<std::string> fileToArray (std::string filepath)
+{
+    std::ifstream inputFile(filepath);
+    std::string line;
+    std::vector<std::string> array;
+    while (getline(inputFile, line)) {
+        array.push_back(line);
+    }
+    inputFile.close();
+    return array;
+}
+
+void Snake::getInfoSnake (std::vector<std::string> map)
+{
+    _size_snake = 0;
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j] >= '0' && map[i][j] <= '9' && _size_snake < map[i][j] - '0') {
+                _size_snake = map[i][j] - '0';
+                _head_x = j;
+                _head_y = i;
+            }
+        }
+    }
+}
 
 Snake::Snake()
 {
-    std::cout << "snake create" << std::endl;
-    // generateGrid(100);
-    // dataToEntity();
-    // generateApple();
-    // _head_x = 4;
-    // _head_y = 3;
-    // _size_snake = 4;
+    std::vector<std::string> map = fileToArray("lib/games/snake/map1.txt");
+    generateGrid(map);
+    getInfoSnake(map);
+    dataToEntity();
 }
 
 Snake::~Snake()
 {
-    std::cout << "snake destroy" << std::endl;
-}
-
-void Snake::generateApple(void)
-{
-    int x = rand() % 100;
-    int y = rand() % 10;
-    if (getGrid()[y][x] == 0) {
-        setGridValue(y, x, -1);
-    } else {
-        generateApple();
-    }
 }
 
 bool closeToOne (int a, int b)
@@ -96,28 +110,34 @@ void Snake::snakePart(std::vector<int> value, float x, float y, int row, int i)
         "A", "|", "\\", "/", "/", "\\", "M", "3", "E", "W", "=", "^", ">", "<", "v", "#", " "
     };
 
-    int index = chooseSprite(x, y, value[i]);
+    int index_snake = chooseSprite(x, y - 1, value[i]);
     Entity newEntity = {
-        index,
-        snake[index],
+        index_snake,
+        snake[index_snake],
         "",
         x,
         y,
         false,
         false,
         {0, 255, 0},
+        // ((index_snake >= 6 && snake[index_snake] <= 9) ? {255, 0, 0} : {0, 255, 0}),
         {0, 0, 0},
     };
     setNewEntity(std::to_string(i) + "snake" + std::to_string(row), newEntity);
 }
 
+// TODO :
+// size of text in sfml
+// size of sprite in sfml
+
 void Snake::dataToEntity(void)
 {
-    float y = 0, x = 0;
+    // decale d'un carre pour laisser la place au score
+    float y = 1, x = 0;
     int row = 0;
     clearEntities();
     for (std::vector<int> value : getGrid()) {
-        for (int i = 0; i != 100; i++) {
+        for (int i = 0; i < getGrid()[0].size(); i++) {
             if (value[i] == -2) { // walls
                 Entity newEntity = {
                     15,
@@ -131,10 +151,9 @@ void Snake::dataToEntity(void)
                     {0, 0, 0},
                 };
                 setNewEntity(std::to_string(i) + "walls" + std::to_string(row), newEntity);
-            }
-            if (value[i] == 0) { // spaces
+            } else if (value[i] == 0) { // spaces
                 Entity newEntity = {
-                    16,
+                    -1,
                     " ",
                     "",
                     x,
@@ -145,8 +164,7 @@ void Snake::dataToEntity(void)
                     {0, 0, 0},
                 };
                 setNewEntity(std::to_string(i) + "spaces" + std::to_string(row), newEntity);
-            }
-            if (value[i] == -1) { // apple
+            } else if (value[i] == -1) { // apple
                 Entity newEntity = {
                     0,
                     "A",
@@ -159,9 +177,10 @@ void Snake::dataToEntity(void)
                     {0, 0, 0},
                 };
                 setNewEntity(std::to_string(i) + "apples" + std::to_string(row), newEntity);
-            }
-            if (value[i] > 0) {
+            } else if (value[i] > 0) {
                 snakePart(value, x, y, row, i);
+            } else {
+                // std::cout << "Error: " << value[i] << std::endl;
             }
             x += 1;
         }
@@ -169,49 +188,114 @@ void Snake::dataToEntity(void)
         y += 1;
         row++;
     }
+    x = 4;
+    y = 0;
+    Entity newEntity = {
+        -1,
+        "Time: " + std::to_string(getTime()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("time", newEntity);
+    y = 1;
+    newEntity = {
+        -1,
+        "Score: " + std::to_string(getScore()),
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        255,
+        255,
+        255
+    };
+    setNewEntity("score", newEntity);
+    y = 2;
 }
 
-void Snake::moveHead(int x, int y, bool generateApple)
+void Snake::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
 {
+    setDirection(direction);
     setGridValue(_head_y += y, _head_x += x, _size_snake + 1);
-    _size_snake += generateApple;
+    _size_snake += eat;
+    if (eat) {
+        setScore(10);
+        setText("score", "Score: " + std::to_string(getScore()));
+        std::cout << "Score: " << getScore() << std::endl;
+        generateRandomApple();
+    }
+}
+
+// return -1 = nop
+// return 0 = not decrement
+// return 1 = decrement
+int Snake::tryMoveHere(IGameModule::DIRECTION direction)
+{
+    if (direction == UP && _head_y > 0) {
+        if (getGrid()[_head_y - 1][_head_x] == -1) {
+            moveHead(0, -1, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y - 1][_head_x] >= 1 || getGrid()[_head_y - 1][_head_x] == -2) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(0, -1, false, direction);
+        return 2;
+    } else if (direction == DOWN && getGrid().size() > _head_y) {
+        if (getGrid()[_head_y + 1][_head_x] == -1) {
+            moveHead(0, 1, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y + 1][_head_x] >= 1 || getGrid()[_head_y + 1][_head_x] == -2) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(0, 1, false, direction);
+        return 2;
+    } else if (direction == LEFT && _head_x > 0) {
+        if (getGrid()[_head_y][_head_x - 1] == -1) {
+            moveHead(-1, 0, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y][_head_x - 1] >= 1 || getGrid()[_head_y][_head_x - 1] == -2) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(-1, 0, false, direction);
+        return 2;
+    } else if (direction == RIGHT && getGrid()[_head_y].size() > _head_x) {
+        if (getGrid()[_head_y][_head_x + 1] == -1) {
+            moveHead(1, 0, true, direction);
+            return 1;
+        } else if (getGrid()[_head_y][_head_x + 1] >= 1 || getGrid()[_head_y][_head_x + 1] == -2) {
+            setGameStatus(FINISHED);
+            return 1; // snake
+        }
+        moveHead(1, 0, false, direction);
+        return 2;
+    } else {
+        return 0;
+    }
 }
 
 void Snake::move(void)
 {
-    if (getDirection() == UP && _head_y > 0 && getGrid()[_head_y - 1][_head_x] > -2) {
-        if (getGrid()[_head_y - 1][_head_x] == -1) {
-            moveHead(0, -1, true);
-            generateApple();
-            return;
-        }
-        moveHead(0, -1, false);
-    } else if (getDirection() == DOWN && getGrid().size() > _head_y && getGrid()[_head_y + 1][_head_x] > -2) {
-        if (getGrid()[_head_y + 1][_head_x] == -1) {
-            moveHead(0, 1, true);
-            generateApple();
-            return;
-        }
-        moveHead(0, 1, false);
-    } else if (getDirection() == LEFT && _head_x > 0 && getGrid()[_head_y][_head_x - 1] > -2) {
-        if (getGrid()[_head_y][_head_x - 1] == -1) {
-            moveHead(-1, 0, true);
-            generateApple();
-            return;
-        }
-        moveHead(-1, 0, false);
-    } else if (getDirection() == RIGHT && getGrid()[_head_y].size() > _head_x && getGrid()[_head_y][_head_x + 1] > -2) {
-        if (getGrid()[_head_y][_head_x + 1] == -1) {
-            moveHead(1, 0, true);
-            generateApple();
-            return;
-        }
-        moveHead(1, 0, false);
-    } else {
-        setGameStatus(FINISHED);
+    if (getTimeElapsed(start) < std::chrono::milliseconds(200)) {
         return;
+    } else {
+        setChronoValue(std::chrono::high_resolution_clock::now());
     }
 
+    int decrement = -1;
+    if ((decrement = tryMoveHere(_next_direction)) == -1)
+        decrement = tryMoveHere(getDirection());
+    if (decrement != 2)
+        return;
     for (int i = 0; i != getGrid().size(); i++) {
         for (int j = 0; j != getGrid()[i].size(); j++) {
             if (getGrid()[i][j] > 0) {
@@ -223,14 +307,20 @@ void Snake::move(void)
 
 void Snake::update(std::string key)
 {
+    if (_status == IN_GAME) {
+        if (getTimeElapsed(scoreClock) >= std::chrono::milliseconds(1000)) {
+            setTime(1);
+            scoreClock = std::chrono::high_resolution_clock::now();
+        }
+    }
     if (key == "LeftArrow" && getDirection() != RIGHT)
-        setDirection(LEFT);
+        _next_direction = LEFT;
     if (key == "RightArrow" && getDirection() != LEFT)
-        setDirection(RIGHT);
+        _next_direction = RIGHT;
     if (key == "UpArrow" && getDirection() != DOWN)
-        setDirection(UP);
+        _next_direction = UP;
     if (key == "DownArrow" && getDirection() != UP)
-        setDirection(DOWN);
+        _next_direction = DOWN;
     move();
     dataToEntity();
     if (key.empty())
@@ -242,25 +332,27 @@ void Snake::update(std::string key)
 
 void Snake::resetGame(void)
 {
-    generateGrid(100);
-    dataToEntity();
-    generateApple();
-    _head_x = 4;
-    _head_y = 3;
-    _size_snake = 4;
+    _entities.clear();
     _grid.clear();
     start = std::chrono::high_resolution_clock::now();
     scoreClock = std::chrono::high_resolution_clock::now();
     _time = 0;
     _score = 0;
-    _entities.clear();
+    _next_direction = IGameModule::DIRECTION::RIGHT;
+    _head_x = 0;
+    _head_y = 0;
+    _size_snake = 0;
+    std::vector<std::string> map = fileToArray("lib/games/snake/map1.txt");
+    generateGrid(map);
+    generateRandomApple();
+    getInfoSnake(map);
+    dataToEntity();
+
 }
 
 extern "C" IGameModule *create(void) {
-    std::cout << "create snake" << std::endl;
     return new Snake();
 }
-
 
 extern "C" std::string getType() {
     return "Game";
@@ -286,4 +378,16 @@ std::vector<std::string> Snake::getTextures() {
         "lib/games/snake/files/snake/walls.png"
     };
     return snake;
+}
+
+void Snake::generateRandomApple()
+{
+    int maxX = _grid[0].size();
+    int maxY = _grid.size();
+    int x = rand() % maxX;
+    int y = rand() % maxY;
+    if (_grid[y][x] == 0)
+        _grid[y][x] = -1;
+    else 
+        generateRandomApple();
 }
