@@ -15,6 +15,10 @@
 std::vector<std::string> fileToArray (std::string filepath)
 {
     std::ifstream inputFile(filepath);
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: file " << filepath << " not found" << std::endl;
+        exit(84);
+    }
     std::string line;
     std::vector<std::string> array;
     while (getline(inputFile, line)) {
@@ -51,17 +55,35 @@ void Pacman::getInfoMap (std::vector<std::string> map)
     }
 }
 
+void writeAtEnd(std::string str)
+{
+    std::ofstream file;
+    file.open("file.txt", std::ios::app);
+    file << str << std::endl;
+    file.close();
+}
+
+void Pacman::fillGumsRemain()
+{
+    _nbr_gums_remain = 0;
+    for (int i = 0; i < getGrid().size(); i++)
+        for (int j = 0; j < getGrid()[i].size(); j++)
+            if (getGrid()[i][j] >= 2 && getGrid()[i][j] <= 4)
+                    _nbr_gums_remain++;
+}
+
 Pacman::Pacman()
 {
-    std::vector<std::string> map = fileToArray("lib/games/pacman/map1.txt");
+    std::vector<std::string> map = fileToArray("lib/games/pacman/map" + std::to_string(_level) + ".txt");
+    // compt _nmbr_gums_remain
     // # = wall
     // . = small food   (+1)
     // o = medium food  (+5)
     // 0 = big food     (+10)
     // @ = spawn
     // X = ennemy
-    // < / > = teleport
     generateGrid(map, true);
+    fillGumsRemain();
     getInfoMap(map);
     dataToEntity();
     setDirection(DIRECTION::RIGHT);
@@ -90,10 +112,10 @@ void Pacman::pacmanPart()
         "@",
         "",
         _pos_x,
-        _pos_y,
+        _pos_y + _decal_y,
         false,
         false,
-        {0, 255, 0},
+        {255, 255, 0},
         {0, 0, 0},
     };
     setNewEntity("Pacman", newEntity);
@@ -155,10 +177,10 @@ void Pacman::ennemyPart(ennemy_t ennemy, int i, int row)
     }
     Entity newEntity = {
         index,
-        "@",
+        "X",
         "",
         ennemy.x,
-        ennemy.y,
+        ennemy.y + _decal_y,
         false,
         false,
         {red, green, blue},
@@ -180,14 +202,13 @@ void Pacman::dataToEntity(void)
             // O = big food     (+10)
             // @ = spawn
             // X = ennemy
-            // < / > = teleport
             if (value[i] == -2) { // walls
                 Entity newEntity = {
                     0,
                     "#",
                     "",
                     x,
-                    y,
+                    y + _decal_y,
                     false,
                     false,
                     {0, 0, 255},
@@ -200,7 +221,7 @@ void Pacman::dataToEntity(void)
                     ".",
                     "",
                     x,
-                    y,
+                    y + _decal_y,
                     false,
                     false,
                     {255, 255, 255},
@@ -213,7 +234,7 @@ void Pacman::dataToEntity(void)
                     "o",
                     "",
                     x,
-                    y,
+                    y + _decal_y,
                     false,
                     false,
                     {255, 255, 255},
@@ -226,7 +247,7 @@ void Pacman::dataToEntity(void)
                     "O",
                     "",
                     x,
-                    y,
+                    y + _decal_y,
                     false,
                     false,
                     {255, 255, 255},
@@ -239,7 +260,7 @@ void Pacman::dataToEntity(void)
                     "",
                     "",
                     x,
-                    y,
+                    y + _decal_y,
                     false,
                     false,
                     {0, 255, 0},
@@ -257,7 +278,17 @@ void Pacman::dataToEntity(void)
     for (int i = 0; i != _ennemy.size(); i++) {
         ennemyPart(_ennemy[i], i, row++);
     }
-
+    setNewEntity("gum", {
+        -1,
+        "Gum remain: " + std::to_string(_nbr_gums_remain),
+        "",
+        0,
+        0,
+        true,
+        true,
+        {255, 255, 255},
+        {0, 0, 0},
+    });
 }
 
 void Pacman::positionToThisValue(int value)
@@ -275,49 +306,67 @@ void Pacman::positionToThisValue(int value)
 bool Pacman::eventAfterMoving(int x, int y)
 {
     // eventAfterMoving
-    if (getGrid()[_pos_y + y][_pos_x + x] == 6) {
-        positionToThisValue(7);
-        return 1;
-    } else if (getGrid()[_pos_y + y][_pos_x + x] == 7) {
-        positionToThisValue(6);
-        return 1;
-    } else if (getGrid()[_pos_y + y][_pos_x + x] == 2) {
+    if (getGrid()[_pos_y + y][_pos_x + x] == 2) {
         _score += 1;
+        _nbr_gums_remain--;
     } else if (getGrid()[_pos_y + y][_pos_x + x] == 3) {
+        _nbr_gums_remain--;
         _score += 5;
     } else if (getGrid()[_pos_y + y][_pos_x + x] == 4) {
+        _nbr_gums_remain--;
         _score += 10;
-        _invincible += 30;
+        _invincible += 30; // TODO 10 secondes ?
+    }
+    if (!_nbr_gums_remain) {
+        _level++;
+        resetGame();
+        // setGameStatus(FINISHED);
     }
     return 0;
 }
 
 void Pacman::move(void)
 {
-    if (_next_direction == UP && _pos_y > 0 && getGrid()[_pos_y - 1][_pos_x] > -2) {
+    if (_next_direction == UP && _pos_y >= 0 && getGrid()[_pos_y - 1][_pos_x] > -2) {
         setDirection(UP);
     } else if (_next_direction == DOWN && getGrid().size() >= _pos_y && getGrid()[_pos_y + 1][_pos_x] > -2) {
         setDirection(DOWN);
-    } else if (_next_direction == LEFT && _pos_x > 0 && getGrid()[_pos_y][_pos_x - 1] > -2) {
+    } else if (_next_direction == LEFT && _pos_x >= 0 && getGrid()[_pos_y][_pos_x - 1] > -2) {
         setDirection(LEFT);
     } else if (_next_direction == RIGHT && getGrid()[_pos_y].size() >= _pos_x && getGrid()[_pos_y][_pos_x + 1] > -2) {
         setDirection(RIGHT);
     }
     if (getDirection() == UP && _pos_y > 0 && getGrid()[_pos_y - 1][_pos_x] > -2) {
-        if (eventAfterMoving(0, -1))
+        // teleport
+        if (_pos_y - 1 == 0) {
+            _pos_y = getGrid().size() - 1;
             return;
+        }
+        eventAfterMoving(0, -1);
         setGridValue(--_pos_y, _pos_x, 0);
     } else if (getDirection() == DOWN && getGrid().size() >= _pos_y && getGrid()[_pos_y + 1][_pos_x] > -2) {
-        if (eventAfterMoving(0, 1))
+        // teleport
+        if (_pos_y + 1 == getGrid().size() - 1) {
+            _pos_y = 0;
             return;
+        }
+        eventAfterMoving(0, 1);
         setGridValue(++_pos_y, _pos_x, 0);
     } else if (getDirection() == LEFT && _pos_x > 0 && getGrid()[_pos_y][_pos_x - 1] > -2) {
-        if (eventAfterMoving(-1, 0))
+        // teleport
+        if (_pos_x - 1 == 0) {
+            _pos_x = getGrid()[_pos_y].size() - 1;
             return;
+        }
+        eventAfterMoving(-1, 0);
         setGridValue(_pos_y, --_pos_x, 0);
     } else if (getDirection() == RIGHT && getGrid()[_pos_y].size() >= _pos_x && getGrid()[_pos_y][_pos_x + 1] > -2) {
-        if (eventAfterMoving(1, 0))
+        // teleport
+        if (_pos_x + 1 == getGrid()[_pos_y].size() - 1) {
+            _pos_x = 0;
             return;
+        }
+        eventAfterMoving(1, 0);
         setGridValue(_pos_y, ++_pos_x, 0);
     } else {
         _isMoving = false;
@@ -367,7 +416,7 @@ void Pacman::update(std::string key)
     }
     // check if pacman touch ennemy
     if (checkIfPacmanTouchEnnemy())
-        setGameStatus(FINISHED);
+        resetGame();
     if (_isMoving)
         move();
     dataToEntity();
@@ -380,15 +429,19 @@ void Pacman::update(std::string key)
 
 void Pacman::resetGame(void)
 {
-    // _isAlive = true;
-    // _isMoving = false;
-    // _score = 0;
-    // _invincible = 0;
-    // _second_sprite = false;
-    // _pos_x = 0;
-    // _pos_y = 0;
-    // _next_direction = RIGHT;
-    // _ennemy.clear();
+    clearGrid();
+    _isAlive = true;
+    _isMoving = false;
+    _score = 0;
+    _invincible = 0;
+    _ennemy.clear();
+    std::vector<std::string> map = fileToArray("lib/games/pacman/map" + std::to_string(_level) + ".txt");
+    generateGrid(map, true);
+    fillGumsRemain();
+    getInfoMap(map);
+    dataToEntity();
+    setDirection(DIRECTION::RIGHT);
+    _next_direction = RIGHT;
 }
 
 extern "C" IGameModule *create(void) {

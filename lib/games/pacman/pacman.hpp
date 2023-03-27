@@ -38,10 +38,12 @@ class Pacman : public AGameModule {
         bool eventAfterMoving(int x, int y);
         int checkIfPacmanTouchEnnemy(void);
         std::vector<std::string> getTextures(void);
+        void fillGumsRemain(void);
 
         float _pos_x = 0;
         float _pos_y = 0;
         int _score = 0;
+        int _nbr_gums_remain = 0;
         int _lives = 3;
         int _invincible = 0;
         bool _isMoving = false;
@@ -50,6 +52,9 @@ class Pacman : public AGameModule {
         DIRECTION _next_direction = DIRECTION::RIGHT;
         std::vector<ennemy_t> _ennemy;
         std::string _name = "Pacman";
+        int _decal_y = 1;
+        // std::string _map_file = "lib/games/pacman/map1.txt";
+        int _level = 1;
 };
 
 #endif /* !PACMAN_HPP_ */
