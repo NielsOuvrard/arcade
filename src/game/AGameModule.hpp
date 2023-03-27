@@ -21,6 +21,7 @@ class AGameModule : public IGameModule {
         void generateGrid(int lenght) override;
         void generateGrid(std::vector<std::string>) override;
         void generateGrid(std::vector<std::string> grid, bool pacman) override;
+        void clearGrid(void) override;
 
         std::vector<std::vector<int>> getGrid() const override;
         void setGridValue(int y, int x, int value) override;

@@ -68,6 +68,7 @@ class IGameModule {
         virtual void generateGrid(int lenght) = 0;
         virtual void generateGrid(std::vector<std::string>) = 0;
         virtual void generateGrid(std::vector<std::string> grid, bool pacman) = 0;
+        virtual void clearGrid(void) = 0;
         virtual std::vector<std::vector<int>> getGrid() const = 0;
         virtual void setGridValue(int y, int x, int value) = 0;
         virtual void setNewEntity(std::string name, Entity entity) = 0;
