@@ -34,7 +34,7 @@ class Sfml : public IDisplayModule {
     protected:
         // sf::RenderWindow _window;
         // sf::RenderWindow window (sf::VideoMode(500,200) , "ma fenetre");
-        sf::RenderWindow _window{sf::VideoMode(1920, 1080), "Arcade - SFML"};
+        std::unique_ptr<sf::RenderWindow> _window;
         sf::Event _event;
         std::string _name = "SFML";
         sf::Font font;

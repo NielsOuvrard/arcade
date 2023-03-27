@@ -27,19 +27,11 @@ class DLLoader {
     public:
         DLLoader(std::string name){
             const char *val = name.c_str();
-            lib = (void **) dlopen(val, RTLD_LAZY);
+            lib = (void **) dlopen(val, RTLD_NOW);
             char *error = dlerror();
             if (error != NULL) {
                 throw Error(error);
             }
-            T *(*func)(void);
-            func = (T * (*) ()) dlsym(lib, "create");
-            error = dlerror();
-            if (error != NULL) {
-                std::cout << "ici" << std::endl;
-                throw Error(error);
-            }
-            instance = func();
         };
         ~DLLoader(){
             char *error = dlerror();
@@ -50,7 +42,15 @@ class DLLoader {
                 std::cout << error << std::endl;
         };
         T *getInstance(void) {
-            return instance;
+            T *(*func)(void);
+            func = (T * (*) ()) dlsym(lib, "create");
+            std::cout << "create" << std::endl;
+            char *error = dlerror();
+            if (error != NULL) {
+                std::cout << "ici" << std::endl;
+                throw Error(error);
+            }
+            return func();
         };
         std::string getInstanceType() const {
             std::string (*func)(void);
@@ -65,7 +65,6 @@ class DLLoader {
     private:
         std::string instanceType;
         void **lib;
-        T *instance;
 };
 
 #endif /* !DLLOADER_HPP_ */

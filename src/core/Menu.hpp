@@ -14,7 +14,7 @@ class Menu : public AGameModule {
         Menu(std::vector<std::string> gameLibs, std::vector<std::string> gfxLibs);
         ~Menu();
         void update(std::string key);
-        bool getSelectedStatus() {return hasSelected;};
+        bool getSelectedStatus() {return (hasSelected && name.length() > 18);};
         int getSelectedGameLibIndex() const { return selectedGameIndex;};
         int getSelectedDisplayLibIndex() const {return selectedDisplayIndex;};
         std::vector<std::string> getTextures(void){return std::vector<std::string>();};

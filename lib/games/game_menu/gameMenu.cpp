@@ -60,7 +60,7 @@ void GameMenu::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
     if (options.size() != 0) {
         if (key == "Enter") {
@@ -147,10 +147,6 @@ void GameMenu::resetGame(void)
 
 extern "C" IGameModule *create(void) {
     return new GameMenu();
-}
-
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
 }
 
 extern "C" std::string getType() {

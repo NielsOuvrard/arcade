@@ -21,6 +21,12 @@ int main(int ac, char **av)
     if (ac != 2)
         exit(84);
     srand(time(NULL));
-    Core newCore = Core(av[1]);
-    newCore.displayMenu();
+    try {
+        Core newCore = Core(av[1]);
+        newCore.init();
+        newCore.displayMenu();
+    } catch (std::exception &e){
+        std::cerr << e.what() << std::endl;
+        exit(84);
+    }
 }

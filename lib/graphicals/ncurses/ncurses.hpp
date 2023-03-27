@@ -8,6 +8,9 @@
 #pragma once
 
 #include <ncurses.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "IDisplayModule.hpp"
 
 class Ncurses : public IDisplayModule {
@@ -27,10 +30,11 @@ class Ncurses : public IDisplayModule {
         int handleColor(IGameModule::Entity e);
         void resetDisplay(void);
     protected:
-        std::string _name = "SFML";
+        std::string _name = "Ncurses";
         std::vector<color_t> _list_colors;
         std::vector<std::pair<int, int>> _list_pair_colors;
         WINDOW *_window = nullptr;
+        SCREEN *_screen = nullptr;
         int event;
     private:
 };

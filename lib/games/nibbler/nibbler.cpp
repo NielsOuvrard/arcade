@@ -354,7 +354,7 @@ void Nibbler::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
 }
 
@@ -387,10 +387,6 @@ void Nibbler::resetGame(void)
 
 extern "C" IGameModule *create(void) {
     return new Nibbler();
-}
-
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
 }
 
 extern "C" std::string getType() {

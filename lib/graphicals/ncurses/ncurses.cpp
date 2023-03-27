@@ -13,11 +13,11 @@ Ncurses::Ncurses()
 
 Ncurses::~Ncurses()
 {
-    delwin(_window);
 }
 
 void Ncurses::init()
 {
+    _screen = newterm(NULL, stdout, stdin);
     resetDisplay();
     _window = initscr();
     start_color();
@@ -46,6 +46,7 @@ void Ncurses::init()
 void Ncurses::stop()
 {
     endwin();
+    delscreen(_screen);
 }
 
 void Ncurses::draw()
@@ -76,9 +77,6 @@ int Ncurses::pairExistInList(int color_1, int color_2)
     }
     return -1;
 }
-#include <iostream>
-#include <fstream>
-#include <string>
 
 // wite a function who write at the end of a file
 void writeAtEnd(std::string str)
@@ -170,8 +168,10 @@ std::string Ncurses::getEvent()
         return "F1";
     if (c == KEY_F(2))
         return "F2";
-    if (c == 27)
+    if (c == KEY_F(4))
         return "close";
+    if (c == 27)
+        return "ESC";
     if (c == KEY_ENTER || c == 10)
         return "Enter";
     if (c == KEY_BACKSPACE)
@@ -209,6 +209,3 @@ extern "C" std::string getType(void)
     return "Graphic";
 }
 
-extern "C" void destroy(IDisplayModule* obj) {
-    delete obj;
-}

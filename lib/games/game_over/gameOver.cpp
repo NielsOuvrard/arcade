@@ -73,7 +73,7 @@ void GameOver::update(std::string key)
     if (key.empty())
         return;
     if (key == "close") {
-        setGameStatus(FINISHED);
+        setGameStatus(CLOSED);
     }
     if (options.size() != 0) {
         if (key == "Enter") {
@@ -176,10 +176,6 @@ std::vector<std::string> GameOver::getTextures() {
 
 extern "C" IGameModule *create(void) {
     return new GameOver();
-}
-
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
 }
 
 extern "C" std::string getType() {

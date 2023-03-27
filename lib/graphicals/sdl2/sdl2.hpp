@@ -30,13 +30,12 @@ class Sdl2 : public IDisplayModule {
         void resetDisplay();
     protected:
     private:
-        SDL_Window *_window;
-        SDL_Renderer *_renderer;
+        SDL_Window *_window = nullptr;
+        SDL_Renderer *_renderer = nullptr;
         SDL_Event _event;
         std::string _name = "SDL2";
         //text
         TTF_Font *_font;
-        SDL_Texture *_text_texture = nullptr;
         SDL_Surface *_text_surface = nullptr;
         SDL_Rect _text_rect;
         //image

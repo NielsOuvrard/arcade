@@ -19,14 +19,17 @@ class Snake : public AGameModule {
     protected:
         void move(void);
         void dataToEntity(void);
-        void generateApple(void);
-        void moveHead(int x, int y, bool generateApple);
+        void moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction);
         int chooseSprite (float x, float y, int value);
         void snakePart(std::vector<int> value, float x, float y, int row, int i);
+        void getInfoSnake (std::vector<std::string> map);
+        int tryMoveHere(IGameModule::DIRECTION direction);
+        void generateRandomApple();
         std::vector<std::string> getTextures(void);
         int _head_x = 0;
         int _head_y = 0;
         int _size_snake = 0;
+        IGameModule::DIRECTION _next_direction = IGameModule::DIRECTION::RIGHT;
         std::string _name = "Snake";
 };
 

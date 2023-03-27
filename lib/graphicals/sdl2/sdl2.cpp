@@ -11,18 +11,22 @@
 
 Sdl2::Sdl2()
 {
-    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_HideWindow(_window);
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
+    _font = TTF_OpenFont("font.ttf", 24);
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
 }
 
 Sdl2::~Sdl2()
 {
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
+    // for (auto texture : _renderedTextures) {
+    //     SDL_DestroyTexture(texture);
+    // }
+    if (_font != nullptr)
+        TTF_CloseFont(_font);
+    if (_renderer != nullptr)
+        SDL_DestroyRenderer(_renderer);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
@@ -30,39 +34,45 @@ Sdl2::~Sdl2()
 
 void Sdl2::init()
 {
+
+    _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
+    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
     SDL_ShowWindow(_window);
-    _font = TTF_OpenFont("font.ttf", 24);
-    resetDisplay();
 }
 
 void Sdl2::stop()
 {
-    SDL_HideWindow(_window);
-    TTF_CloseFont(_font);
+    SDL_DestroyRenderer(_renderer);
+    _renderer = nullptr;
+    SDL_DestroyWindow(_window);
 }
 
 void Sdl2::draw()
 {
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
     SDL_RenderPresent(_renderer);
+    SDL_Delay(1000/60);
 }
 
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
     SDL_RenderClear(_renderer);
+    for (auto texture : _renderedTextures) {
+            SDL_DestroyTexture(texture);
+    }
     _renderedTextures.clear();
     for (auto const &entity : entities) {
         IGameModule::Entity e = entity.second;
         if (e.id_file == -1) {
             if (e.bold && e.underline) {
-                TTF_SetFontStyle(_font, TTF_STYLE_BOLD | TTF_STYLE_UNDERLINE);
+                TTF_SetFontStyle(_font, TTF_STYLE_UNDERLINE);
             }
             _text_surface = TTF_RenderText_Solid(_font, e.text.c_str(), {
                 (Uint8)e.color_fg.red,
                 (Uint8)e.color_fg.green,
                 (Uint8)e.color_fg.blue, 255
             });
-            _text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
+            SDL_Texture *_text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
             _text_rect = {(int)((e.x * 100)), (int)(e.y * 100), _text_surface->w, _text_surface->h};
             SDL_FreeSurface(_text_surface);
             SDL_RenderCopy(_renderer, _text_texture, NULL, &_text_rect);
@@ -71,15 +81,12 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             float x = (e.x * 100) * 0.16;
             float y = (e.y * 100) * 0.16;
-            std::cout << "float x : " << x << std::endl;
-            std::cout << "float y : " << y << std::endl;
             _rects[e.id_file].x = (int)x;
             _rects[e.id_file].y = (int)y;
-            std::cout << "int x : " << _rects[e.id_file].x << std::endl;
-            std::cout << "int y : " << _rects[e.id_file].y  << std::endl;
             SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
         }
     }
+    entities.clear();
 }
 
 std::string Sdl2::getEvent()
@@ -91,7 +98,7 @@ std::string Sdl2::getEvent()
         if (_event.type == SDL_KEYDOWN && _event.key.repeat == 0) {
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:
-                    return "close";
+                    return "ESC";
                 case SDLK_RETURN:
                     return "Enter";
                 case SDLK_LEFT:
@@ -129,6 +136,10 @@ void Sdl2::resetDisplay(void)
 {
     _textures.clear();
     _rects.clear();
+    for (auto texture : _renderedTextures) {
+        if (texture)
+            SDL_DestroyTexture(texture);
+    }
     _renderedTextures.clear();
 }
 

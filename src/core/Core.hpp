@@ -36,23 +36,27 @@ class Core {
         void mainLoop();
         void gameMenuLoop();
         void endGameLoop();
+        void loadGraphicLib(std::string path);
+        void init(void);
 
     protected:
     private:
+        std::string menuDisplayLibPath;
         std::vector<std::string> gameLibs;
         std::vector<std::string> gfxLibs;
         std::vector<std::string> menuLibs;
         std::vector<IGameModule *> games;
         int currentGameIndex = 0;
-        int currentDisplayIndex = 0;
+        int currentDisplayIndex = -1;
         int currentMenuIndex = 0;
-        std::vector<IDisplayModule *> displayList;
         std::vector<IGameModule *> gameList;
         std::vector<IGameModule *> menuList;
-        std::vector<DLLoader<void> *> loadedLibs;
+        std::vector<DLLoader<IGameModule> *> loadedLibs;
+        std::vector<DLLoader<IDisplayModule> *> loadedLibsDisplay;
         IDisplayModule *selectedDisplay = nullptr;
         IGameModule *selectedGame = nullptr;
         IGameModule *selectedMenu = nullptr;
+        DLLoader<IDisplayModule> *loadedDisplayLib = nullptr;
 };
 
 #endif /* !CORE_HPP_ */

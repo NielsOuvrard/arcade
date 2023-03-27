@@ -448,10 +448,6 @@ extern "C" IGameModule *create(void) {
     return new Pacman();
 }
 
-extern "C" void destroy(IGameModule* obj) {
-    delete obj;
-}
-
 extern "C" std::string getType() {
     return "Game";
 }
