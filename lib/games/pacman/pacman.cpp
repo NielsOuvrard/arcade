@@ -45,6 +45,12 @@ void Pacman::getInfoMap (std::vector<std::string> map)
                 enemy.direction = RIGHT;
                 _enemy.push_back(enemy);
                 color_enemy++;
+            } else if (map[i][j] == 's') {
+                _pos_enemy_spawn.x = j;
+                _pos_enemy_spawn.y = i;
+            } else if (map[i][j] == '@') {
+                _pos_pacman_spawn.x = j;
+                _pos_pacman_spawn.y = i;
             }
         }
     }

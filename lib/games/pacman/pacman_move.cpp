@@ -24,7 +24,7 @@ bool Pacman::eventAfterMoving(int x, int y)
     } else if (getGrid()[_pos_y + y][_pos_x + x] == 4) {
         _nbr_gums_remain--;
         _score += 10;
-        _invincible += 30; // TODO 10 secondes ?
+        _invincible += 50; // 10 sec
     }
     if (!_nbr_gums_remain) {
         _level++;
@@ -142,15 +142,43 @@ void Pacman::enemyMoveRandow(int enemy)
         _enemy[enemy].y++;
 }
 
+void Pacman::enemyReturnToHome(int enemy)
+{
+    // TODO _enemy[enemy].pos
+    t_myopen ghost;
+    t_myopen target = _pos_enemy_spawn;
+    ghost.x = _enemy[enemy].x;
+    ghost.y = _enemy[enemy].y;
+    t_myopen next = nextPositionGhost(ghost, target, getGrid());
+    // TODO check direction, and hadle error
+    if (next.x != -1 && next.y != -1) {
+        if (next.x > _enemy[enemy].x)
+            _enemy[enemy].direction = RIGHT;
+        else if (next.x < _enemy[enemy].x)
+            _enemy[enemy].direction = LEFT;
+        else if (next.y > _enemy[enemy].y)
+            _enemy[enemy].direction = DOWN;
+        else if (next.y < _enemy[enemy].y)
+            _enemy[enemy].direction = UP;
+        _enemy[enemy].x = next.x;
+        _enemy[enemy].y = next.y;
+    }
+    if (_enemy[enemy].x == _pos_enemy_spawn.x && _enemy[enemy].y == _pos_enemy_spawn.y) {
+        _enemy[enemy].avlive = true;
+        _enemy[enemy].direction = UP;
+    }
+}
 
 void Pacman::enemyMove(void)
 {
     // not invincible
-    if (_invincible)
-        return;
+    // if (_invincible)
+    //     return;
     // blue
     if (_enemy[0].avlive == true) {
         enemyMoveRandow(0);
+    } else {
+        enemyReturnToHome(0);
     }
     // pink
     if (_enemy[1].avlive == true) {
@@ -161,13 +189,25 @@ void Pacman::enemyMove(void)
         t_myopen next = nextPositionGhost(ghost, target, getGrid());
         // TODO check direction, and hadle error
         if (next.x != -1 && next.y != -1) {
+        if (next.x > _enemy[1].x)
+                _enemy[1].direction = RIGHT;
+            else if (next.x < _enemy[1].x)
+                _enemy[1].direction = LEFT;
+            else if (next.y > _enemy[1].y)
+                _enemy[1].direction = DOWN;
+            else if (next.y < _enemy[1].y)
+                _enemy[1].direction = UP;
             _enemy[1].x = next.x;
             _enemy[1].y = next.y;
         }
+    } else {
+        enemyReturnToHome(1);
     }
     // orange
     if (_enemy[2].avlive == true) { // TODO around pacman
         enemyMoveRandow(2);
+    } else {
+        enemyReturnToHome(2);
     }
     // red
     if (_enemy[3].avlive == true) {
@@ -179,9 +219,19 @@ void Pacman::enemyMove(void)
         target.y = _pos_y;
         t_myopen next = nextPositionGhost(ghost, target, getGrid());
         if (next.x != -1 && next.y != -1) {
+            if (next.x > _enemy[3].x)
+                _enemy[3].direction = RIGHT;
+            else if (next.x < _enemy[3].x)
+                _enemy[3].direction = LEFT;
+            else if (next.y > _enemy[3].y)
+                _enemy[3].direction = DOWN;
+            else if (next.y < _enemy[3].y)
+                _enemy[3].direction = UP;
             _enemy[3].x = next.x;
             _enemy[3].y = next.y;
         }
+    } else {
+        enemyReturnToHome(3);
     }
     // TODO enemy back from dead
 }

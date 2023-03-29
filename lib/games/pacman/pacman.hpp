@@ -41,7 +41,7 @@ class Pacman : public AGameModule {
         void enemyMove(void);
         void getInfoMap (std::vector<std::string> map);
         void pacmanPart(void);
-        int chooseenemySprite (int color, int direction);
+        int chooseenemySprite (enemy_t enemy);
         void enemyPart(enemy_t enemy, int i, int row);
         bool eventAfterMoving(int x, int y);
         int checkIfPacmanTouchenemy(void);
@@ -51,6 +51,7 @@ class Pacman : public AGameModule {
         t_myopen nextPositionPacman(void);
         bool isValidPositionEnnemy(int x, int y) const;
         void enemyMoveRandow(int enemy);
+        void enemyReturnToHome(int enemy);
 
         float _pos_x = 0;
         float _pos_y = 0;
@@ -64,8 +65,9 @@ class Pacman : public AGameModule {
         DIRECTION _next_direction = DIRECTION::RIGHT;
         std::vector<enemy_t> _enemy;
         std::string _name = "Pacman";
+        t_myopen _pos_enemy_spawn;
+        t_myopen _pos_pacman_spawn;
         int _decal_y = 1;
-        // std::string _map_file = "lib/games/pacman/map1.txt";
         int _level = 1;
 };
 

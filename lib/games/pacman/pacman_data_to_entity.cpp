@@ -40,24 +40,33 @@ void Pacman::pacmanPart()
     setNewEntity("Pacman", newEntity);
 }
 
-int Pacman::chooseenemySprite (int color, int direction)
+int Pacman::chooseenemySprite (enemy_t enemy)
 {
+    if (!enemy.avlive) {
+        if (enemy.direction == DIRECTION::RIGHT)
+            return 48;
+        else if (enemy.direction == DIRECTION::LEFT)
+            return 49;
+        else if (enemy.direction == DIRECTION::UP)
+            return 50;
+        return 51;
+    }
     // begin at 9
     int index = 9;
     // TODO : when color is implemented
-    if (color > 0)
+    if (enemy.color > 0)
         index += 8;
-    if (color > 1)
+    if (enemy.color > 1)
         index += 8;
-    if (color > 2)
+    if (enemy.color > 2)
         index += 8;
-    if (direction == DIRECTION::RIGHT)
+    if (enemy.direction == DIRECTION::RIGHT)
         index += 0;
-    if (direction == DIRECTION::LEFT)
+    if (enemy.direction == DIRECTION::LEFT)
         index += 2;
-    if (direction == DIRECTION::UP)
+    if (enemy.direction == DIRECTION::UP)
         index += 4;
-    if (direction == DIRECTION::DOWN)
+    if (enemy.direction == DIRECTION::DOWN)
         index += 6;
     if (_invincible) {
         index = 44;
@@ -71,9 +80,7 @@ int Pacman::chooseenemySprite (int color, int direction)
 
 void Pacman::enemyPart(enemy_t enemy, int i, int row)
 {
-    if (enemy.avlive == false)
-        return;
-    int index = chooseenemySprite(enemy.color, enemy.direction);
+    int index = chooseenemySprite(enemy);
     int red = 0;
     int green = 0;
     int blue = 0;

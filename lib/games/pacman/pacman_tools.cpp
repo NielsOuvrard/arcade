@@ -94,6 +94,11 @@ std::vector<std::string> Pacman::getTextures() {
         "lib/games/Pacman/files/ghost-weak-10.png",
         "lib/games/Pacman/files/ghost-weak-11.png",
         "lib/games/Pacman/files/ghost-weak-12.png",
+        // ghost-eyes-9 = 48
+        "lib/games/Pacman/files/ghost-eyes-9.png",
+        "lib/games/Pacman/files/ghost-eyes-10.png",
+        "lib/games/Pacman/files/ghost-eyes-11.png",
+        "lib/games/Pacman/files/ghost-eyes-12.png"
     };
     return files_path;
 }
