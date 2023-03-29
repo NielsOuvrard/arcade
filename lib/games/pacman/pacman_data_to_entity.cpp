@@ -68,7 +68,7 @@ int Pacman::chooseenemySprite (enemy_t enemy)
         index += 4;
     if (enemy.direction == DIRECTION::DOWN)
         index += 6;
-    if (_invincible) {
+    if (_invincible && enemy.weak) {
         index = 44;
         if (_invincible < 10 && _invincible % 2 == 0)
             index = 46;

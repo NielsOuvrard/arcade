@@ -19,6 +19,11 @@ void Pacman::resetGame(void)
     _isMoving = false;
     _score = 0;
     _invincible = 0;
+    _delay_ghost = 50;
+    for (int i = 0; i != _enemy.size(); i++) {
+        _enemy[i].avlive = true;
+        _enemy[i].weak = false;
+    }
     _enemy.clear();
     std::vector<std::string> map = fileToArray("lib/games/pacman/map" + std::to_string(_level) + ".txt");
     generateGrid(map, true);

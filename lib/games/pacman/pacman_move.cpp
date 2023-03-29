@@ -25,6 +25,8 @@ bool Pacman::eventAfterMoving(int x, int y)
         _nbr_gums_remain--;
         _score += 10;
         _invincible += 50; // 10 sec
+        for (int i = 0; i < _enemy.size(); i++)
+            _enemy[i].weak = true;
     }
     if (!_nbr_gums_remain) {
         _level++;
@@ -166,14 +168,12 @@ void Pacman::enemyReturnToHome(int enemy)
     if (_enemy[enemy].x == _pos_enemy_spawn.x && _enemy[enemy].y == _pos_enemy_spawn.y) {
         _enemy[enemy].avlive = true;
         _enemy[enemy].direction = UP;
+        _enemy[enemy].weak = false;
     }
 }
 
 void Pacman::enemyMove(void)
 {
-    // not invincible
-    // if (_invincible)
-    //     return;
     // blue
     if (_enemy[0].avlive == true) {
         enemyMoveRandow(0);
@@ -182,23 +182,27 @@ void Pacman::enemyMove(void)
     }
     // pink
     if (_enemy[1].avlive == true) {
-        t_myopen ghost;
-        t_myopen target = nextPositionPacman();
-        ghost.x = _enemy[1].x;
-        ghost.y = _enemy[1].y;
-        t_myopen next = nextPositionGhost(ghost, target, getGrid());
-        // TODO check direction, and hadle error
-        if (next.x != -1 && next.y != -1) {
-        if (next.x > _enemy[1].x)
-                _enemy[1].direction = RIGHT;
-            else if (next.x < _enemy[1].x)
-                _enemy[1].direction = LEFT;
-            else if (next.y > _enemy[1].y)
-                _enemy[1].direction = DOWN;
-            else if (next.y < _enemy[1].y)
-                _enemy[1].direction = UP;
-            _enemy[1].x = next.x;
-            _enemy[1].y = next.y;
+        if (_enemy[1].weak == true) {
+            enemyMoveRandow(1);
+        } else {
+            t_myopen ghost;
+            t_myopen target = nextPositionPacman();
+            ghost.x = _enemy[1].x;
+            ghost.y = _enemy[1].y;
+            t_myopen next = nextPositionGhost(ghost, target, getGrid());
+            // TODO check direction, and hadle error
+            if (next.x != -1 && next.y != -1) {
+            if (next.x > _enemy[1].x)
+                    _enemy[1].direction = RIGHT;
+                else if (next.x < _enemy[1].x)
+                    _enemy[1].direction = LEFT;
+                else if (next.y > _enemy[1].y)
+                    _enemy[1].direction = DOWN;
+                else if (next.y < _enemy[1].y)
+                    _enemy[1].direction = UP;
+                _enemy[1].x = next.x;
+                _enemy[1].y = next.y;
+            }
         }
     } else {
         enemyReturnToHome(1);
@@ -211,24 +215,29 @@ void Pacman::enemyMove(void)
     }
     // red
     if (_enemy[3].avlive == true) {
-        t_myopen ghost;
-        t_myopen target;
-        ghost.x = _enemy[3].x;
-        ghost.y = _enemy[3].y;
-        target.x = _pos_x;
-        target.y = _pos_y;
-        t_myopen next = nextPositionGhost(ghost, target, getGrid());
-        if (next.x != -1 && next.y != -1) {
-            if (next.x > _enemy[3].x)
-                _enemy[3].direction = RIGHT;
-            else if (next.x < _enemy[3].x)
-                _enemy[3].direction = LEFT;
-            else if (next.y > _enemy[3].y)
-                _enemy[3].direction = DOWN;
-            else if (next.y < _enemy[3].y)
-                _enemy[3].direction = UP;
-            _enemy[3].x = next.x;
-            _enemy[3].y = next.y;
+        if (_enemy[3].weak == true) {
+            enemyMoveRandow(3);
+        } else {
+            t_myopen ghost;
+            t_myopen target;
+            target.x = _pos_x;
+            target.y = _pos_y;
+            ghost.x = _enemy[3].x;
+            ghost.y = _enemy[3].y;
+            t_myopen next = nextPositionGhost(ghost, target, getGrid());
+            // TODO check direction, and hadle error
+            if (next.x != -1 && next.y != -1) {
+                if (next.x > _enemy[3].x)
+                    _enemy[3].direction = RIGHT;
+                else if (next.x < _enemy[3].x)
+                    _enemy[3].direction = LEFT;
+                else if (next.y > _enemy[3].y)
+                    _enemy[3].direction = DOWN;
+                else if (next.y < _enemy[3].y)
+                    _enemy[3].direction = UP;
+                _enemy[3].x = next.x;
+                _enemy[3].y = next.y;
+            }
         }
     } else {
         enemyReturnToHome(3);

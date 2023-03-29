@@ -43,6 +43,7 @@ void Pacman::getInfoMap (std::vector<std::string> map)
                 enemy.y = i;
                 enemy.avlive = true;
                 enemy.direction = RIGHT;
+                enemy.weak = false;
                 _enemy.push_back(enemy);
                 color_enemy++;
             } else if (map[i][j] == 's') {
@@ -99,7 +100,7 @@ int Pacman::checkIfPacmanTouchenemy(void)
 {
     for (int i = 0; i != _enemy.size(); i++) {
         if (_pos_x == _enemy[i].x && _pos_y == _enemy[i].y) {
-            if (_invincible) {
+            if (_invincible && _enemy[i].weak) {
                 _enemy[i].avlive = false;
                 _score += 100;
                 return 0;
@@ -135,12 +136,18 @@ void Pacman::update(std::string key)
             _invincible -= 1;
         setChronoValue(std::chrono::high_resolution_clock::now());
     }
+    if (!_invincible) {
+        for (int i = 0; i != _enemy.size(); i++) {
+            _enemy[i].weak = false;
+        }
+    }
     // check if pacman touch enemy
     if (checkIfPacmanTouchenemy())
         resetGame();
     if (_isMoving)
         move();
-    enemyMove();
+    if (_delay_ghost-- < 0)
+        enemyMove();
     dataToEntity();
     if (key.empty())
         return;

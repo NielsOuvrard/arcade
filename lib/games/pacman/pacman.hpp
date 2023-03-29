@@ -22,6 +22,7 @@ class Pacman : public AGameModule {
             float y;
             int direction;
             bool avlive;
+            bool weak;
         } enemy_t;
 
         typedef struct pos {
@@ -67,8 +68,9 @@ class Pacman : public AGameModule {
         std::string _name = "Pacman";
         t_myopen _pos_enemy_spawn;
         t_myopen _pos_pacman_spawn;
-        int _decal_y = 1;
+        int _decal_y = 5;
         int _level = 1;
+        int _delay_ghost = 50;
 };
 
 #endif /* !PACMAN_HPP_ */
