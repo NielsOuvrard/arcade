@@ -42,7 +42,7 @@ void Pacman::getInfoMap (std::vector<std::string> map)
                 enemy.x = j;
                 enemy.y = i;
                 enemy.avlive = true;
-                enemy.direction = 0;
+                enemy.direction = RIGHT;
                 _enemy.push_back(enemy);
                 color_enemy++;
             }

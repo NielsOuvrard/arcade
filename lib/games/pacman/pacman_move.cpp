@@ -58,15 +58,100 @@ t_myopen Pacman::nextPositionPacman(void)
     t_myopen next;
     next.x = _pos_x + x;
     next.y = _pos_y + y;
-    std::cout << "nextPositionPacman: " << next.x << " " << next.y << std::endl;
-    std::cout << "pacman now: " << _pos_x << " " << _pos_y << std::endl;
     return next;
 }
 
+
+bool Pacman::isValidPositionEnnemy(int x, int y) const
+{
+    return x >= 0 && y >= 0 && y < getGrid().size() && x < getGrid()[y].size() && getGrid()[y][x] != -2;
+}
+
+void Pacman::enemyMoveRandow(int enemy)
+{
+    if (_enemy[enemy].direction == RIGHT && isValidPositionEnnemy(_enemy[enemy].x + 1, _enemy[enemy].y)) {
+        if (isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y + 1) && rand() % 2) {
+            _enemy[enemy].direction = DOWN;
+        } else if (isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y - 1) && rand() % 2) {
+            _enemy[enemy].direction = UP;
+        }
+    } else if (_enemy[enemy].direction == LEFT && isValidPositionEnnemy(_enemy[enemy].x - 1, _enemy[enemy].y)) {
+        if (isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y + 1) && rand() % 2) {
+            _enemy[enemy].direction = DOWN;
+        } else if (isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y - 1) && rand() % 2) {
+            _enemy[enemy].direction = UP;
+        }
+    } else if (_enemy[enemy].direction == UP && isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y - 1)) {
+        if (isValidPositionEnnemy(_enemy[enemy].x + 1, _enemy[enemy].y) && rand() % 2) {
+            _enemy[enemy].direction = RIGHT;
+        } else if (isValidPositionEnnemy(_enemy[enemy].x - 1, _enemy[enemy].y) && rand() % 2) {
+            _enemy[enemy].direction = LEFT;
+        }
+    } else if (_enemy[enemy].direction == DOWN && isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y + 1)) {
+        if (isValidPositionEnnemy(_enemy[enemy].x + 1, _enemy[enemy].y) && rand() % 2) {
+            _enemy[enemy].direction = RIGHT;
+        } else if (isValidPositionEnnemy(_enemy[enemy].x - 1, _enemy[enemy].y) && rand() % 2) {
+            _enemy[enemy].direction = LEFT;
+        }
+    } else {
+        if (_enemy[enemy].direction == RIGHT || _enemy[enemy].direction == LEFT) {
+            if (!isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y + 1) && !isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y - 1)) {
+                if (_enemy[enemy].direction == RIGHT) {
+                    _enemy[enemy].direction = LEFT;
+                } else {
+                    _enemy[enemy].direction = RIGHT;
+                }
+            } else if (!isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y + 1)) {
+                _enemy[enemy].direction = UP;
+            } else if (!isValidPositionEnnemy(_enemy[enemy].x, _enemy[enemy].y - 1)) {
+                _enemy[enemy].direction = DOWN;
+            } else {
+                if (rand() % 2) {
+                    _enemy[enemy].direction = UP;
+                } else {
+                    _enemy[enemy].direction = DOWN;
+                }
+            }
+        } else if (_enemy[enemy].direction == UP || _enemy[enemy].direction == DOWN) {
+            if (!isValidPositionEnnemy(_enemy[enemy].x + 1, _enemy[enemy].y) && !isValidPositionEnnemy(_enemy[enemy].x - 1, _enemy[enemy].y)) {
+                if (_enemy[enemy].direction == UP) {
+                    _enemy[enemy].direction = DOWN;
+                } else {
+                    _enemy[enemy].direction = UP;
+                }
+            } else if (!isValidPositionEnnemy(_enemy[enemy].x + 1, _enemy[enemy].y)) {
+                _enemy[enemy].direction = LEFT;
+            } else if (!isValidPositionEnnemy(_enemy[enemy].x - 1, _enemy[enemy].y)) {
+                _enemy[enemy].direction = RIGHT;
+            } else {
+                if (rand() % 2) {
+                    _enemy[enemy].direction = LEFT;
+                } else {
+                    _enemy[enemy].direction = RIGHT;
+                }
+            }
+        }
+    }
+    if (_enemy[enemy].direction == RIGHT)
+        _enemy[enemy].x++;
+    else if (_enemy[enemy].direction == LEFT)
+        _enemy[enemy].x--;
+    else if (_enemy[enemy].direction == UP)
+        _enemy[enemy].y--;
+    else if (_enemy[enemy].direction == DOWN)
+        _enemy[enemy].y++;
+}
+
+
 void Pacman::enemyMove(void)
 {
-    // blue pink orange red
-
+    // not invincible
+    if (_invincible)
+        return;
+    // blue
+    if (_enemy[0].avlive == true) {
+        enemyMoveRandow(0);
+    }
     // pink
     if (_enemy[1].avlive == true) {
         t_myopen ghost;
@@ -79,6 +164,10 @@ void Pacman::enemyMove(void)
             _enemy[1].x = next.x;
             _enemy[1].y = next.y;
         }
+    }
+    // orange
+    if (_enemy[2].avlive == true) { // TODO around pacman
+        enemyMoveRandow(2);
     }
     // red
     if (_enemy[3].avlive == true) {
@@ -94,6 +183,7 @@ void Pacman::enemyMove(void)
             _enemy[3].y = next.y;
         }
     }
+    // TODO enemy back from dead
 }
 
 bool Pacman::isValidPosition(int x, int y) const

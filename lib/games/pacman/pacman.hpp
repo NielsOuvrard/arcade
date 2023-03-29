@@ -49,6 +49,8 @@ class Pacman : public AGameModule {
         void fillGumsRemain(void);
         bool isValidPosition(int x, int y) const;
         t_myopen nextPositionPacman(void);
+        bool isValidPositionEnnemy(int x, int y) const;
+        void enemyMoveRandow(int enemy);
 
         float _pos_x = 0;
         float _pos_y = 0;
