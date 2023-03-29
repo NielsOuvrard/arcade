@@ -94,12 +94,15 @@ void AGameModule::generateGrid(std::vector<std::string> grid, bool pacman)
     // o = medium food  (+5)
     // O = big food     (+10)
     // @ = spawn
-    // X = ennemy
+    // X = enemy
+    // - = door
     for (auto &line : grid) {
         std::vector<int> val;
         for (auto &c : line) {
             if (c == '#')
                 val.push_back(-2); // wall
+            else if (c == '-')
+                val.push_back(-3); // door
             else if (c == ' ')
                 val.push_back(0); // empty
             else if (c == '@')
@@ -111,7 +114,7 @@ void AGameModule::generateGrid(std::vector<std::string> grid, bool pacman)
             else if (c == 'O')
                 val.push_back(4); // big food
             else if (c == 'X')
-                val.push_back(0); // ennemy
+                val.push_back(0); // enemy
         }
         _grid.push_back(val);
     }

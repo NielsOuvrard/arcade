@@ -117,7 +117,7 @@ void Core::displayMenu()
             myMenu.update(key);
         }
     }
-    if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex() && myMenu.getSelectedStatus() == IGameModule::FINISHED) {
+    if (currentDisplayIndex != myMenu.getSelectedDisplayLibIndex() && myMenu.getGameStatus() == IGameModule::FINISHED) {
         loadGraphicLib(gfxLibs[myMenu.getSelectedDisplayLibIndex()]);
     }
     currentGameIndex = myMenu.getSelectedGameLibIndex();

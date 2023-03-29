@@ -11,15 +11,22 @@
 #define PACMAN_HPP_
 #include "AGameModule.hpp"
 
+std::vector<std::string> fileToArray (std::string filepath);
+
 class Pacman : public AGameModule {
     public:
-        typedef struct ennemy {
+        typedef struct enemy {
             int color; // 0 = red, 1 = blue, 2 = pink, 3 = orange
             float x;
             float y;
             int direction;
             bool avlive;
-        } ennemy_t;
+        } enemy_t;
+
+        typedef struct pos {
+            float x;
+            float y;
+        } pos_t;
 
         Pacman();
         ~Pacman();
@@ -30,15 +37,16 @@ class Pacman : public AGameModule {
     protected:
         void move(void);
         void dataToEntity(void);
+        void enemyMove(void);
         void getInfoMap (std::vector<std::string> map);
         void pacmanPart(void);
-        int chooseEnnemySprite (int color, int direction);
-        void ennemyPart(ennemy_t ennemy, int i, int row);
-        void positionToThisValue(int value);
+        int chooseenemySprite (int color, int direction);
+        void enemyPart(enemy_t enemy, int i, int row);
         bool eventAfterMoving(int x, int y);
-        int checkIfPacmanTouchEnnemy(void);
+        int checkIfPacmanTouchenemy(void);
         std::vector<std::string> getTextures(void);
         void fillGumsRemain(void);
+        bool isValidPosition(int x, int y) const;
 
         float _pos_x = 0;
         float _pos_y = 0;
@@ -50,7 +58,7 @@ class Pacman : public AGameModule {
         bool _second_sprite = false;
         bool _isAlive = true;
         DIRECTION _next_direction = DIRECTION::RIGHT;
-        std::vector<ennemy_t> _ennemy;
+        std::vector<enemy_t> _enemy;
         std::string _name = "Pacman";
         int _decal_y = 1;
         // std::string _map_file = "lib/games/pacman/map1.txt";
