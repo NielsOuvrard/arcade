@@ -35,22 +35,63 @@ bool Pacman::eventAfterMoving(int x, int y)
 
 t_myopen nextPositionGhost(t_myopen ghost, t_myopen target, std::vector<std::vector<int>> _grid);
 
+t_myopen Pacman::nextPositionPacman(void)
+{
+    int x = 0, y = 0;
+    if (getDirection() == UP) {
+        while (isValidPosition(_pos_x, _pos_y + y))
+            y--;
+        y++;
+    } else if (getDirection() == DOWN) {
+        while (isValidPosition(_pos_x, _pos_y + y))
+            y++;
+        y--;
+    } else if (getDirection() == LEFT) {
+        while (isValidPosition(_pos_x + x, _pos_y))
+            x--;
+        x++;
+    } else if (getDirection() == RIGHT) {
+        while (isValidPosition(_pos_x + x, _pos_y))
+            x++;
+        x--;
+    }
+    t_myopen next;
+    next.x = _pos_x + x;
+    next.y = _pos_y + y;
+    std::cout << "nextPositionPacman: " << next.x << " " << next.y << std::endl;
+    std::cout << "pacman now: " << _pos_x << " " << _pos_y << std::endl;
+    return next;
+}
+
 void Pacman::enemyMove(void)
 {
     // blue pink orange red
-    for (int i = 0; i != _enemy.size() / 2; i++) {
-        if (_enemy[i].avlive == true) {
-            t_myopen ghost;
-            t_myopen target;
-            ghost.x = _enemy[i].x;
-            ghost.y = _enemy[i].y;
-            target.x = _pos_x;
-            target.y = _pos_y;
-            t_myopen next = nextPositionGhost(ghost, target, getGrid());
-            if (next.x != -1 && next.y != -1) {
-                _enemy[i].x = next.x;
-                _enemy[i].y = next.y;
-            }
+
+    // pink
+    if (_enemy[1].avlive == true) {
+        t_myopen ghost;
+        t_myopen target = nextPositionPacman();
+        ghost.x = _enemy[1].x;
+        ghost.y = _enemy[1].y;
+        t_myopen next = nextPositionGhost(ghost, target, getGrid());
+        // TODO check direction, and hadle error
+        if (next.x != -1 && next.y != -1) {
+            _enemy[1].x = next.x;
+            _enemy[1].y = next.y;
+        }
+    }
+    // red
+    if (_enemy[3].avlive == true) {
+        t_myopen ghost;
+        t_myopen target;
+        ghost.x = _enemy[3].x;
+        ghost.y = _enemy[3].y;
+        target.x = _pos_x;
+        target.y = _pos_y;
+        t_myopen next = nextPositionGhost(ghost, target, getGrid());
+        if (next.x != -1 && next.y != -1) {
+            _enemy[3].x = next.x;
+            _enemy[3].y = next.y;
         }
     }
 }

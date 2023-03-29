@@ -10,6 +10,7 @@
 #ifndef PACMAN_HPP_
 #define PACMAN_HPP_
 #include "AGameModule.hpp"
+#include "pathfinding.hpp"
 
 std::vector<std::string> fileToArray (std::string filepath);
 
@@ -47,6 +48,7 @@ class Pacman : public AGameModule {
         std::vector<std::string> getTextures(void);
         void fillGumsRemain(void);
         bool isValidPosition(int x, int y) const;
+        t_myopen nextPositionPacman(void);
 
         float _pos_x = 0;
         float _pos_y = 0;
