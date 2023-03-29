@@ -17,14 +17,10 @@ void Core::init(void)
     int i = 0;
     try {
         std::string path = "lib/";
-        void **lib;
         for (const auto &entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == ".so") {
-                lib = (void **) dlopen(entry.path().c_str(), RTLD_NOW);
-                std::string (*func)(void);
-                func = (std::string  (*) ()) dlsym(lib, "getType");
-                std::string type = func();
-                dlclose(lib);
+                DLLoader<void> loader = DLLoader<void>(entry.path());
+                std::string type = loader.getInstanceType();
                 if (type == "Graphic") {
                     gfxLibs.insert(gfxLibs.end(),entry.path());
                     std::cout << "GRAPHIC LIB : " << entry.path() << std::endl;

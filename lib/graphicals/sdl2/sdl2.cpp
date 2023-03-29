@@ -14,7 +14,7 @@ Sdl2::Sdl2()
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     IMG_Init(0);
-    _font = TTF_OpenFont("font.ttf", 24);
+    _font = TTF_OpenFont("font.ttf", 60);
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
 }
 

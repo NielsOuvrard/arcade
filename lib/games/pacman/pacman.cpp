@@ -63,7 +63,7 @@ void Pacman::fillGumsRemain()
     _nbr_gums_remain = 0;
     for (int i = 0; i < getGrid().size(); i++)
         for (int j = 0; j < getGrid()[i].size(); j++)
-            if (getGrid()[i][j] >= 2 && getGrid()[i][j] <= 4)
+            if (getGrid()[i][j] >= 2 && getGrid()[i][j] <= 4)
                     _nbr_gums_remain++;
 }
 
