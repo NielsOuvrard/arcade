@@ -242,7 +242,6 @@ void Pacman::enemyMove(void)
     } else {
         enemyReturnToHome(3);
     }
-    // TODO enemy back from dead
 }
 
 bool Pacman::isValidPosition(int x, int y) const

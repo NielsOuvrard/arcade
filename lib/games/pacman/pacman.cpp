@@ -146,6 +146,8 @@ void Pacman::update(std::string key)
         resetGame();
     if (_isMoving)
         move();
+    if (checkIfPacmanTouchenemy())
+        resetGame();
     if (_delay_ghost-- < 0)
         enemyMove();
     dataToEntity();
