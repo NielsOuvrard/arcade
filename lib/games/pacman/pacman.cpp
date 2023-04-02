@@ -115,6 +115,9 @@ int Pacman::checkIfPacmanTouchenemy(void)
 
 void Pacman::update(std::string key)
 {
+    if (key == "close") {
+        setGameStatus(CLOSED);
+    }
     if (key == "LeftArrow") {
         _next_direction = LEFT;
         _isMoving = true;
@@ -128,7 +131,7 @@ void Pacman::update(std::string key)
         _next_direction = DOWN;
         _isMoving = true;
     }
-    if (getTimeElapsed(start) < std::chrono::milliseconds(200)) {
+    if (getTimeElapsed(start) < std::chrono::milliseconds(130)) {
         return;
     } else {
         _second_sprite = !_second_sprite;

@@ -69,7 +69,8 @@ void Sfml::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             sf::Sprite sprite;
             sprite.setTexture(_textures[entity.id_file]);
-            sprite.setPosition(sf::Vector2f((entity.x * 100) * 0.16, (entity.y * 100) * 0.16));
+            sprite.scale(sf::Vector2f(2, 2));
+            sprite.setPosition(sf::Vector2f((entity.x * 200) * 0.16, (entity.y * 200) * 0.16));
             _window->draw(sprite);
         }
     }

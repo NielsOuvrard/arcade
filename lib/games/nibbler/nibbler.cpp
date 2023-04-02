@@ -195,7 +195,7 @@ void Nibbler::dataToEntity(void)
         y += 1;
         row++;
     }
-    x = 4;
+    x = 8;
     y = 0;
     Entity newEntity = {
         -1,

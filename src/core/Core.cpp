@@ -145,11 +145,13 @@ void Core::gameMenuLoop()
                 currentDisplayIndex++;
             loadGraphicLib(gfxLibs[currentDisplayIndex]);
         } else if (key == "F2") {
+            selectedDisplay->resetDisplay();
             if (currentGameIndex == gameLibs.size() - 1)
                 currentGameIndex = 0;
             else
                 currentGameIndex++;
             selectedGame = gameList[currentGameIndex];
+            selectedDisplay->saveTextures(selectedGame->getTextures());
             selectedMenu->setText("Game", selectedGame->getName());
         } else {
             selectedMenu->update(key);
@@ -183,11 +185,13 @@ void Core::mainLoop()
             loadGraphicLib(gfxLibs[currentDisplayIndex]);
             selectedDisplay->saveTextures(selectedGame->getTextures());
         } else if (key == "F2") {
+            selectedDisplay->resetDisplay();
             if (currentGameIndex == gameLibs.size() - 1)
                 currentGameIndex = 0;
             else
                 currentGameIndex++;
             selectedGame = gameList[currentGameIndex];
+            selectedDisplay->saveTextures(selectedGame->getTextures());
         } else {
             selectedGame->update(key);
         }

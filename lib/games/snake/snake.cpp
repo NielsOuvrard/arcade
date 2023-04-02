@@ -42,6 +42,7 @@ Snake::Snake()
     generateGrid(map);
     getInfoSnake(map);
     dataToEntity();
+    generateRandomApple();
 }
 
 Snake::~Snake()
@@ -188,7 +189,7 @@ void Snake::dataToEntity(void)
         y += 1;
         row++;
     }
-    x = 4;
+    x = 8;
     y = 0;
     Entity newEntity = {
         -1,
@@ -388,6 +389,6 @@ void Snake::generateRandomApple()
     int y = rand() % maxY;
     if (_grid[y][x] == 0)
         _grid[y][x] = -1;
-    else 
+    else
         generateRandomApple();
 }

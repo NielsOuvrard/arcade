@@ -72,6 +72,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
                 (Uint8)e.color_fg.green,
                 (Uint8)e.color_fg.blue, 255
             });
+            SDL_RenderSetScale(_renderer, 1, 1);
             SDL_Texture *_text_texture = SDL_CreateTextureFromSurface(_renderer, _text_surface);
             _text_rect = {(int)((e.x * 100)), (int)(e.y * 100), _text_surface->w, _text_surface->h};
             SDL_FreeSurface(_text_surface);
@@ -81,6 +82,7 @@ void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
         } else {
             float x = (e.x * 100) * 0.16;
             float y = (e.y * 100) * 0.16;
+            SDL_RenderSetScale(_renderer, 2, 2);
             _rects[e.id_file].x = (int)x;
             _rects[e.id_file].y = (int)y;
             SDL_RenderCopy(_renderer, _textures[e.id_file], NULL, &_rects[e.id_file]);
