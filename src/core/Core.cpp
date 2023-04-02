@@ -119,8 +119,34 @@ void Core::displayMenu()
     currentGameIndex = myMenu.getSelectedGameLibIndex();
     currentDisplayIndex = myMenu.getSelectedDisplayLibIndex();
     selectedDisplay->resetDisplay();
+    name = myMenu.getName().substr(18, name.length() - 18);
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     if (myMenu.getSelectedStatus()) {
         gameMenuLoop();
+    }
+}
+
+void Core::writeScore()
+{
+    std::ifstream file("scores/" + selectedGame->getName() + ".txt");
+    std::string file_name = selectedGame->getName();
+    std::transform(file_name.begin(), file_name.end(), file_name.begin(), ::tolower);
+    if (!file) {
+        file.close();
+        std::ofstream file2("scores/" + file_name + ".txt");
+        file2 << selectedGame->getScore() << " " << name << std::endl;
+    } else {
+        std::string line;
+        std::string score;
+        getline(file, line);
+        std::ofstream file2("scores/" + file_name + ".txt");
+        score = line.substr(0, line.find(" "));
+        if (std::stoi(score) < selectedGame->getScore()) {
+            file2 << selectedGame->getScore() << " " << name << std::endl;
+        } else {
+            file2 << line << std::endl;
+        }
+        file2.close();
     }
 }
 
@@ -157,6 +183,7 @@ void Core::gameMenuLoop()
             selectedMenu->update(key);
         }
     }
+
     if (selectedMenu->getGameStatus() == IGameModule::MENU) {
         selectedGame->resetGame();
         selectedDisplay->resetDisplay();
@@ -196,6 +223,7 @@ void Core::mainLoop()
             selectedGame->update(key);
         }
     }
+    writeScore();
     if (selectedGame->getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->resetDisplay();
         endGameLoop();
@@ -205,9 +233,11 @@ void Core::mainLoop()
 
 void Core::endGameLoop()
 {
+    int score = selectedGame->getScore();
     selectedGame = gameList[currentGameIndex];
     selectedMenu = menuList[1];
     selectedMenu->startGame();
+    selectedMenu->setText("Score", "Score:" + std::to_string(score));
     while (selectedMenu->getGameStatus() != IGameModule::FINISHED &&
     selectedMenu->getGameStatus() != IGameModule::MENU &&
     selectedMenu->getGameStatus() != IGameModule::RESTART) {

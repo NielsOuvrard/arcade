@@ -7,6 +7,19 @@
 
 #include "Menu.hpp"
 
+std::string getGameScore(std::string game_name)
+{
+    std::ifstream file("scores/" + game_name + ".txt");
+    std::string line;
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            return line;
+        }
+        file.close();
+    }
+    return "no points yet";
+}
+
 Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal)
 {
     _status = IN_GAME;
@@ -91,8 +104,39 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
         {0, 0, 0}
     };
     setNewEntity("nameTitle", nameTitle);
-    x += 1;
-
+    x = 12;
+    y = 0;
+    Entity scoreEntity = {
+        -1,
+        "High Scores",
+        "E9967A",
+        x,
+        y,
+        true,
+        true,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    setNewEntity("HighScores", scoreEntity);
+    y += 1;
+    for (std::string val : gameLibs) {
+        std::string game_name = val.substr(11, val.length() - 14);
+        std::string game_score = getGameScore(game_name);
+        game_name[0] = toupper(game_name[0]);
+        Entity score = {
+            -1,
+            game_name + ": " + game_score,
+            "E9967A",
+            x,
+            y,
+            false,
+            false,
+            {255, 255, 255},
+            {0, 0, 0}
+        };
+        y += 1,
+        setNewEntity("score" + std::to_string(y), score);
+    }
 }
 
 Menu::~Menu()
@@ -117,6 +161,7 @@ void Menu::update(std::string key)
         return;
     }
     if (key == "Enter" && isGameSelected && isDisplaySelected && name.length() > 19) {
+        // name = name.substr(18, name.length() - 18);
         setGameStatus(FINISHED);
         return;
     }

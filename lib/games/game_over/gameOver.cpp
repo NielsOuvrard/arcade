@@ -60,8 +60,20 @@ GameOver::GameOver()
         {255, 255, 255},
         {0, 0, 0}
     };
-    y += 1;
+    y += 2;
     setNewEntity("Quit", gameEntity);
+    gameEntity = {
+        -1,
+        "Score:0",
+        "E9967A",
+        x,
+        y,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    setNewEntity("Score", gameEntity);
 }
 
 GameOver::~GameOver()
@@ -164,8 +176,20 @@ void GameOver::resetGame(void)
         {255, 255, 255},
         {0, 0, 0}
     };
-    y += 1;
+    y += 2;
     setNewEntity("Quit", gameEntity);
+    gameEntity = {
+        -1,
+        "Score:0",
+        "E9967A",
+        x,
+        y,
+        false,
+        false,
+        {255, 255, 255},
+        {0, 0, 0}
+    };
+    setNewEntity("Score", gameEntity);
     selectedOptionIndex = 0;
     hasSelected = false;
 }

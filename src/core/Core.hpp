@@ -15,6 +15,9 @@
 #include <unistd.h>
 #include <map>
 #include <memory>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 #include "DLLoader.hpp"
 #include "IDisplayModule.hpp"
 #include "AGameModule.hpp"
@@ -38,6 +41,7 @@ class Core {
         void endGameLoop();
         void loadGraphicLib(std::string path);
         void init(void);
+        void writeScore();
 
     protected:
     private:
@@ -57,6 +61,7 @@ class Core {
         IGameModule *selectedGame = nullptr;
         IGameModule *selectedMenu = nullptr;
         DLLoader<IDisplayModule> *loadedDisplayLib = nullptr;
+        std::string name;
 };
 
 #endif /* !CORE_HPP_ */
