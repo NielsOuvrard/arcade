@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: configure
-      run: ./configure
     - name: Update apt
       run: sudo apt-get update
     - name: Install SFML
