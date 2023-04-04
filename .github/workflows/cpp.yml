@@ -1,0 +1,39 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: ./configure
+    - name: Update apt
+      run: sudo apt-get update
+    - name: Install SFML
+      run: sudo apt-get -y install libsfml-dev
+    - name: Install SDL
+      run: sudo apt-get -y install libsdl2-dev
+    - name: Make core
+      run: make core
+    - name: Make sfml
+      run: make sfml
+    - name: Make sdl2
+      run: make sdl2
+    - name: Make snake
+      run: make snake
+    - name: Make nibbler
+      run: make nibbler
+    - name: Make pacman
+      run: make pacman
+    - name: Make gameMenu
+      run: make gameMenu
+    - name: Make gameOver
+      run: make gameOver
