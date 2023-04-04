@@ -18,7 +18,9 @@ jobs:
     - name: Install SFML
       run: sudo apt-get -y install libsfml-dev
     - name: Install SDL
-      run: sudo apt-get -y install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0
+      run: sudo apt-get -y install libsdl2-dev
+    - name: Install SDL libs
+      run: sudo apt-get -y install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0 libsdl2-mixer-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-net-dev libsdl2-gfx-dev
     - name: Make core
       run: make core
     - name: Make sfml
