@@ -16,6 +16,8 @@ class Nibbler : public AGameModule {
         void update(std::string key);
         const std::string &getName() const{return _name;};
         void resetGame(void);
+        void changeLevel(void);
+
     protected:
         void move(void);
         void dataToEntity(void);
@@ -25,10 +27,13 @@ class Nibbler : public AGameModule {
         void getInfoSnake (std::vector<std::string> map);
         int tryMoveHere(IGameModule::DIRECTION direction);
         std::vector<std::string> getTextures(void);
+        void elapsedTime(int time);
         int _head_x = 0;
         int _head_y = 0;
         int _size_snake = 0;
         int _apple_remain = 0;
+        int countdown = 60;
+        int level = 1;
         IGameModule::DIRECTION _next_direction = IGameModule::DIRECTION::RIGHT;
         std::string _name = "Nibbler";
 };

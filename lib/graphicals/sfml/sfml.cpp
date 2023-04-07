@@ -83,6 +83,9 @@ std::string Sfml::getEvent()
     while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return "close";
+        if (event.type == sf::Event::MouseButtonPressed) {
+            return "click";
+        }
         if (event.type == sf::Event::TextEntered) {
             if (event.text.unicode == '\n')
                 return "Enter";
