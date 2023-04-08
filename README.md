@@ -60,3 +60,7 @@ Return the name of the graphic lib.
 
 - `void resetDisplay();`
 Resets display stored values such as textures.
+
+### Edit the Makefile
+To add your game to the compilation process, you need to edit the makefile and add the following line :
+`{GRAPHICNAME}: @ g++ -v -shared -o lib/arcade_{GRAPHICNAME}.so -fPIC $(SRC_LIB_GRAPHICALS)/{GRAPHICNAME}/*.cpp $({GRAPHICNAME}_FLAGS) $(INCLUDE_PATH)`
