@@ -98,7 +98,7 @@ void Core::loadGraphicLib(std::string path)
 
 void Core::displayMenu()
 {
-    Menu myMenu = Menu(gameLibs, gfxLibs);
+    Menu myMenu = Menu(gameLibs, gfxLibs, menuDisplayLibPath);
     while (myMenu.getGameStatus() != IGameModule::FINISHED && myMenu.getGameStatus() != IGameModule::CLOSED) {
         selectedDisplay->update(myMenu.getInfos());
         selectedDisplay->draw();
