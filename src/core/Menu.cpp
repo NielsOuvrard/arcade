@@ -20,7 +20,7 @@ std::string getGameScore(std::string game_name)
     return "no points yet";
 }
 
-Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal)
+Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLibsVal, std::string nameVal)
 {
     _status = IN_GAME;
     gameLibs = gameLibsVal;
@@ -72,12 +72,13 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
     };
     y += 1;
     setNewEntity("GFX Libs", gfxEntity);
+    int i = 0;
     for (std::string val : gfxLibs) {
         bool bold = false, underline = false;
-        if (val == gfxLibs.front()) {
-            bold = true;
-            underline = true;
-        }
+        // if (val == gfxLibs.front()) {
+        //     bold = true;
+        //     underline = true;
+        // }
         Entity gfxLib = {
             -1,
             val,
@@ -89,8 +90,17 @@ Menu::Menu(std::vector<std::string> gameLibsVal, std::vector<std::string> gfxLib
             {255, 255, 255},
             {0, 0, 0}
         };
+        if (val == nameVal) {
+            gfxLib.bold = true;
+            gfxLib.underline = true;
+            gfxLib.color_fg = {255, 0, 0};
+            isDisplaySelected = true;
+            hasSelected = true;
+            selectedDisplayIndex = i;
+        }
         setNewEntity(val, gfxLib);
         y += 1;
+        i++;
     }
     Entity nameTitle = {
         -1,
