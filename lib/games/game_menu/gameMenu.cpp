@@ -91,6 +91,17 @@ void GameMenu::update(std::string key)
             selectedOptionIndex -= 1;
             return;
         }
+        if (key.starts_with("MouseClick")) { // pos = 0 limits the search to the prefix
+            exit(2);
+            std::stringstream ss(key);
+            std::string cmd;
+            int x, y;
+            ss >> cmd; // extract the command string "MouseClick"
+            ss >> x >> y; // extract the integer values for x and y
+            if (x >= 0 && x <= 3) {
+                selectedOptionIndex = x;
+            }
+        }
     }
 }
 

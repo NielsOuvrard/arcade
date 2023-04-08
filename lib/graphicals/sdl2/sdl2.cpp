@@ -97,6 +97,14 @@ std::string Sdl2::getEvent()
         if (_event.type == SDL_QUIT) {
             return "close";
         }
+        int x, y;
+        SDL_GetWindowSize(_window, &x, &y);
+        if (_event.type == SDL_MOUSEBUTTONDOWN) {
+            std::cout << _event.button.x / (x / 11) << " " << _event.button.y / (y / 11) << std::endl;
+            return "MouseClick " +
+            std::to_string(_event.button.x / (x / 11)) + " " +
+            std::to_string(_event.button.y / (y / 11));
+        }
         if (_event.type == SDL_KEYDOWN && _event.key.repeat == 0) {
             switch (_event.key.keysym.sym) {
                 case SDLK_ESCAPE:

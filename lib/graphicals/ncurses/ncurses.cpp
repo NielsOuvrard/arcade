@@ -31,7 +31,8 @@ void Ncurses::init()
     keyok(10, TRUE); // ENTER
     keyok(127, TRUE); // BACKSPACE
     keyok(265, TRUE);
-
+    MEVENT event;
+    _event = event;
     keyok(265, TRUE); // UP
     keyok(264, TRUE); // DOWN
     keyok(263, TRUE); // LEFT
@@ -39,7 +40,7 @@ void Ncurses::init()
 
     keyok(259, TRUE); // F1
     keyok(260, TRUE); // F2
-
+    mousemask(ALL_MOUSE_EVENTS, NULL);
     cbreak();
 }
 
@@ -178,6 +179,10 @@ std::string Ncurses::getEvent()
         return "Backspace";
     if (isascii(c)) {
         std::string val = {(char)c};
+        return val;
+    }
+    if (c == KEY_MOUSE && getmouse(&_event) == OK) {
+        std::string val = "MouseClick " + std::to_string(_event.x) + " " + std::to_string(_event.y);
         return val;
     }
     return "";

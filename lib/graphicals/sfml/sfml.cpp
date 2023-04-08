@@ -116,6 +116,15 @@ std::string Sfml::getEvent()
                     return "ESC";
             }
         }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                std::string val = "MouseClick " +
+                std::to_string(event.mouseButton.x / (_window->getSize().x / 11)) + " " +
+                std::to_string(event.mouseButton.y / (_window->getSize().y / 11));
+                std::cout << val << std::endl;
+                return val;
+            }
+        }
     }
     return "";
 }

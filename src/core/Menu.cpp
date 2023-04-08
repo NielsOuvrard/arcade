@@ -206,6 +206,33 @@ void Menu::update(std::string key)
             selectedDisplayIndex -= 1;
             return;
         }
+        if (key.starts_with("MouseClick")) { // pos = 0 limits the search to the prefix
+            std::stringstream ss(key);
+            std::string cmd;
+            int x, y;
+            ss >> cmd; // extract the command string "MouseClick"
+            ss >> x >> y; // extract the integer values for x and y
+            if (y >= gameLibs.size() + 2 && y < gameLibs.size() + 2 + gfxLibs.size()) {
+                if (selectedDisplayIndex == y - gameLibs.size() - 2) {
+                    std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+                    color_t color_fg = {255, 0, 0};
+                    color_t color_bg = {0, 0, 0};
+                    getEntity(currentSelectedDisplay).color_fg = color_fg;
+                    getEntity(currentSelectedDisplay).color_bg = color_bg;
+                    isDisplaySelected = true;
+                    hasSelected = true;
+                    return;
+                }
+                std::string currentSelectedDisplay = gfxLibs[selectedDisplayIndex];
+                std::string newSelectedDisplay = gfxLibs[y - gameLibs.size() - 2];
+                getEntity(currentSelectedDisplay).underline = false;
+                getEntity(currentSelectedDisplay).bold = false;
+                getEntity(newSelectedDisplay).underline = true;
+                getEntity(newSelectedDisplay).bold = true;
+                selectedDisplayIndex = y - gameLibs.size() - 2;
+            }
+            return;
+        }
     }
     if (gameLibs.size() != 0) {
         if (key == "Enter" && !isGameSelected) {
@@ -244,6 +271,32 @@ void Menu::update(std::string key)
             getEntity(newSelectedGame).underline = true;
             getEntity(newSelectedGame).bold = true;
             selectedGameIndex -= 1;
+            return;
+        }
+        if (key.starts_with("MouseClick")) { // pos = 0 limits the search to the prefix
+            std::stringstream ss(key);
+            std::string cmd;
+            int x, y;
+            ss >> cmd; // extract the command string "MouseClick"
+            ss >> x >> y; // extract the integer values for x and y
+            if (y >= 1 && y <= gameLibs.size()) {
+                if (selectedGameIndex == y - 1) {
+                    std::string currentSelectedGame = gameLibs[selectedGameIndex];
+                    color_t color_fg = {255, 0, 0};
+                    color_t color_bg = {0, 0, 0};
+                    getEntity(currentSelectedGame).color_fg = color_fg;
+                    getEntity(currentSelectedGame).color_bg = color_bg;
+                    isGameSelected = true;
+                    return;
+                }
+                std::string currentSelectedGame = gameLibs[selectedGameIndex];
+                std::string newSelectedGame = gameLibs[y - 1];
+                getEntity(currentSelectedGame).underline = false;
+                getEntity(currentSelectedGame).bold = false;
+                getEntity(newSelectedGame).underline = true;
+                getEntity(newSelectedGame).bold = true;
+                selectedGameIndex = y - 1;
+            }
             return;
         }
     }

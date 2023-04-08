@@ -35,6 +35,6 @@ class Ncurses : public IDisplayModule {
         std::vector<std::pair<int, int>> _list_pair_colors;
         WINDOW *_window = nullptr;
         SCREEN *_screen = nullptr;
-        int event;
+        MEVENT _event;
     private:
 };
