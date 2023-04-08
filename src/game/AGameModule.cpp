@@ -87,7 +87,7 @@ void AGameModule::generateGrid(std::vector<std::string> grid)
     }
 }
 
-void AGameModule::generateGrid(std::vector<std::string> grid, bool pacman)
+void AGameModule::generateGrid(std::vector<std::string> grid, bool defaultGrid)
 {
     // # = wall
     // . = small food   (+1)
