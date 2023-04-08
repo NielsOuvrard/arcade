@@ -36,7 +36,7 @@ Destroys the graphic lib and it's associated libs (font, sound..)
 
 - `void update(std::map<std::string, IGameModule::Entity> entities)`
 Update the screen using the entities sent by the game, the struct of the entities are as follow :
-`int id_file // File number`;
+`int id_file // File number`
 `std::string text; // Text if there is one`
 `std::string background_color;`
 `float x; // Position x`
