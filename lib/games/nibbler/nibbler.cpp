@@ -38,7 +38,7 @@ void Nibbler::getInfoSnake (std::vector<std::string> map)
 
 Nibbler::Nibbler()
 {
-    std::vector<std::string> map = fileToArray("lib/games/nibbler/map2.txt");
+    std::vector<std::string> map = fileToArray("lib/games/nibbler/map1.txt");
     for (int i = 0; i < map.size(); i++) {
         for (int j = 0; j < map[i].size(); j++) {
             if (map[i][j] == 'A') {
@@ -199,7 +199,7 @@ void Nibbler::dataToEntity(void)
     y = 0;
     Entity newEntity = {
         -1,
-        "Time: " + std::to_string(getTime()),
+        "Time: " + std::to_string(countdown),
         "E9967A",
         x,
         y,
@@ -331,16 +331,30 @@ void Nibbler::move(void)
     }
 }
 
+void Nibbler::elapsedTime(int time)
+{
+    countdown -= time;
+}
+
 void Nibbler::update(std::string key)
 {
     if (_status == IN_GAME) {
         if (getTimeElapsed(scoreClock) >= std::chrono::milliseconds(1000)) {
-            setTime(1);
+            elapsedTime(1);
             scoreClock = std::chrono::high_resolution_clock::now();
         }
+        if (countdown <= 0) {
+            setGameStatus(FINISHED);
+        }
     }
-    if (!_apple_remain)
-        setGameStatus(FINISHED);
+    if (!_apple_remain) {
+        if (level == 1) {
+            level = 2;
+            changeLevel();
+        } else {
+            setGameStatus(FINISHED);
+        }
+    }
     if (key == "LeftArrow" && getDirection() != RIGHT)
         _next_direction = LEFT;
     if (key == "RightArrow" && getDirection() != LEFT)
@@ -358,6 +372,33 @@ void Nibbler::update(std::string key)
     }
 }
 
+void Nibbler::changeLevel(void)
+{
+    _entities.clear();
+    _grid.clear();
+    start = std::chrono::high_resolution_clock::now();
+    scoreClock = std::chrono::high_resolution_clock::now();
+    _time = 0;
+    _score = 0;
+    _next_direction = IGameModule::DIRECTION::RIGHT;
+    _head_x = 0;
+    _head_y = 0;
+    _size_snake = 0;
+    _apple_remain = 0;
+    std::vector<std::string> map = fileToArray("lib/games/nibbler/map2.txt");
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j] == 'A') {
+                _apple_remain++;
+            }
+        }
+    }
+    generateGrid(map);
+    getInfoSnake(map);
+    dataToEntity();
+
+}
+
 void Nibbler::resetGame(void)
 {
     _entities.clear();
@@ -371,6 +412,8 @@ void Nibbler::resetGame(void)
     _head_y = 0;
     _size_snake = 0;
     _apple_remain = 0;
+    countdown = 60;
+    level = 1;
     std::vector<std::string> map = fileToArray("lib/games/nibbler/map1.txt");
     for (int i = 0; i < map.size(); i++) {
         for (int j = 0; j < map[i].size(); j++) {

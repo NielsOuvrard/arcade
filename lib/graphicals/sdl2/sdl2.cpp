@@ -125,6 +125,16 @@ std::string Sdl2::getEvent()
             std::string val = _event.text.text;
             return val;
         }
+        if (_event.type = SDL_MOUSEBUTTONDOWN) {
+            if (_event.button.button == SDL_BUTTON_LEFT) {
+                int x = _event.button.x;
+                int y = _event.button.y;
+                printf("Mouse left button clicked at (%d, %d)\n", x, y);
+                char msg[100];
+                sprintf(msg, "MouseLeft %d %d", x, y);
+                return msg;
+            }
+        }
     }
     return "";
 }
