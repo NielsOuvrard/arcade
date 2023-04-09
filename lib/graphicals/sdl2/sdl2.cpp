@@ -11,7 +11,7 @@
 
 Sdl2::Sdl2()
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     TTF_Init();
     IMG_Init(0);
     _font = TTF_OpenFont("font.ttf", 60);
@@ -27,16 +27,22 @@ Sdl2::~Sdl2()
         TTF_CloseFont(_font);
     if (_renderer != nullptr)
         SDL_DestroyRenderer(_renderer);
+    Mix_CloseAudio();
+    Mix_FreeMusic( _music );
     TTF_Quit();
     IMG_Quit();
+    Mix_Quit();
     SDL_Quit();
 }
 
 void Sdl2::init()
 {
-
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    _music = Mix_LoadMUS("music.ogg");
     _window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_HIDDEN);
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_SOFTWARE);
+    Mix_Volume(-1, 30);
+    Mix_PlayMusic(_music, -1);
     SDL_ShowWindow(_window);
 }
 
@@ -56,6 +62,8 @@ void Sdl2::draw()
 
 void Sdl2::update(std::map<std::string, IGameModule::Entity> entities)
 {
+    if (Mix_PlayingMusic() == 0)
+        Mix_PlayMusic(_music, -1);
     SDL_RenderClear(_renderer);
     for (auto texture : _renderedTextures) {
             SDL_DestroyTexture(texture);

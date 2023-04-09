@@ -18,8 +18,8 @@ SRC_LIB_GAMES = lib/games
 
 SRC_LIB_GRAPHICALS = lib/graphicals
 
-SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
-SDL2_FLAGS = -lSDL2 -lSDL2_ttf -lSDL2_image
+SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+SDL2_FLAGS = -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer
 
 INCLUDE_PATH = -I./src/display -I./src/game -I./src/core -std=c++20 -g3
 HOMEBREW = /opt/homebrew/Cellar/
