@@ -26,6 +26,7 @@ class Nibbler : public AGameModule {
         void snakePart(std::vector<int> value, float x, float y, int row, int i);
         void getInfoSnake (std::vector<std::string> map);
         int tryMoveHere(IGameModule::DIRECTION direction);
+        int automaticMove(void);
         std::vector<std::string> getTextures(void);
         void elapsedTime(int time);
         int _head_x = 0;

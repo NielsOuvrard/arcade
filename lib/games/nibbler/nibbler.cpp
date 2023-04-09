@@ -251,6 +251,56 @@ void Nibbler::moveHead(int x, int y, bool eat, IGameModule::DIRECTION direction)
     }
 }
 
+int Nibbler::automaticMove(void)
+{
+    if (getDirection() == RIGHT) {
+        if ((getGrid()[_head_y + 1][_head_x] == 0 || getGrid()[_head_y + 1][_head_x] == -1) && getGrid()[_head_y - 1][_head_x] != 0) {
+            moveHead(0, 1, getGrid()[_head_y + 1][_head_x] == -1 ? true : false, DOWN);
+            _next_direction = DOWN;
+            return 2;
+        }
+        if ((getGrid()[_head_y - 1][_head_x] == 0 || getGrid()[_head_y - 1][_head_x] == -1) && getGrid()[_head_y + 1][_head_x] != 0) {
+            moveHead(0, -1, getGrid()[_head_y - 1][_head_x] == -1 ? true : false, UP);
+            _next_direction = UP;
+            return 2;
+        }
+    } else if (getDirection() == LEFT) {
+        if ((getGrid()[_head_y + 1][_head_x] == 0 || getGrid()[_head_y + 1][_head_x] == -1) && getGrid()[_head_y - 1][_head_x] != 0) {
+            moveHead(0, 1, getGrid()[_head_y + 1][_head_x] == -1 ? true : false, DOWN);
+            _next_direction = DOWN;
+            return 2;
+        }
+        if ((getGrid()[_head_y - 1][_head_x] == 0 || getGrid()[_head_y - 1][_head_x] == -1) && getGrid()[_head_y + 1][_head_x] != 0) {
+            moveHead(0, -1, getGrid()[_head_y - 1][_head_x] == -1 ? true : false, UP);
+            _next_direction = UP;
+            return 2;
+        }
+    } else if (getDirection() == UP) {
+        if ((getGrid()[_head_y][_head_x + 1] == 0 || getGrid()[_head_y][_head_x + 1] == -1) && getGrid()[_head_y][_head_x - 1] != 0) {
+            moveHead(1, 0, getGrid()[_head_y][_head_x + 1] == -1 ? true : false, RIGHT);
+            _next_direction = RIGHT;
+            return 2;
+        }
+        if ((getGrid()[_head_y][_head_x - 1] == 0 || getGrid()[_head_y][_head_x - 1] == -1) && getGrid()[_head_y][_head_x + 1] != 0) {
+            moveHead(-1, 0, getGrid()[_head_y][_head_x - 1] == -1 ? true : false, LEFT);
+            _next_direction = LEFT;
+            return 2;
+        }
+    } else if (getDirection() == DOWN) {
+        if ((getGrid()[_head_y][_head_x + 1] == 0 || getGrid()[_head_y][_head_x + 1] == -1) && getGrid()[_head_y][_head_x - 1] != 0) {
+            moveHead(1, 0, getGrid()[_head_y][_head_x + 1] == -1 ? true : false, RIGHT);
+            _next_direction = RIGHT;
+            return 2;
+        }
+        if ((getGrid()[_head_y][_head_x - 1] == 0 || getGrid()[_head_y][_head_x - 1] == -1) && getGrid()[_head_y][_head_x + 1] != 0) {
+            moveHead(-1, 0, getGrid()[_head_y][_head_x - 1] == -1 ? true : false, LEFT);
+            _next_direction = LEFT;
+            return 2;
+        }
+    }
+    return -1;
+}
+
 // return -1 = nop
 // return 0 = not decrement
 // return 1 = decrement
@@ -320,6 +370,8 @@ void Nibbler::move(void)
     int decrement = -1;
     if ((decrement = tryMoveHere(_next_direction)) == -1)
         decrement = tryMoveHere(getDirection());
+    if (decrement == -1)
+        decrement = automaticMove();
     if (decrement != 2)
         return;
     for (int i = 0; i != getGrid().size(); i++) {
