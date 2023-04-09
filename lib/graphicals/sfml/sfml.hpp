@@ -39,5 +39,6 @@ class Sfml : public IDisplayModule {
         std::string _name = "SFML";
         sf::Font font;
         std::vector<sf::Texture> _textures;
+        sf::Music _music;
     private:
 };

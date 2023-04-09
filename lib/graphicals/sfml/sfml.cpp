@@ -13,7 +13,9 @@
 #include "sfml.hpp"
 
 Sfml::Sfml()
-{}
+{
+
+}
 
 Sfml::~Sfml()
 {
@@ -29,10 +31,15 @@ void Sfml::init()
     _window->setVisible(true);
     _window->setKeyRepeatEnabled(false);
     font.loadFromFile("font.ttf");
+    _music.openFromFile("music.ogg");
+    _music.setVolume(35);
+    _music.setLoop(true);
+    _music.play();
 }
 
 void Sfml::stop()
 {
+    _music.stop();
     _window->setVisible(false);
 }
 
@@ -43,7 +50,6 @@ void Sfml::draw()
         return;
     }
     // draw...
-
     _window->display();
 }
 

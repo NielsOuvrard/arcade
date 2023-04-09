@@ -51,6 +51,7 @@ void Core::init(void)
         selectedDisplay = val->getInstance();
         selectedDisplay->init();
     } catch (std::exception &e){
+        std::cerr << e.what() << std::endl;
         throw Error("Error while loading libs.");
     }
     if (currentDisplayIndex == -1) {
