@@ -35,6 +35,7 @@ ifeq ($(shell uname -s),Darwin)
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2/2.26.4/include -L$(HOMEBREW)sdl2/2.26.4/lib
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2_image/2.6.3/include -L$(HOMEBREW)sdl2_image/2.6.3/lib
 	SDL2_FLAGS += -I$(HOMEBREW)sdl2_ttf/2.20.2/include -L$(HOMEBREW)sdl2_ttf/2.20.2/lib -lSDL2_ttf
+	SDL2_FLAGS += -I$(HOMEBREW)sdl2_mixer/2.6.3_1/include -L$(HOMEBREW)sdl2_mixer/2.6.3_1/lib -lSDL2_mixer
 endif
 
 NAME = arcade
